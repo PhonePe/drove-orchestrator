@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  zookeeper:
+    image: zookeeper:3.7
+    network_mode: host
+  controller:
+    image: quay.io/santanu_sinha/drove-controller:1.26
+    command: sleep infinity
+    network_mode: host
+    environment:
+      ZK_CONNECTION_STRING: localhost:2181
+      LOG_LEVEL: DEBUG
+      TIMEZONE: IST
+      DEBUG: 1
+  executor:
+    image: quay.io/santanu_sinha/drove-executor:1.26
+    network_mode: host
+    environment:
+      ZK_CONNECTION_STRING: localhost:2181
+      LOG_LEVEL: DEBUG
+      TIMEZONE: IST
+      DEBUG: 1
+    volumes:
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+  nixy:
+    image: quay.io/santanu_sinha/drove-nixy:latest
+    network_mode: host
+    environment:
+      DROVE_CONTROLLERS: 'http://localhost:4000'
+      NGINX_DROVE_VHOST: drove.local

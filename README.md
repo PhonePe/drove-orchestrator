@@ -8,3 +8,9 @@ git submodule init
 git submodule update
 ```
 
+# Bringing up a demo cluster
+```shell
+cd compose
+docker-compose up
+```
+
