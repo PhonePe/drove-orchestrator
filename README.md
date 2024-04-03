@@ -1,4 +1,4 @@
-# Uber repo for the Drove Cotnainer Orchestrator
+# Uber repo for the Drove Container Orchestrator
 
 Usage:
 
