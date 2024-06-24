@@ -4,7 +4,7 @@ services:
     image: zookeeper:3.7
     network_mode: host
   controller:
-    image: ghcr.io/phonepe/drove-controller:1.27
+    image: ghcr.io/phonepe/drove-controller:latest
     command: sleep infinity
     network_mode: host
     environment:
@@ -13,7 +13,7 @@ services:
       TIMEZONE: IST
       DEBUG: 1
   executor:
-    image: ghcr.io/phonepe/drove-executor:1.27
+    image: ghcr.io/phonepe/drove-executor:latest
     network_mode: host
     environment:
       ZK_CONNECTION_STRING: localhost:2181
