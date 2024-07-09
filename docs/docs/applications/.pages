@@ -1,0 +1,7 @@
+title: Applications
+nav:
+ - index.md
+ - instances.md
+ - specification.md
+ - operations.md
+ - outage.md

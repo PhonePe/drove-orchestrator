@@ -1,0 +1,27 @@
+site_name: Drove
+theme:
+  name: material
+  features:
+    - navigation.tracking
+    - content.code.copy
+    - content.code.annotate
+plugins:
+  - glightbox
+  - search
+  - awesome-pages
+
+markdown_extensions:
+  - attr_list
+  - md_in_html
+  - pymdownx.superfences
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - tables
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - markdown_include.include:
+        base_path: snippets
+  - pymdownx.tabbed:
+      alternate_style: true

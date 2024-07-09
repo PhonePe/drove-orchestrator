@@ -1,0 +1,7 @@
+nav:
+  - index.md
+  - ...
+  - cluster
+  - applications
+  - tasks
+  - apis

@@ -1,0 +1,1146 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      
+        <link rel="next" href="apis/">
+      
+      
+      <link rel="icon" href="assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.27">
+    
+    
+      
+        <title>Drove</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.6543a935.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+   <link href="assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+    html.glightbox-open { overflow: initial; height: 100%; }
+    .gslide-title { margin-top: 0px; user-select: text; }
+    .gslide-desc { color: #666; user-select: text; }
+    .gslide-image img { background: white; }
+    .gscrollbar-fixer { padding-right: 15px; }
+    .gdesc-inner { font-size: 0.75rem; }
+    body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color);}
+    body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color);}
+    body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}</style> <script src="assets/javascripts/glightbox.min.js"></script></head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#introduction" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="." title="Drove" class="md-header__button md-logo" aria-label="Drove" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Drove
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Introduction
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="." title="Drove" class="md-nav__button md-logo" aria-label="Drove" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Drove
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Introduction
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="." class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Introduction
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#features" class="md-nav__link">
+    <span class="md-ellipsis">
+      Features
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Features">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#functional" class="md-nav__link">
+    <span class="md-ellipsis">
+      Functional
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Operations
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#performance" class="md-nav__link">
+    <span class="md-ellipsis">
+      Performance
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resilience" class="md-nav__link">
+    <span class="md-ellipsis">
+      Resilience
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#security" class="md-nav__link">
+    <span class="md-ellipsis">
+      Security
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#observability" class="md-nav__link">
+    <span class="md-ellipsis">
+      Observability
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#unsupported-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      Unsupported Features
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#terminology" class="md-nav__link">
+    <span class="md-ellipsis">
+      Terminology
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#github-repositories" class="md-nav__link">
+    <span class="md-ellipsis">
+      Github Repositories
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#license" class="md-nav__link">
+    <span class="md-ellipsis">
+      License
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    API Reference
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            API Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="apis/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Introduction
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="apis/application/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Application Management
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="apis/task/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Task Management
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="apis/logs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Log Related APIs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="apis/cluster/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Cluster Management
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Applications
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Applications
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="applications/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Introduction
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="applications/instances/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Application Instances
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="applications/specification/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Application Specification
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="applications/operations/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Application Operations
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="applications/outage/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Outage Detection and Recovery
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Cluster
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Cluster
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cluster/cluster/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Anatomy of a Drove Cluster
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cluster/operations/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Operations
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Tasks
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Tasks
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="tasks/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Introduction
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="tasks/specification/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Task Specification
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="tasks/operations/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Task Operations
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#features" class="md-nav__link">
+    <span class="md-ellipsis">
+      Features
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Features">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#functional" class="md-nav__link">
+    <span class="md-ellipsis">
+      Functional
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Operations
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#performance" class="md-nav__link">
+    <span class="md-ellipsis">
+      Performance
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resilience" class="md-nav__link">
+    <span class="md-ellipsis">
+      Resilience
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#security" class="md-nav__link">
+    <span class="md-ellipsis">
+      Security
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#observability" class="md-nav__link">
+    <span class="md-ellipsis">
+      Observability
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#unsupported-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      Unsupported Features
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#terminology" class="md-nav__link">
+    <span class="md-ellipsis">
+      Terminology
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#github-repositories" class="md-nav__link">
+    <span class="md-ellipsis">
+      Github Repositories
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#license" class="md-nav__link">
+    <span class="md-ellipsis">
+      License
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="introduction">Introduction</h1>
+<p>Drove is a container orchestrator built at <a href="https://phonepe.com">PhonePe</a>. It is focussed on simplicity, container performance and easy operations.</p>
+<p><a class="glightbox" href="images/drove-home.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Drove Home" src="images/drove-home.png" /></a></p>
+<h2 id="features">Features</h2>
+<p>The following sections go over the features.</p>
+<h3 id="functional">Functional</h3>
+<ul>
+<li><strong>Application</strong> (service) and application container lifecycle management including <em>mandated</em> readiness checks, health checks, pre-shutdown hooks to enable operators to take containers out of rotation easily and shut them down ggracefully if needed.</li>
+<li>Ensures the required(specified) number of containers will always be present in the cluster. It will detect <strong>failures</strong> across the cluster and bring containers up/down to maintain required instance count.</li>
+<li>Provides <strong>endpoint</strong> information to be consumed by routers like nixy+nginx/traefik etc to expose containers over vhost.</li>
+<li>Supports short lived container based <strong>tasks</strong>. This help folks build newer systems that can spin up containers as needed on the cluster. (See <a href="https://github.com/PhonePe/epoch">epoch</a>).</li>
+<li>Provides functionality for real-time <strong>log streaming and log download</strong> for all instances.</li>
+<li>Log generation is handled by Drove in a file layout suitable for existing log shipping mechanisms as well as for streaming to rsyslog servers (if needed).</li>
+<li>Provides a functional read-only web-based console for checking cluster, application, task and instance states, log streaming etc.</li>
+<li>Provides <strong>APIs</strong> for both read and write operations</li>
+<li>Supports <strong>discovery for sibling containers</strong> to support dynamic cluster reconfiguration in frameworks like hazelcast.</li>
+<li>Support extra metadata in the form of <strong>tags</strong> on instances. This can be used in external systems for routing or other use-cases as this information is avaliable in endpoint as well.</li>
+<li><a href="https://github.com/PhonePe/drove-cli"><strong>CLI</strong></a> system for easy deployments and app/task lifecycle management.</li>
+<li>NGinx based router called <a href="https://github.com/PhonePe/drove-nixy">drove-nixy</a> for efficient communication with the cluster itself and containers deployed on it.</li>
+</ul>
+<h3 id="operations">Operations</h3>
+<ul>
+<li>Only two components (controller and executor) to make a cluster (plus Zookeeper for coordination, drove-nixy for routing if needed).</li>
+<li>All components <strong>dockerised</strong> to allow for easy deployment as well as upgrades</li>
+<li>Simple single file YAML based configuration for the controller and executor. </li>
+<li>Cluster can be set to <strong>maintenance mode</strong> where it pauses making changes to the cluster and turns off safeguards around ensuring the required number of containers get reported from the executor nodes. This will allow the SRE team to do seamless software updates across the whole cluster in a few minutes,  irrespective of the size.</li>
+<li><strong>Blacklisting</strong> of the executor nodes will automatically move all the running application containers to other nodes and prevent any further allocations to this node. This allows the node to be taken down for maintenance that needs longer periods of time to complete OS/patch application, hardware maintenance etc.</li>
+<li>Detect and kill any <strong>zombie</strong> container nodes. On mesos, SRE team needs to be involved to manually kill such containers.</li>
+</ul>
+<h3 id="performance">Performance</h3>
+<ul>
+<li>Scheduler needs to be aware of NUMA hardware topology of the node and prevent containers from being split across nodes.</li>
+<li>Scheduler will <strong>pin containers</strong> to specific cores on a NUMA node so as to stop containers from stepping on each other’s toes during peak hours and allow them to fully utilise the multi-level caches associated with the allocated CPU cores. Some balance is anyways gained by enabling hyper-threading on the executor nodes. This should be sufficient to provide a significant boost to the application performance.</li>
+<li>Allows for <strong>specialised nodes</strong> in the cluster. For example, there might be nodes with GPU available. We would want to run ML models that can utilise such hardware rather than allocate generic service containers on such nodes. To this end, the scheduler supports tagging and allows for containers to be explicitly mapped to tagged nodes.</li>
+<li>Allows for different <strong>placement policies</strong> to provide some flexibility to users in where they want to place their container nodes. This sometimes helps developers deploy specific apps to specific nodes where they might have been granted special privileges to perform deeper than usual investigations of running service containers (for example, take heap-dumps to specific mounted volumes etc).</li>
+<li>Allows for <strong>configuration injection</strong> at container startup. Such configuration can be stream in as part of the dpeloyment specification, mounted in from executor hosts or fetched via API calls by the controllers or executors.</li>
+<li>Provides provisions to allow for extension of the scheduler to implement different scheduling algorithms in the code later on.</li>
+<li>Sometimes, NUMA localization and cpu pinning are overkill for clusters that don't need to extract the last bit of performance. For example, testing/staging clusters. To this end, drove supports the following features:<ul>
+<li>Allows turning off NUMA and core pinning at executor level</li>
+<li>Allows to specify multipliers for available CPU/memory to accommodate for over provisioning on the cluster.</li>
+</ul>
+</li>
+<li>Because the above are set at an executor level, the cluster can have different types of nodes with different required performance characteristics appropriately tagged. Relevant apps can be deployed based on performance requirements.</li>
+</ul>
+<h3 id="resilience">Resilience</h3>
+<ul>
+<li><strong>Small</strong> number of <strong>moving pieces</strong>. Keeps the minimal amount of dependencies in the system. This reduces the exposure for failures by effectively reducing the number of external dependencies and possible failure points.</li>
+<li>Controller stores state on external system (Zookeeper) for now.</li>
+<li>Executor stores all container specific state in container metadata itself. No other state is maintained/needed by executor.</li>
+<li>Containers keep running even when most of the system is down. This means even when the cluster coordinators, executors, state storage etc are down, the already deployed containers keep on running as is. If a service discovery mechanism is implemented properly, this effectively protects the system against service disruptions even in the face of failure of critical cluster components. At PhonePe we use <a href="https://github.com/appform-io/ranger">Ranger</a> for service discovery. </li>
+<li><strong>Container state reconciliation</strong> is part of the executor system, so that executor service can be restarted easily without affecting application or task deployments. In other words, the executor needs to recognise the containers started by itself on restarts and report their state as usual to the controller.</li>
+<li>Keeps things as simple as possible. Drove uses a few simple constructs (scale up/scale down) and implement all application/task features using that.</li>
+<li><strong>Multi-mode cluster messaging</strong> ensures that faster updates will be sent to controller via sync channels, while the controller(s) keep refreshing the cluster state periodically irrespective of the last synced data. Drove assumes that communication failures would happen. Even if new changes can’t be propagated from executor to controller, it tries to keep existing topology as updated as possible.</li>
+<li>Built in safeguards to detect and kill any rogue (zombie) container instances that have remained back for some reason (maybe some bug in the orchestrator etc).</li>
+<li>Controller is <strong>highly available</strong> with one leader active at a time. Any communication issues with zookeeeper will leader to quick death of the controller so that another controller can take up it's place as quickly as possible.</li>
+<li>Leader can be tracked using the <code>ping</code> api and is used by components such as <a href="https://github.com/PhonePe/drove-nixy">drove-nixy</a> to provide a Virtual Host that can be used to interact with the cluster via the ui or the CLI and other tools.</li>
+</ul>
+<h3 id="security">Security</h3>
+<ul>
+<li>Clearly designate roles for read and write operations. Write operations include cluster maintenance and app and task lifecycle maintenance.</li>
+<li>Authentication system is easily extensible</li>
+<li>Supports basic auth as the minimal auth requirement. User credentials stored in bcrypt format in controller config files.</li>
+<li>Support a no auth mode for starter clusters</li>
+<li>Provides audit logs for events in the system. Such logs can get aggregated and/or shipped out  independently by existing log aggregation systems like logrotate-+rsync or (r)syslog etc by configuring the appropirate loggers in the controller configuration file.</li>
+<li>Separate authentication system for intra-cluster authentication and for edge. This will mean that even if external auth is compromised (or vice versa), the system keeps working as is.</li>
+<li>Shared secret is used for intra cluster authentication.</li>
+<li><strong>Dynamically generated tokens</strong> are injected into container instances for seamless sibling discovery. This provides a way for developers to implement clustering mechanisms for frameworks like Hazelcast (provided already).</li>
+</ul>
+<h3 id="observability">Observability</h3>
+<ul>
+<li><strong>Real-time event stream</strong> from the controller can be used for any other event driven system like nixy etc to refresh upstream topology.</li>
+<li><strong>Metrics</strong> available on admin ports for both the controllers and executors. Something like telegraf can be used to collect and send them to the centralised metrics management system of your choice. (At PhonePe we use telegraf, which pushed the metrics to our custom metrics collection service backed by a modified version of OpenTSDB. We use grafana to visualize the same metrics).</li>
+<li>Published metrics from controllers includes system health metrics around themselves.</li>
+<li>Published metrics from executors contains system health metrics as well as other metrics around the containers running on them. This includes but is not limited to CPU, Memory and network usage.</li>
+</ul>
+<h3 id="unsupported-features">Unsupported Features</h3>
+<ul>
+<li><em>Auto-scaling of containers:</em> In PhonePe we have an extensive metrics ingestion system and an auto-scaler that works on a proprietary algorithm to scale containers up and down based on the same. This works independent of the orchestration system in play (we were on Drove and Mesos both at the same time during the transition period) and calls apis on the deployment system that handles scaling operations independently. Any implementation at the orchestration level will not work as the contributors to the metrics might be running on different clusters and scaling them independently will bring in more complexities rather than solving for simplicity.</li>
+<li><em>Network level traffic control:</em> At PhonePe network security is handled at VRF level and container level access control is not needed. All services are already integrated with the OAuth2 compliant internal authentication and authorization system and perform security checks for the same at the application layer. As a matter of fact, we want containers to be as close to the raw network level as possible to ensure we can extract the highest level of network performance possible, other things being constant.</li>
+<li><em>End to end configuration management:</em> At this point of time, app/task configuration is maintained independently at PhonePe, subject to our apporval workflows based on the compliance domain for the application, can be static or dynamic and may be tied to deployments.</li>
+<li><em>Multi-DC clusters</em> - We have not tested a single Drove cluster spanning across multiple data centers.</li>
+</ul>
+<h2 id="terminology">Terminology</h2>
+<p>Before we delve into the details, let's get acquainted with the required terminology:</p>
+<ul>
+<li><strong>Application</strong> - A service running on the cluster. Such a service can have an exposed port and will have an automatically configured virtual host on Drove Gateway.</li>
+<li><strong>Task</strong> - A transient container based task.</li>
+<li><strong>Controller Nodes</strong> - The brains of the cluster. Only one cluster is the leader and hence the decision maker in the system.</li>
+<li><strong>Executor Nodes</strong> - The workhorse nodes of the cluster where the actual containers are run.</li>
+<li><strong>Drove CLI</strong> - A command line client to interact with the cluster.</li>
+<li><strong>Drove Gateway</strong> - Used to provide ingress to the leader and containers running on the cluster.</li>
+<li><strong>Epoch</strong> - A cron type scheduler to spin up <em>tasks</em> on a Drove cluster based on pre-defined schedules.</li>
+</ul>
+<h2 id="github-repositories">Github Repositories</h2>
+<ul>
+<li>Uber Repo - <a href="https://github.com/PhonePe/drove-orchestrator">https://github.com/PhonePe/drove-orchestrator</a></li>
+<li>Drove Orchestrator Code - <a href="https://github.com/PhonePe/drove">https://github.com/PhonePe/drove</a></li>
+<li>Drove CLI - <a href="https://github.com/PhonePe/drove-cli">https://github.com/PhonePe/drove-cli</a></li>
+<li>Drove Gateway - <a href="https://github.com/PhonePe/drove-nixy">https://github.com/PhonePe/drove-nixy</a></li>
+<li>Epoch - <a href="https://github.com/PhonePe/epoch">https://github.com/PhonePe/epoch</a></li>
+</ul>
+<h2 id="license">License</h2>
+<p>Apache 2</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": ".", "features": ["navigation.tracking", "content.code.copy", "content.code.annotate"], "search": "assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="assets/javascripts/bundle.ad660dcc.min.js"></script>
+      
+    
+  <script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(() => { lightbox.reload() });
+</script></body>
+</html>

@@ -24,9 +24,12 @@ services:
       - type: bind
         source: /var/run/docker.sock
         target: /var/run/docker.sock
-  nixy:
+  gateway:
     image: ghcr.io/phonepe/drove-nixy:latest
     network_mode: host
     environment:
       DROVE_CONTROLLERS: 'http://localhost:4000'
       NGINX_DROVE_VHOST: drove.local
+    extra_hosts:
+      testapp.local : 127.0.0.1
+      drove.local : 127.0.0.1
