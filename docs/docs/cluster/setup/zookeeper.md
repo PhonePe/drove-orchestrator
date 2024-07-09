@@ -7,7 +7,10 @@ The following ports will be exposed:
 - `2181` - This is the main port for ZK clients to connect to the server
 - `2888` - The port used by Zookeeper for in-cluster communications between peers
 - `3888` - Port used for internal leader election
-- `8080` - Admin server port
+- `8080` - Admin server port. We are going to turn this off.
+
+!!!danger
+    The ZK admin server does not shut down cleanly from time to time. And is not needed for anything related to Drove. If not needed, you should turn it off.
 
 We assume the following to be the IP for the 3 zookeeper nodes:
 
@@ -20,18 +23,30 @@ We assume the following to be the IP for the 3 zookeeper nodes:
 Let us prepare the configuration. Put the following in a file: `/etc/drove/zk.env`:
 
 ```unixconfig
-ZOO_TICK_TIME=2000
-ZOO_INIT_LIMIT=5
-ZOO_SYNC_LIMIT=2
-ZOO_STANDALONE_ENABLED=true
-ZOO_ADMINSERVER_ENABLED=true
 
+#(1)!
+ZOO_TICK_TIME=2000
+ZOO_INIT_LIMIT=10
+ZOO_SYNC_LIMIT=5
+ZOO_STANDALONE_ENABLED=false
+ZOO_ADMINSERVER_ENABLED=false
+
+#(2)!
 ZOO_AUTOPURGE_PURGEINTERVAL=12
 ZOO_AUTOPURGE_SNAPRETAINCOUNT=5
 
-ZOO_MY_ID=1
+#(3)!
+ZOO_MY_ID=1 //(2)!
 ZOO_SERVERS=server.1=192.168.3.10:2888:3888;2181 server.2=192.168.3.11:2888:3888;2181 server.3=192.168.3.12:2888:3888;2181
+
+#(4)!
+JVMFLAGS='-Djute.maxbuffer=0x9fffff -Xmx4g -Xms4g'#(1)!
 ```
+
+1. This is cluster level configuration to ensure the cluster topology remains stable through minor flaps
+2. This will control how much data we retain
+3. This section needs to change per server. Each server should have a different `ZOO_MY_ID` set. And the same numbers get referred to in `ZOO_SERVERS` section.
+4. JVM Configuration and other configuration options. Please check notes below.
 
 !!!warning
     -  The `ZOO_MY_ID` value needs to be different on _every_ server.So it would be:
@@ -43,6 +58,16 @@ ZOO_SERVERS=server.1=192.168.3.10:2888:3888;2181 server.2=192.168.3.11:2888:3888
 
 !!!info
     Exhaustive set of options can be found on the [Official Docker Page](https://hub.docker.com/_/zookeeper/#configuration).
+
+!!!danger "Configuring Max Data Size"
+    Drove data per node can get a bit on the larger side from time to time depending on your application configuration. To be on the safe side, we need to increase the maximum data size per node. This is achieved by setting the JVM option `-Djute.maxbuffer=0x9fffff` on _all_ cluster nodes in Drove. This is 10MB (approx). The actual payload doesn't reach anywhere close. However we shall be picking up payload compression in a future version to stop this variable from needing to be set.
+    
+    For the Zookeeper Docker, the environment variable `JVMFLAGS` needs to be set to `-Djute.maxbuffer=0x9fffff`.
+
+    Please refer to [Zookeeper Advanced Configuration](https://zookeeper.apache.org/doc/r3.6.2/zookeeperAdmin.html) for further properties that can be tuned.
+
+!!!tip "JVM Size"
+    We set 4GB JVM heap size for ZK by adding appropriate options in `JVMFLAGS`. Please make sure you have sized your machines to have 10-16GB of RAM at the very least. Tune the JVM size and machine size according to your needs.
 
 ## Data Storage
 
@@ -72,10 +97,12 @@ TimeoutStartSec=0
 Restart=always
 ExecStartPre=/usr/bin/docker pull zookeeper:3.7
 ExecStart=/usr/bin/docker run --env-file /etc/drove/zk.env 
-    -v /var/lib/drove/zk/data:/data 
-    -v /var/lib/drove/zk/datalog:/datalog
-    -v /var/log/drove/zk:/logs
-    --network host
+    --volume /var/lib/drove/zk/data:/data 
+    --volume /var/lib/drove/zk/datalog:/datalog
+    --volume /var/log/drove/zk:/logs
+    --publish 2181:2181 
+    --publish 2888:2888
+    --publish 3888:3888
     --restart always --name %n zookeeper:3.7
 
 [Install]
