@@ -1,4 +1,4 @@
-# Setting Up The Zookeeper Cluster
+# Setting Up Zookeeper
 
 We shall be running Zookeeper using the official Docker images. All data volumes etc will be mounted on the host machines.
 
@@ -40,7 +40,7 @@ ZOO_MY_ID=1 //(2)!
 ZOO_SERVERS=server.1=192.168.3.10:2888:3888;2181 server.2=192.168.3.11:2888:3888;2181 server.3=192.168.3.12:2888:3888;2181
 
 #(4)!
-JVMFLAGS='-Djute.maxbuffer=0x9fffff -Xmx4g -Xms4g'#(1)!
+JVMFLAGS='-Djute.maxbuffer=0x9fffff -Xmx4g -Xms4g'
 ```
 
 1. This is cluster level configuration to ensure the cluster topology remains stable through minor flaps
@@ -88,7 +88,7 @@ Create a `systemd` file. Put the following in `/etc/systemd/system/drove.zookeep
 
 ```systemd
 [Unit]
-Description=Drove Zookeeper Container
+Description=Drove Zookeeper Service
 After=docker.service
 Requires=docker.service
 
@@ -96,14 +96,17 @@ Requires=docker.service
 TimeoutStartSec=0
 Restart=always
 ExecStartPre=/usr/bin/docker pull zookeeper:3.7
-ExecStart=/usr/bin/docker run --env-file /etc/drove/zk.env 
-    --volume /var/lib/drove/zk/data:/data 
-    --volume /var/lib/drove/zk/datalog:/datalog
-    --volume /var/log/drove/zk:/logs
-    --publish 2181:2181 
-    --publish 2888:2888
-    --publish 3888:3888
-    --restart always --name %n zookeeper:3.7
+ExecStart=/usr/bin/docker run \
+    --env-file /etc/drove/zk.env \
+    --volume /var/lib/drove/zk/data:/data \
+    --volume /var/lib/drove/zk/datalog:/datalog \
+    --volume /var/log/drove/zk:/logs \
+    --publish 2181:2181 \
+    --publish 2888:2888 \
+    --publish 3888:3888 \
+    --restart always \
+    --name %n \
+    zookeeper:3.7
 
 [Install]
 WantedBy=multi-user.target
