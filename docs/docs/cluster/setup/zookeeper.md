@@ -252,20 +252,23 @@ After=docker.service
 Requires=docker.service
 
 [Service]
+User=drove
 TimeoutStartSec=0
 Restart=always
-ExecStartPre=/usr/bin/docker pull zookeeper:3.7
+ExecStartPre=-/usr/bin/docker pull zookeeper:3.8
 ExecStart=/usr/bin/docker run \
-    --env-file /etc/drove/zk.env \
+    --env-file /etc/drove/zk/zk.env \
     --volume /var/lib/drove/zk/data:/data \
     --volume /var/lib/drove/zk/datalog:/datalog \
     --volume /var/log/drove/zk:/logs \
+    --volume /etc/drove/zk/logback.xml:/conf/logback.xml \
+    --volume /etc/drove/zk/java.env:/conf/java.env \
     --publish 2181:2181 \
     --publish 2888:2888 \
     --publish 3888:3888 \
     --rm \
     --name drove.zookeeper \
-    zookeeper:3.7
+    zookeeper:3.8
 
 [Install]
 WantedBy=multi-user.target
