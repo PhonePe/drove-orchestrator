@@ -419,6 +419,7 @@ chown -R drove:drove /var/log/drove/drove-controller
 Create a `systemd` file. Put the following in `/etc/systemd/system/drove.controller.service`:
 
 ```systemd
+[Unit]
 Description=Drove Controller Service
 After=docker.service
 Requires=docker.service
@@ -431,6 +432,16 @@ Restart=always
 ExecStartPre=/usr/bin/docker pull ghcr.io/phonepe/drove-controller:latest
 ExecStart=/usr/bin/docker run  \
     --env "CONFIG_FILE_PATH=/etc/drove/controller.yml" \
+    --env "JAVA_PROCESS_MIN_HEAP=4g" \
+    --env "JAVA_PROCESS_MAX_HEAP=4g" \
+	--env "JAVA_OPTS='-Xlog:gc:/var/log/drove/drove-controller/gc.log \
+				-Xlog:gc:::filecount=15,filesize=20M \
+				-Xlog:gc::time,level,tags \
+				-XX:+UseNUMA \
+				-XX:+ExitOnOutOfMemoryError \
+				-Djava.security.egd=file:/dev/urandom \
+				-Dfile.encoding=utf-8 \
+				-Djute.maxbuffer=0x9fffff' \
     --volume /etc/drove/controller.yml:/etc/drove/controller.yml:RO \
     --volume /var/log/drove/drove-controller:/var/log/drove/drove-controller \
     --publish 10000:10000  \

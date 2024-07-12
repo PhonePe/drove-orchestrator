@@ -1,5 +1,6 @@
 nav:
   - planning.md
+  - prerequisites.md
   - zookeeper.md
   - controller.md
   - executor-setup.md

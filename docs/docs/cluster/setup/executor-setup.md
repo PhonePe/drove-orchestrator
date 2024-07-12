@@ -2,9 +2,17 @@
 
 We shall setup the executor nodes by setting up the hardware, operating system first and then the executor service itself.
 
-## CPU considerations
+## Considerations and tuning for hardware and operating system
 
-The executor nodes are the servers that host and run the actual docker containers. Drove will use the NUMA topology of these machines to optimize the placement for containers to extract the maximum performance.
+In the following sections we discus some aspects of scheduling, hardware and settings on the OS to ensure good performance.
+
+### CPU and Memory considerations
+
+The executor nodes are the servers that host and run the actual docker containers. Drove will take into consideration the NUMA topology of these machines to optimize the placement for containers to extract the maximum performance. Along with this, Drove will cpuset the containers to the allocated cores in a non overlapping manner, so that the cores allocated to a container are dedicated to it. Memory allocated to a container is pinned as well and selected from the same NUMA node.
+
+There is an option to disable NUMA and core pinning. There are additional options to introduce core and memory multipliers. Once these are configured, core and memory pinning is turned off. Drove does not do any kind of burst scaling or overcommitment to ensure application performance remains predictable even under load. Instead, the multiplier based config can be used to reduce cpu wastage when running small containers. It needs to be noted here, that multipliers are configured at a executor host level. Hence nodes with multipliers should be properly tagged and deployments be done using `TAG` placement to put small containers on these nodes.
+
+Adopting such a cluster topology will ensure that containers that need high performance run on nodes with NUM/Core pinning enabled and the smaller ones (like for example consoles etc) are run on separate nodes without pinning.
 
 ### Hyper-threading
 Whether Hyper Threading needs to be enabled or not is a bit dependent on applications deployed and how effectively they can utilize individual CPU cores. For mixed workloads, we recommend Hyper Threading to be enabled on the system.
@@ -63,5 +71,8 @@ resources:
     systemctl restart drove-executor
     ``` -->
 
-## Storage consideration
+### Storage consideration
 On executor nodes the disk might be under pressure if container (re)deployments are frequent or the containers log very heavily. As such, we recommend the logging directory for Drove be mounted on hardware that will be able to handle this load. Similar considerations need to be given to the log and package directory for docker or podman.
+
+## Executor Configuration Reference
+
