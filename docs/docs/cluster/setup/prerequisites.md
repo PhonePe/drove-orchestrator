@@ -43,3 +43,6 @@ chmod 700 /var/lib/drove
 
 mkdir -p /var/log/drove
 ``` 
+
+!!!danger
+	Ensure you run the `chmod` commands to remove read access everyone other than the owner.

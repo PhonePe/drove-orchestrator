@@ -25,6 +25,8 @@ Location for data and logs are as follows:
 - `/var/lib/drove/zk/` - Data and data logs
 - `/var/log/drove/zk` - Logs
 
+### Important files
+
 The zookeeper container stores snapshots, transaction logs and application logs on `/data`, `/datalog` and `/logs` directories respectively. We shall be volume mounting the following:
 
 - `/var/lib/drove/zk/data` to `/data` on the container
@@ -110,12 +112,12 @@ export SERVER_JVMFLAGS='-Djute.maxbuffer=0x9fffff -Xmx4g -Xms4g -Dfile.encoding=
 
 !!!tip "JVM Size"
     We set 4GB JVM heap size for ZK by adding appropriate options in `SERVER_JVMFLAGS`. Please make sure you have sized your machines to have 10-16GB of RAM at the very least. Tune the JVM size and machine size according to your needs.
-
+q
 !!!danger "`JVMFLAGS` environment variable"
     Do not set this variable in `zk.env`. Couple of reasons:
 
     - This will affect _both_ the zk server _as well as_ the client.
-    - There is an [issue](https://stackoverflow.com/questions/56497140/zookeeper-ignores-jvmflags) and the flag (nor the `SERVER_JVMFLAGS`) are used properly by the startup scripts. 
+    - There is an [issue](https://stackoverflow.com/questions/56497140/zookeeper-ignores-jvmflags) and the flag (nor the `SERVER_JVMFLAGS`) are _not_ used properly by the startup scripts.
 
 ### Configure logging
 We want to have physical log files on disk for debugging and audits and want the container to be ephemeral to allow for easy updates etc. To achieve this, put the following in `/etc/drove/zk/logback.xml`:

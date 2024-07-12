@@ -312,19 +312,20 @@ Durations in Drove can be expressed in human readable form, for example: `3d` ca
 - `day` - days
 - `days` - days
 
+## Relevant directories
+Location for data and logs are as follows:
+
+- `/etc/drove/controller/` - Configuration files
+- `/var/log/drove/controller/` - Logs
+
+We shall be volume mounting the config and log directories with the same name.
+
+!!!warning "Prerequisite Setup"
+    If not done already, lease complete the [prerequisite setup](prerequisites.md) on all machines earmarked for the cluster.
+
 ## Setup the config file
 
-Create the directory `/etc/drove`.
-
-```shell
-mkdir /etc/drove
-chmod 700 /etc/drove
-```
-
-!!!danger
-	Ensure you run the `chmod` command to remove read access everyone other than the owner.
-
-Create a relevant configuration file in `/etc/drove/controller.yml`.
+Create a relevant configuration file in `/etc/drove/controller/controller.yml`.
 
 **Sample**
 ```yaml
@@ -339,8 +340,8 @@ server:
     appenders:
       - type: file
         timeZone: IST
-        currentLogFilename: /var/logs/drove/drove-controller-access.log
-        archivedLogFilenamePattern: /var/logs/drove/drove-controller-access.log-%d-%i
+        currentLogFilename: /var/log/drove/controller/drove-controller-access.log
+        archivedLogFilenamePattern: /var/log/drove/controller/drove-controller-access.log-%d-%i
         archivedFileCount: 3
         maxFileSize: 100MiB
 
@@ -354,14 +355,14 @@ logging:
     - type: file
       threshold: ALL
       timeZone: IST
-      currentLogFilename: /var/logs/drove/drove-controller.log
-      archivedLogFilenamePattern: /var/logs/drove/drove-controller.log-%d-%i
+      currentLogFilename: /var/log/drove/controller/drove-controller.log
+      archivedLogFilenamePattern: /var/log/drove/controller/drove-controller.log-%d-%i
       archivedFileCount: 3
       maxFileSize: 100MiB
       logFormat: "%(%-5level) [%date] [%logger{0} - %X{appId}] %message%n"
 
 zookeeper:
-  connectionString: "192.168.3.10:2181,192.168.3.11:2181,192.168.3.12:2181"
+  connectionString: "192.168.56.10:2181"
 
 clusterAuth:
   secrets:
@@ -396,25 +397,6 @@ options:
    - /dev/null
 ```
 
-## Create the `drove` user
-```shell
-adduser --system --group "drove" --home /var/lib/misc --no-create-home > /dev/null
-```
-
-## Add user to docker group
-```shell
-groupadd docker
-usermod -aG docker drove
-```
-
-## Create required directories and assign permissions
-
-```shell
-mkdir -p /var/log/drove/drove-controller
-chown -R drove:drove /etc/drove
-chown -R drove:drove /var/log/drove/drove-controller
-```
-
 ## Create systemd file
 Create a `systemd` file. Put the following in `/etc/systemd/system/drove.controller.service`:
 
@@ -426,42 +408,45 @@ Requires=docker.service
 
 [Service]
 User=drove
-Group=drove
 TimeoutStartSec=0
 Restart=always
-ExecStartPre=/usr/bin/docker pull ghcr.io/phonepe/drove-controller:latest
+ExecStartPre=-/usr/bin/docker pull ghcr.io/phonepe/drove-controller:latest
 ExecStart=/usr/bin/docker run  \
-    --env "CONFIG_FILE_PATH=/etc/drove/controller.yml" \
-    --env "JAVA_PROCESS_MIN_HEAP=4g" \
-    --env "JAVA_PROCESS_MAX_HEAP=4g" \
-	--env "JAVA_OPTS='-Xlog:gc:/var/log/drove/drove-controller/gc.log \
-				-Xlog:gc:::filecount=15,filesize=20M \
-				-Xlog:gc::time,level,tags \
-				-XX:+UseNUMA \
-				-XX:+ExitOnOutOfMemoryError \
-				-Djava.security.egd=file:/dev/urandom \
-				-Dfile.encoding=utf-8 \
-				-Djute.maxbuffer=0x9fffff' \
-    --volume /etc/drove/controller.yml:/etc/drove/controller.yml:RO \
-    --volume /var/log/drove/drove-controller:/var/log/drove/drove-controller \
+    --env-file /etc/drove/controller/controller.env \
+    --volume /etc/drove/controller:/etc/drove/controller:ro \
+    --volume /var/log/drove/controller:/var/log/drove/controller \
     --publish 10000:10000  \
     --publish 10001:10001 \
-    --restart always \
-    --name %n \
+    --hostname %H \
+    --rm \
+    --name drove.controller \
     ghcr.io/phonepe/drove-controller:latest
 
 [Install]
 WantedBy=multi-user.target
 ```
+
+Verify the file with the following command:
+```shell
+systemd-analyze verify drove.controller.service
+```
+
+Set permissions
+```shell
+chmod 664 /etc/systemd/system/drove.controller.service
+```
+
 ## Start the service on all servers
 
 Use the following to start the service:
 
 ```shell
+systemctl daemon-reload
+systemctl enable drove.controller
 systemctl start drove.controller
 ```
 
-You can tail the logs at `/var/logs/drove/drove-controller.log`.
+You can tail the logs at `/var/logs/drove/controller/drove-controller.log`.
 
 The console would be available at `http://<ip>:10000` and admin functionality will be available on `http://<ip>:10001` according to the above config.
 
