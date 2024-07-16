@@ -51,11 +51,13 @@ logging: #(6)!
     - type: file #(8)!
       threshold: ALL
       timeZone: ${DROVE_TIMEZONE}
-      currentLogFilename: /logs/rove-controller.log
+      currentLogFilename: /logs/drove-controller.log
       archivedLogFilenamePattern: /logs/drove-controller.log-%d-%i
       archivedFileCount: 3
       maxFileSize: 100MiB
       logFormat: "%(%-5level) [%date] [%logger{0} - %X{appId}] %message%n"
+      archive: true
+
 
 zookeeper: #(9)!
   connectionString: ${ZK_CONNECTION_STRING}
@@ -80,7 +82,7 @@ userAuth: #(11)!
 instanceAuth: #(12)!
   secret: ${DROVE_INSTANCE_AUTH_SECRET}
 
-options:
+options: #(13)!
   maxStaleInstancesCount: 3
   staleCheckInterval: 1m
   staleAppAge: 1d
@@ -102,6 +104,7 @@ options:
 10. Configuration for authentication between nodes in the cluster. Please check [intra node auth config](#intra-node-authentication-configuration) for details.
 11.  Configure user authentication to access the cluster. Please check [User auth config](#user-authentication-configuration) for details.
 12. Signing secret for JWT to be embedded in application and task instances. Check [Instance auth config](#instance-authentication-configuration) for details.
+13. Special options to configure controller behaviour. See [Controller Options](#controller-options) for details.
 
 !!!tip
 	In case you do not want to expose admin apis to outside the host, please set `bindHost` in the admin connectors section.
@@ -217,17 +220,17 @@ instanceAuth:
 ```
 
 ### Controller Options
-The following options can be set to influence the behavior for the Drove cluster and the controller.
+The following options can be set to influence the behavior of the Drove cluster and the controller.
 
 | Name | Option | Description |
 |------|--------|-------------|
-| Stale Check Interval | `staleCheckInterval` | Interval at which Drove checks for stale application and task metadata for cleanup. Defaults to 1 hour. Expressed in [duration](#duration-units). |
-| Stale App Age | `staleAppAge` | Apps in `MONITORING` state are cleaned up after some time by Drove. This variable can be used to control the max time for which such apps are maintained in the cluster. Defaults to 7 days. Expressed in [duration](#duration-units). |
+| Stale Check Interval | `staleCheckInterval` | Interval at which Drove checks for stale application and task metadata for cleanup. Defaults to 1 hour. Expressed in [duration](units.md#duration). |
+| Stale App Age | `staleAppAge` | Apps in `MONITORING` state are cleaned up after some time by Drove. This variable can be used to control the max time for which such apps are maintained in the cluster. Defaults to 7 days. Expressed in [duration](units.md#duration). |
 | Stale App Instances Count | `maxStaleInstancesCount` | Maximum number of application instances metadata for stopped or lost instances to be maintained in the cluster. Defaults to 100. |
-| Stale Instance Age | `staleInstanceAge` | Maximum age for a stale application instance to be retained. Defaults to 7 days. Expressed in [duration](#duration-units). |
-| Stale Task Age | `staleTaskAge` | Maximum time for which metadata for a finished task is retained on the cluster. Defaults to 2 days. Expressed in [duration](#duration-units). |
-| Event Storage Duration | `maxEventsStorageDuration` | Maximum time for which cluster events are retained on the cluster. Defaults to 1 hour. Expressed in [duration](#duration-units). |
-| Default Operation Timeout | `clusterOpTimeout` | Timeout for operations that are initiated by drove itself. For example, instance spin up in case of executor failure, instance migrations etc. Defaults to 5 minutes. Expressed in [duration](#duration-units). |
+| Stale Instance Age | `staleInstanceAge` | Maximum age for a stale application instance to be retained. Defaults to 7 days. Expressed in [duration](units.md#duration). |
+| Stale Task Age | `staleTaskAge` | Maximum time for which metadata for a finished task is retained on the cluster. Defaults to 2 days. Expressed in [duration](units.md#duration). |
+| Event Storage Duration | `maxEventsStorageDuration` | Maximum time for which cluster events are retained on the cluster. Defaults to 1 hour. Expressed in [duration](units.md#duration). |
+| Default Operation Timeout | `clusterOpTimeout` | Timeout for operations that are initiated by drove itself. For example, instance spin up in case of executor failure, instance migrations etc. Defaults to 5 minutes. Expressed in [duration](units.md#duration). |
 | Operation threads | `clusterOpParallelism` | Signified the parallelism for operations internal to the cluster. Defaults to: 1. Range: 1-32. |
 | Audited Methods | `auditedHttpMethods` | Drove prints an audit log with user details when an api is called by an user. Defaults to `["POST", "PUT"]`. |
 | Allowed mount directories | `allowedMountDirs` | If provided, Drove will ensure that application and task spec can mount only the directories mentioned in this set on executor host. |
@@ -283,34 +286,6 @@ The `allowedMountDirs` option whitelists only some directories to be mounted on 
 
 !!!danger
 	It is **highly** recommended to set `allowedMountDirs` to a designated directory that containers might want to use as scratch space if needed. Keeping this empty _will almost definitely_ cause security issues in the long run.
-
-### Duration Units
-
-Durations in Drove can be expressed in human readable form, for example: `3d` can be used to signify 3 days and so on. The list of valid duration unit suffixes are:
-
-- `ns` - nanoseconds
-- `nanosecond` - nanoseconds
-- `nanoseconds` - nanoseconds
-- `us` - microseconds
-- `microsecond` - microseconds
-- `microseconds` - microseconds
-- `ms` - milliseconds
-- `millisecond` - milliseconds
-- `milliseconds` - milliseconds
-- `s` - seconds
-- `second` - seconds
-- `seconds` - seconds
-- `m` - minutes
-- `min` - minutes
-- `mins` - minutes
-- `minute` - minutes
-- `minutes` - minutes
-- `h` - hours
-- `hour` - hours
-- `hours` - hours
-- `d` - days
-- `day` - days
-- `days` - days
 
 ## Relevant directories
 Location for data and logs are as follows:
@@ -396,6 +371,18 @@ options:
   allowedMountDirs:
    - /dev/null
 ```
+
+## Setup required environment variables
+Environment variables need to run the drove controller are setup in `/etc/drove/controller/controller.env`.
+
+```unixconfig
+CONFIG_FILE_PATH=/etc/drove/controller/controller.yml
+JAVA_PROCESS_MIN_HEAP=2g
+JAVA_PROCESS_MAX_HEAP=2g
+ZK_CONNECTION_STRING="192.168.3.10:2181"
+JAVA_OPTS="-Xlog:gc:/var/log/drove/controller/gc.log -Xlog:gc:::filecount=3,filesize=10M -Xlog:gc::time,level,tags -XX:+UseNUMA -XX:+ExitOnOutOfMemoryError -Djava.security.egd=file:/dev/urandom -Dfile.encoding=utf-8 -Djute.maxbuffer=0x9fffff"
+```
+
 
 ## Create systemd file
 Create a `systemd` file. Put the following in `/etc/systemd/system/drove.controller.service`:

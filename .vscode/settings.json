@@ -3,7 +3,17 @@
         "appenders",
         "behaviour",
         "Dropwizard",
-        "NUMA"
+        "gibibyte",
+        "GIBIBYTES",
+        "kibibyte",
+        "KIBIBYTES",
+        "mebibyte",
+        "MEBIBYTES",
+        "NUMA",
+        "pebibyte",
+        "PEBIBYTES",
+        "tebibyte",
+        "TEBIBYTES"
     ],
     "yaml.schemas": {
         "https://squidfunk.github.io/mkdocs-material/schema.json": "mkdocs.yml"
