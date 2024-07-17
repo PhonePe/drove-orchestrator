@@ -7,3 +7,6 @@
 [submodule "epoch"]
 	path = epoch
 	url = git@github.com:PhonePe/epoch.git
+[submodule "drove-gateway"]
+	path = drove-gateway
+	url = git@github.com:PhonePe/drove-gateway.git
