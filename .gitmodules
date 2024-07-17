@@ -4,9 +4,6 @@
 [submodule "drove-cli"]
 	path = drove-cli
 	url = git@github.com:PhonePe/drove-cli.git
-[submodule "drove-nixy"]
-	path = drove-nixy
-	url = git@github.com:PhonePe/drove-nixy.git
 [submodule "epoch"]
 	path = epoch
 	url = git@github.com:PhonePe/epoch.git
