@@ -296,7 +296,7 @@ Location for data and logs are as follows:
 We shall be volume mounting the config and log directories with the same name.
 
 !!!warning "Prerequisite Setup"
-    If not done already, lease complete the [prerequisite setup](prerequisites.md) on all machines earmarked for the cluster.
+    If not done already, please complete the [prerequisite setup](prerequisites.md) on all machines earmarked for the cluster.
 
 ## Setup the config file
 

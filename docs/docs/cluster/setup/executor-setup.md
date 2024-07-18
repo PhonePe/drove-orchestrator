@@ -55,22 +55,6 @@ Cpus_allowed_list:	0-3
 !!!note
     Refer to [this](https://access.redhat.com/solutions/2884991) for more details.
 
-<!-- Once this is done, we can configure Drove executor YAML to skip these cores during container allocation by adding the following:
-
-```yaml
-resources:
-  ...
-  osCores: [ 0, 1, 2, 3 ]
-  ...
-```
-
-!!!tip
-    Restart the executor service for this to take effect.
-
-    ```shell
-    systemctl restart drove-executor
-    ``` -->
-
 ### Storage consideration
 On executor nodes the disk might be under pressure if container (re)deployments are frequent or the containers log very heavily. As such, we recommend the logging directory for Drove be mounted on hardware that will be able to handle this load. Similar considerations need to be given to the log and package directory for docker or podman.
 
@@ -354,7 +338,7 @@ Location for data and logs are as follows:
 We shall be volume mounting the config and log directories with the same name.
 
 !!!warning "Prerequisite Setup"
-    If not done already, lease complete the [prerequisite setup](prerequisites.md) on all machines earmarked for the cluster.
+    If not done already, please complete the [prerequisite setup](prerequisites.md) on all machines earmarked for the cluster.
 
 
 ## Setup the config file
@@ -463,8 +447,8 @@ ExecStart=/usr/bin/docker run  \
     --volume /etc/drove/executor:/etc/drove/executor:ro \
     --volume /var/log/drove/executor:/var/log/drove/executor \
     --volume /var/run/docker.sock:/var/run/docker.sock \
-    --publish 10000:10000  \
-    --publish 10001:10001 \
+    --publish 11000:11000  \
+    --publish 11001:11001 \
     --hostname %H \
     --rm \
     --name drove.executor \
