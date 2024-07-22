@@ -3,6 +3,8 @@
         "appenders",
         "behaviour",
         "Dropwizard",
+        "droveclient",
+        "droveutils",
         "gibibyte",
         "GIBIBYTES",
         "kibibyte",
