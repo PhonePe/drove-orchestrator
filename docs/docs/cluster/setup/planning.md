@@ -38,7 +38,7 @@ Controllers will manage the cluster with application instances spread across mul
 
 - **Containerisation Engine**: Drove supports the Docker engine and has experimental support for Podman. Choose your engine as per your security, networking and performance considerations.
 - **Container Networking**: The container engine and container networking should be configured as per your requirements. It is recommended to use Port forwarding based container networking if you choose to use Drove Gateway to route application traffic. Container engine settings can be modified to manage DNS and proxy parameters for containers.
-- **Placement policies and availability**: Drove supports placement policies to set criteria for replication of instances across executors and avoiding single points of failure. Drove tags can be assigned to executors and placement policy can be used to ping certain applications to specific selected executors if you have any hardware or other considerations.
+- **Placement policies and availability**: Drove supports placement policies to set criteria for replication of instances across executors and avoiding single points of failure. Drove tags can be assigned to executors and placement policy can be used to pin certain applications to specific selected executors if you have any hardware or other considerations.
 - **Scaling**: As your cluster scale increases, you can continue adding executors to the cluster. Placement policies should be used to manage availability criteria. Controller and ZooKeeper resource requirements will increase as your executor count increases and should be reviewed accordingly.
 
 ### Gateways
