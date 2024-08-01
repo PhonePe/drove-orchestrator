@@ -8,14 +8,30 @@ In the following sections we discus some aspects of scheduling, hardware and set
 
 ### CPU and Memory considerations
 
-The executor nodes are the servers that host and run the actual docker containers. Drove will take into consideration the NUMA topology of these machines to optimize the placement for containers to extract the maximum performance. Along with this, Drove will cpuset the containers to the allocated cores in a non overlapping manner, so that the cores allocated to a container are dedicated to it. Memory allocated to a container is pinned as well and selected from the same NUMA node.
+The executor nodes are the servers that host and run the actual docker containers. Drove will take into consideration the NUMA topology of these machines to optimize the placement for containers to extract the maximum performance. Along with this, Drove will `cpuset` the containers to the allocated cores in a non overlapping manner, so that the cores allocated to a container are dedicated to it. Memory allocated to a container is pinned as well and selected from the same NUMA node.
 
-There is an option to disable NUMA and core pinning. There are additional options to introduce core and memory multipliers. Once these are configured, core and memory pinning is turned off. Drove does not do any kind of burst scaling or overcommitment to ensure application performance remains predictable even under load. Instead, the multiplier based config can be used to reduce cpu wastage when running small containers. It needs to be noted here, that multipliers are configured at a executor host level. Hence nodes with multipliers should be properly tagged and deployments be done using `TAG` placement to put small containers on these nodes.
+Needless to say the minimum amount of CPU that can be given to an application or task is 1. Fractional cpu allocation can be achieved in a predictable manner by configuring over provisioning on executor nodes.
 
-Adopting such a cluster topology will ensure that containers that need high performance run on nodes with NUM/Core pinning enabled and the smaller ones (like for example consoles etc) are run on separate nodes without pinning.
+#### Over Provisioning of CPU and Memory
+
+Drove does not do any kind of burst scaling or overcommitment to ensure application performance remains predictable even under load. Instead, in Drove, there is a feature to make executors appear to have more cores (and memory) than it actually has. This can be used to get more utilization out of executor nodes in clusters that do not need guaranteed performance (for example staging or dev testing clusters). This is achieved by enabling **over provisioning**.
+
+Over provisioning needs to be configured in the executor configuration. It primarily consists of two configs:
+
+* CPU Multiplier - an integral multiplier which will be used to multiply the number of available cores
+* Memory Multiplier - an integral multiplier which will be used to multiply available memory
+
+VCores (virtual cores) are internal representation of a CPU core on the executor. If over provisioning is disabled, a vcore will correspond to a physical core. If over provisioning is enabled, 1 CPU core will generate `cpu multiplier` number of v cores. Drove does do `cpuset` even on containers running on nodes that have over provisioning enabled, however the physical cores that the containers get bound to are chosen at random, albeit from the same NUMA node. `cpuset-mem` is always done on the same NUMA node as well.
+
+!!!tip "Mixed clusters"
+    In some production clusters you might have applications that are non critical in terms of performance and are unable to utilize a full core. These can be tagged to be spun up on some nodes where over provisioning is enabled. Adopting such a cluster topology will ensure that containers that need high performance run on nodes without over provisioning and the smaller apps (like for example operations consoles etc) are run on separate nodes with over provisioning enabled. Just ensure the latter are tagged properly and during app deployment specify this tag in [application spec](../../applications/specification.md) or [task spec](../../tasks/specification.md).
+
+#### Disable NUMA Pinning
+
+There is an option to disable memory and core pinning. In this situation, all cores from all NUM nodes show up as being part of one node. `cpuset-mems` is _not_ called if numa pinning is disabled and therefore you will be leaving some memory performance on the table. We recommend not to dabble with this unless you have tasks and containers that need more than the number of cores available on a single NUMA node. This setting is enabled at executor level by setting `disableNUMAPinning: true`.
 
 ### Hyper-threading
-Whether Hyper Threading needs to be enabled or not is a bit dependent on applications deployed and how effectively they can utilize individual CPU cores. For mixed workloads, we recommend Hyper Threading to be enabled on the system.
+Whether Hyper Threading needs to be enabled or not is a bit dependent on applications deployed and how effectively they can utilize individual CPU cores. For mixed workloads, we recommend Hyper Threading to be enabled on the executor nodes.
 
 ### Isolating container and OS processes
 Typically we would not want containers to share CPU resources with processes for the operating system, Drove Executor Service as well as Docker engine (if using docker) and so on. While complete isolation would need creating a full scheduler (and passing `isolcpus` to GRUB parameters), we can get a good middle ground by ensuring such processes utilize only a few CPU cores on the system, and let the Drove executors deploy and pin containers to the rest.
@@ -252,7 +268,7 @@ This section can be used to configure how resources are exposed from an executor
 |NUMA Pinning|`disableNUMAPinning`| Disable NUMA and CPU core pinning for containers. Pinning is on by default. (default: `false`)|
 |Nvidia GPU| `enableNvidiaGpu` | Enable GPU support on containers. This setting makes all available Nvidia GPUs on the current executor machine available for any container running on this executor. GPU resources are not discovered on the executor, managed and rationed between containers. Needs to be used in conjunction with tagging (see `tags` below) to ensure only the applications which require a GPU end up on the executor with GPUs.|
 |Tags|`tags`| A set of strings that can be used in `TAG` placement policy to route application and task instances to this executor. |
-|Over Provisioning|`overProvisioning`|Setup over provisioning configuration. If this is provided, `disableNUMAPinning` needs to be set to `true`.|
+|Over Provisioning|`overProvisioning`|Setup over provisioning configuration. |
 
 
 !!!warning "Tagging"
@@ -274,16 +290,10 @@ To ensure predictability, we do not want pinned and non-pinned containers runnin
 
 To enable more containers than we could usually deploy and to still retain some level of control on how small you want a container to go, we specify multipliers on CPU and memory.
 
-!!!danger "Things turned off"
-    The following are **turned off** when `overProvisioning` is enabled:
-
-    - OS cores reservation.
-    - Drove will not ensure cores and memory allocated to a container come from same numa node
-    - Drove will not be calling cpuset/memset on container to pin containers to cores
-
 **Example:**
-- Let's say your executor server has 40 cores available. If you set `cpuMultiplier` as 4, this will blow up to 0-159.
+- Let's say your executor server has 40 cores available. If you set `cpuMultiplier` as 4, this node will now show up as having 160 cores to the controller.
 - Let's say your server had 512GB of memory, setting `memoryMultiplier` to 2 will make drove see it as 1TB.
+
 
 |Name|Option|Description|
 |----|------|-----------|
@@ -295,7 +305,6 @@ To enable more containers than we could usually deploy and to still retain some 
 ```yaml
 resources:
   exposedMemPercentage: 90
-  disableNUMAPinning: true
   overProvisioning:
     enabled: true
     memoryMultiplier: 1
