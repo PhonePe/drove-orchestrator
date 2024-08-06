@@ -30,10 +30,10 @@ VCores (virtual cores) are internal representation of a CPU core on the executor
 
 There is an option to disable memory and core pinning. In this situation, all cores from all NUM nodes show up as being part of one node. `cpuset-mems` is _not_ called if numa pinning is disabled and therefore you will be leaving some memory performance on the table. We recommend not to dabble with this unless you have tasks and containers that need more than the number of cores available on a single NUMA node. This setting is enabled at executor level by setting `disableNUMAPinning: true`.
 
-### Hyper-threading
+#### Hyper-threading
 Whether Hyper Threading needs to be enabled or not is a bit dependent on applications deployed and how effectively they can utilize individual CPU cores. For mixed workloads, we recommend Hyper Threading to be enabled on the executor nodes.
 
-### Isolating container and OS processes
+#### Isolating container and OS processes
 Typically we would not want containers to share CPU resources with processes for the operating system, Drove Executor Service as well as Docker engine (if using docker) and so on. While complete isolation would need creating a full scheduler (and passing `isolcpus` to GRUB parameters), we can get a good middle ground by ensuring such processes utilize only a few CPU cores on the system, and let the Drove executors deploy and pin containers to the rest.
 
 This is achieved in two steps:
@@ -70,6 +70,9 @@ Cpus_allowed_list:	0-3
 ```
 !!!note
     Refer to [this](https://access.redhat.com/solutions/2884991) for more details.
+
+### GPU Computation
+Nvidia based GPU compute can be enabled at executor level by installing relevant drivers. Please follow the [setup guide](../../extra/nvidia.md) to enable this. Remember to tag these nodes to isolate them from the primary cluster and use tags to deploy apps and tasks that need GPU.
 
 ### Storage consideration
 On executor nodes the disk might be under pressure if container (re)deployments are frequent or the containers log very heavily. As such, we recommend the logging directory for Drove be mounted on hardware that will be able to handle this load. Similar considerations need to be given to the log and package directory for docker or podman.
