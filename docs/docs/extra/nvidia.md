@@ -1,13 +1,13 @@
 # Setting up Nvidia GPU computation on executor
 
-Prerequisite: Docker version `19.0.3+`*
+Prerequisite: Docker version `19.0.3+`. Check [Docker versions and nvidia](https://github.com/NVIDIA/nvidia-docker/issues/1268){:target="_blank"} for details.
 
 Below steps are for ubuntu primarily for other distros check the associated links.
 
 ## Install nvidia drivers on hosts
 
 Ubuntu provides packaged drivers for nvidia.
-[Driver installation Guide](https://ubuntu.com/server/docs/nvidia-drivers-installation)
+[Driver installation Guide](https://ubuntu.com/server/docs/nvidia-drivers-installation){:target="_blank"}
 
 Recommended
 ```
@@ -15,14 +15,14 @@ ubuntu-drivers list --gpgpu
 ubuntu-drivers install --gpgpu nvidia:535-server
 ```
 
-Alternatively `apt` can be used, but may require additional steps [Manual install](https://ubuntu.com/server/docs/nvidia-drivers-installation#installing-the-kernel-modules)
+Alternatively `apt` can be used, but may require additional steps [Manual install](https://ubuntu.com/server/docs/nvidia-drivers-installation#installing-the-kernel-modules){:target="_blank"}
 ```
 # Check for the latest stable version 
 apt search nvidia-driver.*server
 apt install -y nvidia-driver-535-server  nvidia-utils-535-server 
 ```
 
-For other distros check [Guide](https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#driver-installation)
+For other distros check [Guide](https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#driver-installation){:target="_blank"}
 
 ## Install Nvidia-container-toolkit
 
@@ -33,7 +33,7 @@ curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dear
 
 apt install -y nvidia-container-toolkit
 ```
-For other distros check guide [here](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)
+For other distros check guide [here](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html){:target="_blank"}
 
 Configure docker with nvidia toolkit
 
@@ -71,7 +71,7 @@ In docker container
 |  No running processes found                                                 |
 +-----------------------------------------------------------------------------+
 ```
-[Verification guide](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/sample-workload.html)
+[Verification guide](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/sample-workload.html){:target="_blank"}
 
 ## Enable nvidia support on drove
 
@@ -84,5 +84,3 @@ resources:
 ...
 ```
 
-
-*[Docker versions and nvidia](https://github.com/NVIDIA/nvidia-docker/issues/1268)

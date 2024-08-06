@@ -5,6 +5,7 @@ theme:
     - navigation.tracking
     - content.code.copy
     - content.code.annotate
+    # - navigation.expand
 plugins:
   - glightbox
   - search
