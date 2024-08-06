@@ -82,23 +82,7 @@ By default Drove client uses Java internal HTTP client as a trivial transport im
 ### Sample code
 ```java
 
-// Define a class to send auth information
 public class DroveCluster implements AutoCloseable {
-    //..
-    public static final class BasicAuthTokenDecorator implements RequestDecorator {
-
-        private final String authHeaderValue;
-
-        public BasicAuthTokenDecorator(String username, String password) {
-            this.authHeaderValue = "Basic " + Base64.getEncoder().encodeToString((username + ":" + password).getBytes());
-        }
-
-        @Override
-        public void decorateRequest(DroveClient.Request request) {
-            request.headers()
-                    .put("Authorization", List.of(authHeaderValue));
-        }
-    }
 
     @Getter
     private final DroveClient droveClient;
@@ -108,10 +92,7 @@ public class DroveCluster implements AutoCloseable {
             .setEndpoints(List.of("http://controller1:4000,http://controller2:4000"));
 
         this.droveClient = new DroveClient(config,
-                                      List.of(request -> request.headers()
-                                                      .putAll(Map.of("Content-Type", List.of("application/json"),
-                                                                     "Accept", List.of("application/json"))),
-                                            new BasicAuthTokenDecorator("guest", "guest")),
+                                      List.of(new BasicAuthDecorator("guest", "guest")),
                                            new DroveHttpComponentsTransport(config.getCluster()));
     }
 
