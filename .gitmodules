@@ -10,3 +10,6 @@
 [submodule "drove-gateway"]
 	path = drove-gateway
 	url = git@github.com:PhonePe/drove-gateway.git
+[submodule "coredns-drove"]
+	path = coredns-drove
+	url = git@github.com:PhonePe/coredns-drove.git
