@@ -13,3 +13,6 @@
 [submodule "coredns-drove"]
 	path = coredns-drove
 	url = git@github.com:PhonePe/coredns-drove.git
+[submodule "epoch-cli"]
+	path = epoch-cli
+	url = https://github.com/phonepe/epoch-cli
