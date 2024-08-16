@@ -345,3 +345,9 @@ The following environment variables are injected by Drove to all containers:
 
 !!!warning
     **Do not** pass secrets using environment variables. These variables are all visible on the UI as is. Please use [Configs](#config-specification) to inject secrets files and so on.
+
+## Command line arguments
+A list of command line arguments that are sent to the container engine to execute inside the container. This is provides ways for you to configure your container behaviour based off such arguments. Please refer to [docker documentation](https://docs.docker.com/engine/containers/run/#commands-and-arguments){:target="_blank"} for details.
+
+!!!danger
+    This might have security implications from a system point of view. As such Drove provides administrators a way to disable passing arguments at the cluster level by setting `disableCmdlArgs` to `true` in the controller configuration. 

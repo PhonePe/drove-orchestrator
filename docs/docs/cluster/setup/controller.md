@@ -235,6 +235,7 @@ The following options can be set to influence the behavior of the Drove cluster 
 | Audited Methods | `auditedHttpMethods` | Drove prints an audit log with user details when an api is called by an user. Defaults to `["POST", "PUT"]`. |
 | Allowed mount directories | `allowedMountDirs` | If provided, Drove will ensure that application and task spec can mount only the directories mentioned in this set on executor host. |
 | Disable read-only auth | `disableReadAuth` | When `userAuth` is enabled, setting this option, will enforce authorization only on write operations. |
+| Disable command line arguments | `disableCmdlArgs` | When set to `true`, passing command line arguments will be disabled. Default: `false` (users can pass arguments. |
 
 **Sample**
 ```yaml
