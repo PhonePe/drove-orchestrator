@@ -3,27 +3,33 @@ on:
   push:
     branches:
       - master 
-      - main
 permissions:
   contents: write
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Code
+        uses: actions/checkout@v4
       - name: Configure Git Credentials
         run: |
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-      - uses: actions/setup-python@v5
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
           python-version: 3.x
       - run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV 
-      - uses: actions/cache@v4
+      - name: Setup Cache
+        uses: actions/cache@v4
         with:
           key: mkdocs-material-${{ env.cache_id }}
           path: .cache
           restore-keys: |
             mkdocs-material-
-      - run: pip install mkdocs-material 
-      - run: mkdocs gh-deploy --force
+      - name: Install mkdocs and plugins
+        run: pip install mkdocs-material mkdocs-material-extensions mkdocs-awesome-pages-plugin mkdocs-glightbox mkdocs-get-deps mkdocs-glightbox mkdocs-nav-weight mkdocs-pdf-export-plugin
+        working-directory: ./docs
+      - name: Deploy Site
+        run: mkdocs gh-deploy --force
+        working-directory: ./docs

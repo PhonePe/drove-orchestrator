@@ -1,4 +1,7 @@
-site_name: Drove
+site_name: Drove Container Orchestrator
+site_url: https://phonepe.github.io/drove-orchestrator
+repo_url: https://github.com/PhonePe/drove-orchestrator
+
 theme:
   name: material
   features:
