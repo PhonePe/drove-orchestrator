@@ -28,7 +28,7 @@ jobs:
           restore-keys: |
             mkdocs-material-
       - name: Install mkdocs and plugins
-        run: pip install pymdown-extensions mkdocs-material mkdocs-material-extensions mkdocs-awesome-pages-plugin mkdocs-glightbox mkdocs-get-deps mkdocs-glightbox mkdocs-nav-weight mkdocs-pdf-export-plugin
+        run: pip install markdown-include pymdown-extensions mkdocs-material mkdocs-material-extensions mkdocs-awesome-pages-plugin mkdocs-glightbox mkdocs-get-deps mkdocs-glightbox mkdocs-nav-weight mkdocs-pdf-export-plugin
         working-directory: ./docs
       - name: Deploy Site
         run: mkdocs gh-deploy --force
