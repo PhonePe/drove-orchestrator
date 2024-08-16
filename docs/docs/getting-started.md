@@ -27,7 +27,7 @@ wget https://raw.githubusercontent.com/PhonePe/drove-orchestrator/master/compose
 cd compose
 docker-compose up
 ```
-This will start zookeeper,drove controller, executor and nginx/nixy.
+This will start zookeeper,drove controller, executor and nginx/drove-gateway.
 The following ports are used:
 
 - Zookeeper - 2181

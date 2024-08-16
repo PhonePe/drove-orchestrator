@@ -13,7 +13,7 @@ git submodule update
 cd compose
 docker-compose up
 ```
-This will start zookeeper,drove controller, executor and nginx/nixy.
+This will start zookeeper,drove controller, executor and nginx/drove-gateway.
 The following ports are used:
 - Zookeeper - 2181
 - Executor - 3000

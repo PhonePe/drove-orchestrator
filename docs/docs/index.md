@@ -10,7 +10,7 @@ The following sections go over the features.
 ### Functional
 * **Application** (service) and application container lifecycle management including *mandated* readiness checks, health checks, pre-shutdown hooks to enable operators to take containers out of rotation easily and shut them down ggracefully if needed.
 * Ensures the required(specified) number of containers will always be present in the cluster. It will detect **failures** across the cluster and bring containers up/down to maintain required instance count.
-* Provides **endpoint** information to be consumed by routers like nixy+nginx/traefik etc to expose containers over vhost.
+* Provides **endpoint** information to be consumed by routers like drove-gateway+nginx/traefik etc to expose containers over vhost.
 * Supports short lived container based **tasks**. This help folks build newer systems that can spin up containers as needed on the cluster. (See [epoch](https://github.com/PhonePe/epoch)).
 * Provides functionality for real-time **log streaming and log download** for all instances.
 * Log generation is handled by Drove in a file layout suitable for existing log shipping mechanisms as well as for streaming to rsyslog servers (if needed).
@@ -19,11 +19,11 @@ The following sections go over the features.
 * Supports **discovery for sibling containers** to support dynamic cluster reconfiguration in frameworks like hazelcast.
 * Support extra metadata in the form of **tags** on instances. This can be used in external systems for routing or other use-cases as this information is avaliable in endpoint as well.
 * [**CLI**](https://github.com/PhonePe/drove-cli) system for easy deployments and app/task lifecycle management.
-* NGinx based router called [drove-nixy](https://github.com/PhonePe/drove-nixy) for efficient communication with the cluster itself and containers deployed on it.
+* NGinx based router called [drove-gateway](https://github.com/PhonePe/drove-gateway) for efficient communication with the cluster itself and containers deployed on it.
 
 
 ### Operations
-* Only two components (controller and executor) to make a cluster (plus Zookeeper for coordination, drove-nixy for routing if needed).
+* Only two components (controller and executor) to make a cluster (plus Zookeeper for coordination, drove-gateway for routing if needed).
 * All components **dockerised** to allow for easy deployment as well as upgrades
 * Simple single file YAML based configuration for the controller and executor. 
 * Cluster can be set to **maintenance mode** where it pauses making changes to the cluster and turns off safeguards around ensuring the required number of containers get reported from the executor nodes. This will allow the SRE team to do seamless software updates across the whole cluster in a few minutes,  irrespective of the size.
@@ -52,7 +52,7 @@ The following sections go over the features.
 * **Multi-mode cluster messaging** ensures that faster updates will be sent to controller via sync channels, while the controller(s) keep refreshing the cluster state periodically irrespective of the last synced data. Drove assumes that communication failures would happen. Even if new changes can’t be propagated from executor to controller, it tries to keep existing topology as updated as possible.
 * Built in safeguards to detect and kill any rogue (zombie) container instances that have remained back for some reason (maybe some bug in the orchestrator etc).
 * Controller is **highly available** with one leader active at a time. Any communication issues with zookeeeper will leader to quick death of the controller so that another controller can take up it's place as quickly as possible.
-* Leader can be tracked using the `ping` api and is used by components such as [drove-nixy](https://github.com/PhonePe/drove-nixy) to provide a Virtual Host that can be used to interact with the cluster via the ui or the CLI and other tools.
+* Leader can be tracked using the `ping` api and is used by components such as [drove-gateway](https://github.com/PhonePe/drove-gateway) to provide a Virtual Host that can be used to interact with the cluster via the ui or the CLI and other tools.
 
 ### Security
 * Clearly designate roles for read and write operations. Write operations include cluster maintenance and app and task lifecycle maintenance.
@@ -65,7 +65,7 @@ The following sections go over the features.
 * **Dynamically generated tokens** are injected into container instances for seamless sibling discovery. This provides a way for developers to implement clustering mechanisms for frameworks like Hazelcast (provided already).
 
 ### Observability
-* **Real-time event stream** from the controller can be used for any other event driven system like nixy etc to refresh upstream topology.
+* **Real-time event stream** from the controller can be used for any other event driven system like drove-gateway etc to refresh upstream topology.
 * **Metrics** available on admin ports for both the controllers and executors. Something like telegraf can be used to collect and send them to the centralised metrics management system of your choice. (At PhonePe we use telegraf, which pushed the metrics to our custom metrics collection service backed by a modified version of OpenTSDB. We use grafana to visualize the same metrics).
 * Published metrics from controllers includes system health metrics around themselves.
 * Published metrics from executors contains system health metrics as well as other metrics around the containers running on them. This includes but is not limited to CPU, Memory and network usage.
@@ -90,11 +90,13 @@ Before we delve into the details, let's get acquainted with the required termino
 
 ## Github Repositories
 
-- Uber Repo - [https://github.com/PhonePe/drove-orchestrator](https://github.com/PhonePe/drove-orchestrator)
-- Drove Orchestrator Code - [https://github.com/PhonePe/drove](https://github.com/PhonePe/drove)
-- Drove CLI - [https://github.com/PhonePe/drove-cli](https://github.com/PhonePe/drove-cli)
-- Drove Gateway - [https://github.com/PhonePe/drove-nixy](https://github.com/PhonePe/drove-nixy)
-- Epoch - [https://github.com/PhonePe/epoch](https://github.com/PhonePe/epoch)
+- Uber Repo - [https://github.com/PhonePe/drove-orchestrator](https://github.com/PhonePe/drove-orchestrator){:target="_blank"}
+- Drove Orchestrator Code - [https://github.com/PhonePe/drove](https://github.com/PhonePe/drove){:target="_blank"}
+- Drove CLI - [https://github.com/PhonePe/drove-cli](https://github.com/PhonePe/drove-cli){:target="_blank"}
+- Drove Gateway - [https://github.com/PhonePe/drove-gateway](https://github.com/PhonePe/drove-gateway){:target="_blank"}
+- Epoch - [https://github.com/PhonePe/epoch](https://github.com/PhonePe/epoch){:target="_blank"}
+- Epoch CLI - [https://github.com/PhonePe/epoch-cli](https://github.com/PhonePe/epoch-cli){:target="_blank"}
+- CoreDNS plugin for Drove - [https://github.com/PhonePe/coredns-drove](https://github.com/PhonePe/coredns-drove){:target="_blank"}
 
 ## License
 Apache 2

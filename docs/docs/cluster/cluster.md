@@ -6,7 +6,7 @@ The overall topology consists of the following components:
 - An **Apache ZooKeeper** cluster for state persistence and coordination
 - A set of **controller nodes** one of which (the leader) manages the cluster
 - A set of **executor nodes** on which the containers actually execute
-- **NGinx + drove-nixy** nodes that expose virtual hosts for the leader controller as well as for the vhosts defined for the various applications running on the cluster
+- **NGinx + drove-gateway** nodes that expose virtual hosts for the leader controller as well as for the vhosts defined for the various applications running on the cluster
 
 ## Apache ZooKeeper
 Zookeeper is a central component in a Drove cluster. It is used in the following manner:

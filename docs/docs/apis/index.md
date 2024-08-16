@@ -3,11 +3,11 @@
 This section lists all the APIs that a user can communicate with.
 
 ## Making an API call
-Use a standard HTTP client in the language of your choice to make a call to the leader controller (the cluster virtual host exposed by drove-nixy-nginx).
+Use a standard HTTP client in the language of your choice to make a call to the leader controller (the cluster virtual host exposed by drove-gateway-nginx).
 
 !!!tip
     In case you are using Java, we recommend using the [drove-client](https://github.com/PhonePe/drove/packages/2186471) library along with the [http-transport](https://github.com/PhonePe/drove/packages/2186472).
-    > If multiple controllers endpoints are provided, the client will track the leader automatically. This will reduce your dependency on [drove-nixy](https://github.com/PhonePe/drove-nixy).
+    > If multiple controllers endpoints are provided, the client will track the leader automatically. This will reduce your dependency on [drove-gateway](https://github.com/PhonePe/drove-gateway).
 
 ### Authentication
 
