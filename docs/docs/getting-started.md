@@ -2,13 +2,6 @@
 
 To get a trivial cluster up and running on a machine, the [compose file](https://raw.githubusercontent.com/PhonePe/drove-orchestrator/master/compose/compose.yaml) can be used.
 
-Usage:
-
-```shell
-git clone git@github.com:PhonePe/drove-orchestrator.git
-git submodule init
-git submodule update
-```
 ## Update etc hosts to interact wih nginx
 Add the following lines to `/etc/hosts`
 ```
@@ -79,3 +72,13 @@ drove -c local apps scale TEST_APP-1 0 -w
 drove -c local apps destroy TEST_APP-1
 ```
 
+## Accessing the code
+Code is hosted on github.
+
+Cloning everything:
+
+```shell
+git clone git@github.com:PhonePe/drove-orchestrator.git
+git submodule init
+git submodule update
+```

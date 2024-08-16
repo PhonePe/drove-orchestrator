@@ -25,9 +25,74 @@ Setup the drove version
 ```xml
 <properties>
     <!--other properties-->
-    <drove.version>1.28</drove.version>
+    <drove.version>1.29</drove.version>
 </properties>
 ```
+
+!!!note "Checking the latest version"
+    Latest version can be checked at the github packages page [here](https://github.com/PhonePe/drove/packages/2229703){:target="_blank"}
+
+!!!danger "Accessing maven repo on github"
+    Public repos on github need authentication.  In order to use these please follow the steps as mentioned below:
+    
+    - Create a Personal Access Token on github.
+        - Go to your account -> Settings -> Developer settings -> Personal access token -> Tokens (classic) -> Generate new token (classic)
+    (Basically create a PAT and add your username and password in maven-settings.xml or .m2/settings.xml for the repo `https://maven.pkg.github.com/phonepe/drove`).
+        - The only permission needed is `read:packages`.
+
+    - Create a settings file or add required configurations to your `~/.m2/settings.xml`.
+
+    Sample settings file:
+    ```xml
+    <?xml version="1.0" encoding="UTF-8"?>
+    <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+        <activeProfiles>
+            <activeProfile>github</activeProfile>
+        </activeProfiles>
+        <profiles>
+            <profile>
+                <id>github</id>
+                <repositories>
+                    <repository>
+                        <id>central</id>
+                        <url>https://repo1.maven.org/maven2</url>
+                    </repository>
+                    <repository>
+                        <id>github</id>
+                        <url>https://maven.pkg.github.com/phonepe/drove</url>
+                        <snapshots>
+                            <enabled>false</enabled>
+                        </snapshots>
+                        <releases>
+                            <enabled>true</enabled>
+                        </releases>
+                    </repository>
+                </repositories>
+            </profile>
+        </profiles>
+
+        <servers>
+            <server>
+                <id>github</id>
+                <username>YOUR GITHUB USERNAME</username>
+                <password>YOUR PERSONAL ACCESS TOKEN</password>
+            </server>
+        </servers>
+
+    </settings>
+
+    ```
+    > Your PAT works fine as the repo itself is public.
+
+    To build:
+    ```shell
+    mvn -s /path/to/settings.xml clean package
+    ```
+    
+    If setting up your github actions, please follow the steps in this excellent [stack-overflow answer](https://stackoverflow.com/questions/64706720/how-to-access-maven-dependency-from-github-packages-on-a-github-actions-workflow){:target="_blank"} to setup your actions correctly.
+
 
 All libraries are located in sub packages of the top level package `com.phonepe.drove`.
 

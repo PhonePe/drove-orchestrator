@@ -64,7 +64,7 @@ Executors are the agents running on the nodes where the containers are deployed.
 - Find and kill any **zombie containers** that are not supposed to exist on that node. The check is done every 30 seconds.
 - Provide container **log-file** listing and offset based content delivery APIs to container
 
-## NGinx and Drove-Nixy
+## NGinx and Drove-Gateway
 Almost all of the traffic between service containers is routed via the internal Ranger based service discovery system at PhonePe. However, traffic from the edge as well and between different protected environments are routed using the well-established **virtual host** (and additionally, in some unusual cases, header) based routing.
 
 - All applications on Drove can specify a Vhost and a port name as endpoint for such routing.
@@ -85,6 +85,7 @@ Nixy plays the following role in a cluster:
 
 ## Other components
 There are a few more components that are used for operational management and observability.
+
 ### Telegraf
 PhonePe’s internal metric management system uses a HTTP based metric collector. Telegraf is installed on all Drove nodes to collect metric from the metric port (Admin connector on Dropwizard) and push that information to our metric ingestion system. This information is then used to build dashboards as well as by our Anomaly detection and alerting systems.
 

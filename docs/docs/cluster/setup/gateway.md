@@ -47,7 +47,7 @@ slowstartupstream = "0s"
 
 1. Nixy listener configuration. Endpoint for nixy itself.
 
-2. List of Drove controllers. Add all controller nodes here.    Nixy will automatically determine and track th current leader. 
+2. List of Drove controllers. Add all controller nodes here. Nixy will automatically determine and track the current leader. 
     
     > _Auto detection is disabled if a single endpoint is specified._
 
@@ -57,7 +57,7 @@ slowstartupstream = "0s"
     
     > In this example, the RoutingTag variable will be set to the value specified in the `routing_tag` tag key specified when deploying the Drove Application. For example, if we want to expose the app we can set it to `yes`, and filter the VHost to be exposed in NGinx template when `RoutingTag == "yes"`.
 
-5. Nixy works on event polling on controller. This is the polling interval. Especially if number of NGinx nodes is high. Default is `2 seconds`. Unless cluster is really busy with a high rate of change of containers, this strikes a good balance between apps becoming discoverable vs putting the leader controller under heavy load.
+5. Drove Gateway/Nixy works on event polling on controller. This is the polling interval. Especially if number of NGinx nodes is high. Default is `2 seconds`. Unless cluster is really busy with a high rate of change of containers, this strikes a good balance between apps becoming discoverable vs putting the leader controller under heavy load.
 
 6. `user` and `pass` are optional params can be used to set basic auth credentials to the calls made to Drove controllers if basic auth is enabled on the cluster. Leave empty if no basic auth is required.
 
@@ -65,7 +65,7 @@ slowstartupstream = "0s"
 
 8. By default drove-gateway will expose all vhost declared in the spec for all drove apps on a cluster (caveat: filtering can be done using RoutingTag as well). If specific vhosts need to be exposed, set the realms parameter to a comma separated list of realms. Optional.
 
-9. Beside perfect vhost matching, Nixy supports suffix based matches as well. A single suffix is supported. Optional.
+9. Beside perfect vhost matching, Drove Gateway supports suffix based matches as well. A single suffix is supported. Optional.
 
 10. Path to NGinx config.
 
