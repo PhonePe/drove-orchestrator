@@ -63,7 +63,7 @@ The following sections go over the features.
 * Authentication system is easily extensible
 * Supports basic auth as the minimal auth requirement. User credentials stored in bcrypt format in controller config files.
 * Support a no auth mode for starter clusters
-* Provides audit logs for events in the system. Such logs can get aggregated and/or shipped out  independently by existing log aggregation systems like logrotate-+rsync or (r)syslog etc by configuring the appropirate loggers in the controller configuration file.
+* Provides audit logs for events in the system. Such logs can get aggregated and/or shipped out  independently by existing log aggregation systems like logrotate-+rsync or (r)syslog etc by configuring the appropriate loggers in the controller configuration file.
 * Separate authentication system for intra-cluster authentication and for edge. This will mean that even if external auth is compromised (or vice versa), the system keeps working as is.
 * Shared secret is used for intra cluster authentication.
 * **Dynamically generated tokens** are injected into container instances for seamless sibling discovery. This provides a way for developers to implement clustering mechanisms for frameworks like Hazelcast (provided already).
