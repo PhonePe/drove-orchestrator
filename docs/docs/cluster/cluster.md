@@ -1,6 +1,6 @@
 # Anatomy of a Drove Cluster
 The following diagram provides a high level overview of a typical Drove cluster.
-![Drove Cluster](../images/cluster.svg)
+![Drove Cluster](../images/cluster.png)
 The overall topology consists of the following components:
 
 - An **Apache ZooKeeper** cluster for state persistence and coordination

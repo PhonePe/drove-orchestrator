@@ -1,4 +1,8 @@
-# Getting started with Drove
+---
+hide:
+  - navigation
+---
+# Getting Started
 
 To get a trivial cluster up and running on a machine, the [compose file](https://raw.githubusercontent.com/PhonePe/drove-orchestrator/master/compose/compose.yaml) can be used.
 
@@ -49,8 +53,15 @@ password = admin
 ```
 
 ## Deploy an app
+
+Get the sample app spec:
 ```shell
-drove -c local apps create sample/test_app.json
+wget https://raw.githubusercontent.com/PhonePe/drove-cli/master/sample/test_app.json
+```
+
+Now deploy the app.
+```shell
+drove -c local apps create test_app.json
 ```
  
 ## Scale the app

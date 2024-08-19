@@ -6,13 +6,58 @@ theme:
   name: material
   features:
     - navigation.tracking
+    - navigation.path
+    - navigation.tabs
+    - navigation.tabs.sticky
+    # - navigation.sections
     - content.code.copy
     - content.code.annotate
-    # - navigation.expand
+    - navigation.expand
+    - toc.follow
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - search.share
+
+  palette:
+
+        # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default 
+
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    
+    # Palette toggle for automatic mode
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to light mode
+
+
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to system preference
 plugins:
   - glightbox
   - search
   - awesome-pages
+  - privacy:
+      enabled: true
+      cache: true
+      cache_dir: .cache/plugins/privacy
+      assets: true
+      assets_fetch: true
+      assets_fetch_dir: assets/external
+      links: true
+      links_noopener: true
+  - offline:
+     enabled: true
+copyright: "Copyright &copy; 2024  PhonePe India Pvt Ltd"
 
 markdown_extensions:
   - toc:
@@ -36,3 +81,6 @@ markdown_extensions:
         - name: mermaid
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
+
+extra_css:
+  - stylesheets/extra.css

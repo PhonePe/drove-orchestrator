@@ -1,3 +1,7 @@
+---
+hide:
+  - navigation
+---
 # Introduction
 
 Drove is a container orchestrator built at [PhonePe](https://phonepe.com). It is focussed on simplicity, container performance and easy operations.
