@@ -21,7 +21,7 @@ The following sections go over the features.
 * Provides a functional read-only web-based console for checking cluster, application, task and instance states, log streaming etc.
 * Provides **APIs** for both read and write operations
 * Supports **discovery for sibling containers** to support dynamic cluster reconfiguration in frameworks like hazelcast.
-* Support extra metadata in the form of **tags** on instances. This can be used in external systems for routing or other use-cases as this information is avaliable in endpoint as well.
+* Support extra metadata in the form of **tags** on instances. This can be used in external systems for routing or other use-cases as this information is available in the endpoint as well.
 * [**CLI**](https://github.com/PhonePe/drove-cli) system for easy deployments and app/task lifecycle management.
 * NGinx based router called [drove-gateway](https://github.com/PhonePe/drove-gateway) for efficient communication with the cluster itself and containers deployed on it.
 
