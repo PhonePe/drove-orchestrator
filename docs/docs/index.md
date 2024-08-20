@@ -12,7 +12,7 @@ Drove is a container orchestrator built at [PhonePe](https://phonepe.com). It is
 The following sections go over the features.
 
 ### Functional
-* **Application** (service) and application container lifecycle management including *mandated* readiness checks, health checks, pre-shutdown hooks to enable operators to take containers out of rotation easily and shut them down ggracefully if needed.
+* **Application** (service) and application container lifecycle management including *mandated* readiness checks, health checks, pre-shutdown hooks to enable operators to take containers out of rotation easily and shut them down gracefully if needed.
 * Ensures the required(specified) number of containers will always be present in the cluster. It will detect **failures** across the cluster and bring containers up/down to maintain required instance count.
 * Provides **endpoint** information to be consumed by routers like drove-gateway+nginx/traefik etc to expose containers over vhost.
 * Supports short lived container based **tasks**. This help folks build newer systems that can spin up containers as needed on the cluster. (See [epoch](https://github.com/PhonePe/epoch)).
