@@ -61,4 +61,19 @@ drove -e http://drove.local:7000 apps scale TEST_APP-1 0 -w
 drove -e http://drove.local:7000 apps destroy TEST_APP-1
 ```
 
+# MAC OS specific changes 
+
+## Rancher desktop preferences
+Please select below preferences in the Rancher desktop
+
+| Hardware         | Volumes  |                         Emulation |
+|:-----------------|:--------:|----------------------------------:|
+| Memory (GB): 4GB | virtiofs |          Virtual Machine Type: VZ |
+| # CPUs     : 4   |          | VZ Option: Enable Rosetta support |
+
+# Update etc hosts for lima-rancher-desktop
+Add below line to `/etc/hosts`
+```
+127.0.0.1	lima-rancher-desktop
+```
 
