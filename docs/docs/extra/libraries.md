@@ -8,7 +8,7 @@ Setup the drove version
 ```xml
 <properties>
     <!--other properties-->
-    <drove.version>1.29</drove.version>
+    <drove.version>1.30</drove.version>
 </properties>
 ```
 
@@ -197,3 +197,39 @@ val node = Hazelcast.newHazelcastInstance(config);
 
 !!!note "Peer discovery modes"
     By default the containers will _only_ discover and connect to containers from the same [application id](../applications/index.md#application-id). If you need to connect to containers from all versions of the same application please set the `cluster-by-app-name` property to `true` as in the above example.
+
+## Drove Apache Ignite Discovery
+
+Drove provides an implementation of the apache ignite discovery so that containers deployed on a drove cluster can discover each other. This client uses the token injected by drove in the `DROVE_APP_INSTANCE_AUTH_TOKEN` environment variable to get sibling information from the controller.
+
+### Dependencies
+```xml
+<!--Include Drove client-->
+<!--Include apache ignite-->
+<dependency>
+    <groupId>com.phonepe.drove</groupId>
+    <artifactId>drove-ignite-discovery</artifactId>
+    <version>${drove.version}</version>
+</dependency>
+```
+
+### Sample Code
+```java
+
+//Setup ignite
+IgniteConfigProvider igniteConfigProvider = new IgniteConfigProvider();
+
+IgniteConfiguration igniteConfiguration = igniteConfigProvider.provideIgniteConfiguration(DroveIgniteConfig.builder()
+        .communicationPortName("igniteComm") // Communication port name
+        .droveEndpoint("http://controller1:4000,http://controller2:4000") //Controller endpoints
+        .useAppNameForDiscovery(true) //Cluster container across multiple app versions
+        .discoveryPortName("igniteDiscovery") // Discovery port name
+        .build());
+
+// Start ignite
+Ignite ignite = Ignition.start(configuration);
+```
+
+!!!note "Peer discovery modes"
+By default the containers will _only_ discover and connect to containers from the same [application id](../applications/index.md#application-id). If you need to connect to containers from all versions of the same application please set the `cluster-by-app-name` property to `true` as in the above example.
+
