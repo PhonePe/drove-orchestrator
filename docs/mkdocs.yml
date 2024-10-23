@@ -57,7 +57,7 @@ plugins:
       links_noopener: true
   - offline:
      enabled: true
-copyright: "Copyright &copy; 2024  PhonePe India Pvt Ltd"
+copyright: "Copyright &copy; 2024  PhonePe Private Limited"
 
 markdown_extensions:
   - toc:
