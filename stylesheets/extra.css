@@ -1,0 +1,4 @@
+/* Dark mode */
+[data-md-color-scheme="slate"] img {
+    background-color: lightgray;
+}
