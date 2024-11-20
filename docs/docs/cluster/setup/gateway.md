@@ -1,7 +1,7 @@
 # Setting up Drove Gateway
 The Drove Gateway works as a gateway to expose apps running on a drove cluster to rest of the world.
 
-Drove Gateway container uses [NGinx](https://nginx.org){:target="_blank"} and a modified version of [Nixy](https://github.com/martensson/nixy){:target="_blank"} to track drove endpoints. More details about this can be found in the [grove-gateway](https://github.com/PhonePe/drove-gateway){:target="_blank"} project.
+Drove Gateway container uses [NGinx](https://nginx.org){:target="_blank"} and a modified version of [Nixy](https://github.com/martensson/nixy){:target="_blank"} to track drove endpoints. More details about this can be found in the [drove-gateway](https://github.com/PhonePe/drove-gateway){:target="_blank"} project.
 
 ## Drove Gateway Nixy Configuration Reference
 The nixy running inside the gateway container is configured using a custom TOML file. This section looks into this file:
