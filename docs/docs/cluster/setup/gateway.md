@@ -241,6 +241,7 @@ Requires=docker.service
 
 [Service]
 User=drove
+Group=docker
 TimeoutStartSec=0
 Restart=always
 ExecStartPre=-/usr/bin/docker pull ghcr.io/phonepe/drove-gateway:latest

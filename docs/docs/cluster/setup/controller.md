@@ -396,6 +396,7 @@ Requires=docker.service
 
 [Service]
 User=drove
+Group=docker
 TimeoutStartSec=0
 Restart=always
 ExecStartPre=-/usr/bin/docker pull ghcr.io/phonepe/drove-controller:latest
@@ -434,7 +435,7 @@ systemctl enable drove.controller
 systemctl start drove.controller
 ```
 
-You can tail the logs at `/var/logs/drove/controller/drove-controller.log`.
+You can tail the logs at `/var/log/drove/controller/drove-controller.log`.
 
 The console would be available at `http://<ip>:10000` and admin functionality will be available on `http://<ip>:10001` according to the above config.
 

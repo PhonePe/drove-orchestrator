@@ -451,6 +451,7 @@ Requires=docker.service
 
 [Service]
 User=drove
+Group=docker
 TimeoutStartSec=0
 Restart=always
 ExecStartPre=-/usr/bin/docker pull ghcr.io/phonepe/drove-executor:latest
@@ -489,6 +490,6 @@ systemctl enable drove.executor
 systemctl start drove.executor
 ```
 
-You can tail the logs at `/var/logs/drove/executor/drove-executor.log`.
+You can tail the logs at `/var/log/drove/executor/drove-executor.log`.
 
 The executor should now show up on the Drove Console.
