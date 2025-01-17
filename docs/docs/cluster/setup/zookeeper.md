@@ -255,6 +255,7 @@ Requires=docker.service
 
 [Service]
 User=drove
+Group=docker
 TimeoutStartSec=0
 Restart=always
 ExecStartPre=-/usr/bin/docker pull zookeeper:3.8
