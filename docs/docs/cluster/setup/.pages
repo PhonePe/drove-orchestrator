@@ -4,4 +4,6 @@ nav:
   - zookeeper.md
   - controller.md
   - executor-setup.md
+  - gateway.md
+  - coredns-drove.md
   - ...
