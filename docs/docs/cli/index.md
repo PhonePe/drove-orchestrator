@@ -10,7 +10,7 @@ You need:
 - Network access to a Drove controller
 - Valid credentials (username/password or auth token)
 
-## Install drove
+## Install drove-cli
 
 === "pip"
     ```bash
@@ -36,7 +36,7 @@ Verify:
 drove --version
 ```
 
-## Upgrade drove
+## Upgrade drove-cli
 
 === "pip"
     ```bash
