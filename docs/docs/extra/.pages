@@ -1,6 +1,6 @@
 title: Extra
 nav:
-  - cli.md
+  - cli
   - epoch.md
   - libraries.md
   - nvidia.md
