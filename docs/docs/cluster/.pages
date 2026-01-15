@@ -1,3 +1,5 @@
 nav:
 - cluster.md
 - setup
+- metrics.md
+- maintenance.md

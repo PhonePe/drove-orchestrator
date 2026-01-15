@@ -72,6 +72,22 @@ drove cluster ping
 
 See [Configuration](configuration.md) for auth options and multi-cluster setup.
 
+## Enabling Command Completion
+
+You can generate shell completions file for `bash`, `zfs` and `tcsh` using the `--print-completion` option.
+
+```shell
+drove --print-completion bash > drove.bash.completions
+```
+
+To use this osurce the completion file
+```shell
+source drove.bash.completions
+```
+
+!!!tip
+    Check your operating system documentation to understand where to store this file to enable completions automatically.
+
 ## Common tasks
 
 ### View cluster state
