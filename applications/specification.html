@@ -1,0 +1,4139 @@
+<!DOCTYPE html><html lang="en" class="no-js"><head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://phonepe.github.io/drove-orchestrator/applications/specification.html">
+      
+      
+        <link rel="prev" href="instances.html">
+      
+      
+        <link rel="next" href="operations.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Application Specification - Drove Container Orchestrator</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+        <script src="../assets/external/unpkg.com/iframe-worker/shim.js"></script>
+      
+    
+    
+      
+        
+        
+        
+        <link rel="stylesheet" href="../assets/external/fonts.googleapis.com/css.49ea35f2.css">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  <link href="../assets/stylesheets/glightbox.min.css" rel="stylesheet"><script src="../assets/javascripts/glightbox.min.js"></script><style id="glightbox-style">
+            html.glightbox-open { overflow: initial; height: 100%; }
+            .gslide-title { margin-top: 0px; user-select: text; }
+            .gslide-desc { color: #666; user-select: text; }
+            .gslide-image img { background: white; }
+            .gscrollbar-fixer { padding-right: 15px; }
+            .gdesc-inner { font-size: 0.75rem; }
+            body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
+            body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
+            body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
+        </style></head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#application-specification" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../index.html" title="Drove Container Orchestrator" class="md-header__button md-logo" aria-label="Drove Container Orchestrator" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Drove Container Orchestrator
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Application Specification
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo" aria-label="Switch to dark mode" type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo" aria-label="Switch to light mode" type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"></path></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo" aria-label="Switch to system preference" type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"></path></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/PhonePe/drove-orchestrator" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"></path></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../index.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Introduction
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../getting-started.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Getting Started
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../cluster/cluster.html" class="md-tabs__link">
+          
+  
+  
+  Cluster
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="index.html" class="md-tabs__link">
+          
+  
+  
+  Applications
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../tasks/index.html" class="md-tabs__link">
+          
+  
+  
+  Tasks
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../apis/index.html" class="md-tabs__link">
+          
+  
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../cli/index.html" class="md-tabs__link">
+          
+  
+  
+  Drove CLI
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../extra/epoch.html" class="md-tabs__link">
+          
+  
+  
+  Extra
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../index.html" title="Drove Container Orchestrator" class="md-nav__button md-logo" aria-label="Drove Container Orchestrator" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+
+    </a>
+    Drove Container Orchestrator
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/PhonePe/drove-orchestrator" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"></path></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3">
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cluster
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Cluster
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cluster/cluster.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Anatomy of a Drove Cluster
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_2">
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setup
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Setup
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cluster/setup/planning.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Planning your cluster
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cluster/setup/prerequisites.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setting up the prerequisites
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cluster/setup/zookeeper.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setting Up Zookeeper
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cluster/setup/controller.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setting up Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cluster/setup/executor-setup.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setting up Executor Nodes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cluster/setup/gateway.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setting up Drove Gateway
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cluster/setup/coredns-drove.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setting up CoreDNS Drove
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cluster/setup/maintenance.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Maintaining a Drove Cluster
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cluster/setup/units.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Units Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cluster/metrics.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cluster Metrics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cluster/maintenance.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Maintaining a Drove Cluster
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Applications
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Applications
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="instances.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Application Instances
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Application Specification
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="specification.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Application Specification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#sample-application-definition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sample Application Definition
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#executable-specification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Executable Specification
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resource-requirements-specification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resource Requirements Specification
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Resource Requirements Specification">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cpu-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CPU Requirements
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memory-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Memory Requirements
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#volume-specification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Volume Specification
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#config-specification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Config Specification
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Config Specification">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#inline-config" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inline config
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#locally-loaded-config" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Locally loaded config
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#controller-fetched-config" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Controller fetched Config
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#executor-fetched-config" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Executor fetched Config
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#http-call-specification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HTTP Call Specification
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#placement-policy-specification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Placement Policy Specification
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Placement Policy Specification">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#any-placement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Any Placement
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#one-per-host-placement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        One Per Host Placement
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#max-n-per-host-placement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Max N Per Host Placement
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#match-tag-placement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Match Tag Placement
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#no-tag-placement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        No Tag Placement
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#composite-policy-based-placement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Composite Policy Based Placement
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#environment-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Environment variables
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#command-line-arguments" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Command line arguments
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#check-specification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Check Specification
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Check Specification">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#common-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#http-check-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HTTP Check Options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#command-check-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Command Check Options
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exposure-specification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exposure Specification
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuring-pre-shutdown-behaviour" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuring Pre Shutdown Behaviour
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#logging-specification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logging Specification
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Logging Specification">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#local-logger-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Local Logger configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rsyslog-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rsyslog configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="operations.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Application Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="outage.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Outage Detection and Recovery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5">
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tasks
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tasks
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tasks/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tasks/specification.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Task Specification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tasks/operations.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Task Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6">
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../apis/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../apis/application.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Application Management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../apis/task.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Task Management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../apis/logs.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Log Related APIs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../apis/cluster.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cluster Management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7">
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Drove CLI
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Drove CLI
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Drove CLI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli/configuration.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7_3">
+        
+          
+          <label class="md-nav__link" for="__nav_7_3" id="__nav_7_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Commands
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Commands
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli/commands/appinstances.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    drove appinstances
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli/commands/apps.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    drove apps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli/commands/cluster.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    drove cluster
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli/commands/config.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    drove config
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli/commands/describe.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    drove describe
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli/commands/executor.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    drove executor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli/commands/localservices.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    drove localservices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli/commands/lsinstances.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    drove lsinstances
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli/commands/tasks.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    drove tasks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8">
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extra
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Extra
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../extra/epoch.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Epoch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../extra/libraries.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Libraries
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../extra/nvidia.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setting up Nvidia GPU computation on executor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#sample-application-definition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sample Application Definition
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#executable-specification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Executable Specification
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resource-requirements-specification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resource Requirements Specification
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Resource Requirements Specification">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cpu-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CPU Requirements
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memory-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Memory Requirements
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#volume-specification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Volume Specification
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#config-specification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Config Specification
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Config Specification">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#inline-config" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inline config
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#locally-loaded-config" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Locally loaded config
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#controller-fetched-config" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Controller fetched Config
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#executor-fetched-config" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Executor fetched Config
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#http-call-specification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HTTP Call Specification
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#placement-policy-specification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Placement Policy Specification
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Placement Policy Specification">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#any-placement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Any Placement
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#one-per-host-placement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        One Per Host Placement
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#max-n-per-host-placement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Max N Per Host Placement
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#match-tag-placement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Match Tag Placement
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#no-tag-placement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        No Tag Placement
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#composite-policy-based-placement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Composite Policy Based Placement
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#environment-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Environment variables
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#command-line-arguments" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Command line arguments
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#check-specification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Check Specification
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Check Specification">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#common-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#http-check-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HTTP Check Options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#command-check-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Command Check Options
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exposure-specification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exposure Specification
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuring-pre-shutdown-behaviour" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuring Pre Shutdown Behaviour
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#logging-specification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logging Specification
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Logging Specification">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#local-logger-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Local Logger configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rsyslog-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rsyslog configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+  <nav class="md-path" aria-label="Navigation">
+    <ol class="md-path__list">
+      
+        
+  
+  
+    <li class="md-path__item">
+      <a href="../index.html" class="md-path__link">
+        
+  <span class="md-ellipsis">
+    Introduction
+  </span>
+
+      </a>
+    </li>
+  
+
+      
+      
+        
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="index.html" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    Applications
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ol>
+  </nav>
+
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="application-specification">Application Specification<a class="headerlink" href="#application-specification" title="Permanent link">¶</a></h1>
+<p>An application is defined using JSON. We use a sample configuration below to explain the options.</p>
+<h2 id="sample-application-definition">Sample Application Definition<a class="headerlink" href="#sample-application-definition" title="Permanent link">¶</a></h2>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="s2">"name"</span><span class="o">:</span><span class="w"> </span><span class="s2">"TEST_APP"</span><span class="p">,</span><span class="w"> </span><span class="c1">// (1)!</span>
+<span class="w">    </span><span class="s2">"version"</span><span class="o">:</span><span class="w"> </span><span class="s2">"1"</span><span class="p">,</span><span class="w"> </span><span class="c1">// (2)!</span>
+<span class="w">    </span><span class="s2">"type"</span><span class="o">:</span><span class="w"> </span><span class="s2">"SERVICE"</span><span class="p">,</span><span class="w"> </span><span class="c1">// (3)!</span>
+<span class="w">    </span><span class="s2">"executable"</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="c1">//(4)!</span>
+<span class="w">        </span><span class="s2">"type"</span><span class="o">:</span><span class="w"> </span><span class="s2">"DOCKER"</span><span class="p">,</span><span class="w"> </span><span class="c1">// (5)!</span>
+<span class="w">        </span><span class="s2">"url"</span><span class="o">:</span><span class="w"> </span><span class="s2">"ghcr.io/appform-io/perf-test-server-httplib"</span><span class="p">,</span><span class="c1">// (6)!</span>
+<span class="w">        </span><span class="s2">"dockerPullTimeout"</span><span class="o">:</span><span class="w"> </span><span class="s2">"100 seconds"</span><span class="c1">// (7)!</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="s2">"resources"</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="c1">//(20)!</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">"type"</span><span class="o">:</span><span class="w"> </span><span class="s2">"CPU"</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">"count"</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="c1">//(21)!</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">"type"</span><span class="o">:</span><span class="w"> </span><span class="s2">"MEMORY"</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">"sizeInMB"</span><span class="o">:</span><span class="w"> </span><span class="mf">128</span><span class="c1">//(22)!</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="s2">"volumes"</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="c1">//(12)!</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">"pathInContainer"</span><span class="o">:</span><span class="w"> </span><span class="s2">"/data"</span><span class="p">,</span><span class="c1">//(13)!</span>
+<span class="w">            </span><span class="s2">"pathOnHost"</span><span class="o">:</span><span class="w"> </span><span class="s2">"/mnt/datavol"</span><span class="p">,</span><span class="c1">//(14)!</span>
+<span class="w">            </span><span class="s2">"mode"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">"READ_WRITE"</span><span class="c1">//(15)!</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="s2">"configs"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="c1">//(16)!</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">"type"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">"INLINE"</span><span class="p">,</span><span class="c1">//(17)!</span>
+<span class="w">            </span><span class="s2">"localFilename"</span><span class="o">:</span><span class="w"> </span><span class="s2">"/testfiles/drove.txt"</span><span class="p">,</span><span class="c1">//(18)!</span>
+<span class="w">            </span><span class="s2">"data"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">"RHJvdmUgdGVzdA=="</span><span class="c1">//(19)!</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="s2">"placementPolicy"</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="c1">//(23)!</span>
+<span class="w">        </span><span class="s2">"type"</span><span class="o">:</span><span class="w"> </span><span class="s2">"ANY"</span><span class="c1">//(24)!</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="s2">"exposedPorts"</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="c1">//(8)!</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">"name"</span><span class="o">:</span><span class="w"> </span><span class="s2">"main"</span><span class="p">,</span><span class="c1">//(9)!</span>
+<span class="w">            </span><span class="s2">"port"</span><span class="o">:</span><span class="w"> </span><span class="mf">8000</span><span class="p">,</span><span class="c1">//(10)!</span>
+<span class="w">            </span><span class="s2">"type"</span><span class="o">:</span><span class="w"> </span><span class="s2">"HTTP"</span><span class="c1">//(11)!</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="s2">"healthcheck"</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="c1">//(25)!</span>
+<span class="w">        </span><span class="s2">"mode"</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="c1">//(26)!</span>
+<span class="w">            </span><span class="s2">"type"</span><span class="o">:</span><span class="w"> </span><span class="s2">"HTTP"</span><span class="p">,</span><span class="w"> </span><span class="c1">//(27)!</span>
+<span class="w">            </span><span class="s2">"protocol"</span><span class="o">:</span><span class="w"> </span><span class="s2">"HTTP"</span><span class="p">,</span><span class="c1">//(28)!</span>
+<span class="w">            </span><span class="s2">"portName"</span><span class="o">:</span><span class="w"> </span><span class="s2">"main"</span><span class="p">,</span><span class="c1">//(29)!</span>
+<span class="w">            </span><span class="s2">"path"</span><span class="o">:</span><span class="w"> </span><span class="s2">"/"</span><span class="p">,</span><span class="c1">//(30)!</span>
+<span class="w">            </span><span class="s2">"verb"</span><span class="o">:</span><span class="w"> </span><span class="s2">"GET"</span><span class="p">,</span><span class="c1">//(31)!</span>
+<span class="w">            </span><span class="s2">"successCodes"</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="c1">//(32)!</span>
+<span class="w">                </span><span class="mf">200</span>
+<span class="w">            </span><span class="p">],</span>
+<span class="w">            </span><span class="s2">"payload"</span><span class="o">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w"> </span><span class="c1">//(33)!</span>
+<span class="w">            </span><span class="s2">"connectionTimeout"</span><span class="o">:</span><span class="w"> </span><span class="s2">"1 second"</span><span class="w"> </span><span class="c1">//(34)!</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="s2">"timeout"</span><span class="o">:</span><span class="w"> </span><span class="s2">"1 second"</span><span class="p">,</span><span class="c1">//(35)!</span>
+<span class="w">        </span><span class="s2">"interval"</span><span class="o">:</span><span class="w"> </span><span class="s2">"5 seconds"</span><span class="p">,</span><span class="c1">//(36)!</span>
+<span class="w">        </span><span class="s2">"attempts"</span><span class="o">:</span><span class="w"> </span><span class="mf">3</span><span class="p">,</span><span class="c1">//(37)!</span>
+<span class="w">        </span><span class="s2">"initialDelay"</span><span class="o">:</span><span class="w"> </span><span class="s2">"0 seconds"</span><span class="c1">//(38)!</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="s2">"readiness"</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="c1">//(39)!</span>
+<span class="w">        </span><span class="s2">"mode"</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">"type"</span><span class="o">:</span><span class="w"> </span><span class="s2">"HTTP"</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">"protocol"</span><span class="o">:</span><span class="w"> </span><span class="s2">"HTTP"</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">"portName"</span><span class="o">:</span><span class="w"> </span><span class="s2">"main"</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">"path"</span><span class="o">:</span><span class="w"> </span><span class="s2">"/"</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">"verb"</span><span class="o">:</span><span class="w"> </span><span class="s2">"GET"</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">"successCodes"</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="mf">200</span>
+<span class="w">            </span><span class="p">],</span>
+<span class="w">            </span><span class="s2">"payload"</span><span class="o">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">"connectionTimeout"</span><span class="o">:</span><span class="w"> </span><span class="s2">"1 second"</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="s2">"timeout"</span><span class="o">:</span><span class="w"> </span><span class="s2">"1 second"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"interval"</span><span class="o">:</span><span class="w"> </span><span class="s2">"3 seconds"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"attempts"</span><span class="o">:</span><span class="w"> </span><span class="mf">3</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"initialDelay"</span><span class="o">:</span><span class="w"> </span><span class="s2">"0 seconds"</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="s2">"exposureSpec"</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="c1">//(42)!</span>
+<span class="w">        </span><span class="s2">"vhost"</span><span class="o">:</span><span class="w"> </span><span class="s2">"testapp.local"</span><span class="p">,</span><span class="w"> </span><span class="c1">//(43)!</span>
+<span class="w">        </span><span class="s2">"portName"</span><span class="o">:</span><span class="w"> </span><span class="s2">"main"</span><span class="p">,</span><span class="w"> </span><span class="c1">//(44)!</span>
+<span class="w">        </span><span class="s2">"mode"</span><span class="o">:</span><span class="w"> </span><span class="s2">"ALL"</span><span class="c1">//(45)!</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="s2">"env"</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="c1">//(41)!</span>
+<span class="w">        </span><span class="s2">"CORES"</span><span class="o">:</span><span class="w"> </span><span class="s2">"8"</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="s2">"args"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="c1">//(54)!</span>
+<span class="w">        </span><span class="s2">"./entrypoint.sh"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"arg1"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"arg2"</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="s2">"tags"</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="c1">//(40)!</span>
+<span class="w">        </span><span class="s2">"superSpecialApp"</span><span class="o">:</span><span class="w"> </span><span class="s2">"yes_i_am"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"say_my_name"</span><span class="o">:</span><span class="w"> </span><span class="s2">"heisenberg"</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="s2">"preShutdown"</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="c1">//(46)!</span>
+<span class="w">        </span><span class="s2">"hooks"</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="c1">//(47)!</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="s2">"type"</span><span class="o">:</span><span class="w"> </span><span class="s2">"HTTP"</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">"protocol"</span><span class="o">:</span><span class="w"> </span><span class="s2">"HTTP"</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">"portName"</span><span class="o">:</span><span class="w"> </span><span class="s2">"main"</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">"path"</span><span class="o">:</span><span class="w"> </span><span class="s2">"/"</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">"verb"</span><span class="o">:</span><span class="w"> </span><span class="s2">"GET"</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">"successCodes"</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                    </span><span class="mf">200</span>
+<span class="w">                </span><span class="p">],</span>
+<span class="w">                </span><span class="s2">"payload"</span><span class="o">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">"connectionTimeout"</span><span class="o">:</span><span class="w"> </span><span class="s2">"1 second"</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">],</span>
+<span class="w">        </span><span class="s2">"waitBeforeKill"</span><span class="o">:</span><span class="w"> </span><span class="s2">"3 seconds"</span><span class="c1">//(48)!</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="s2">"logging"</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="c1">//(49)!</span>
+<span class="w">        </span><span class="s2">"type"</span><span class="o">:</span><span class="w"> </span><span class="s2">"LOCAL"</span><span class="p">,</span><span class="c1">//(50)!</span>
+<span class="w">        </span><span class="s2">"maxSize"</span><span class="o">:</span><span class="w"> </span><span class="s2">"100m"</span><span class="p">,</span><span class="c1">//(51)!</span>
+<span class="w">        </span><span class="s2">"maxFiles"</span><span class="o">:</span><span class="w"> </span><span class="mf">3</span><span class="p">,</span><span class="c1">//(52)!</span>
+<span class="w">        </span><span class="s2">"compress"</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="c1">//(53)!</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<ol>
+<li>A human readable name for the application. This will remain constant for different versions of the app.</li>
+<li>A version number. Drove does not enforce any format for this, but it is recommended to increment this for changes in spec.</li>
+<li>This should be fixed to <code>SERVICE</code> for an application/service.</li>
+<li>Coordinates for the executable. Refer to <a href="#executable-specification">Executable Specification</a> for details.</li>
+<li>Right now the only type supported is <code>DOCKER</code>.</li>
+<li>Docker container address</li>
+<li>Timeout for container pull.</li>
+<li>The ports to be exposed from the container.</li>
+<li>A logical name for the port. This will be used to reference this port in other sections.</li>
+<li>Actual port number as mentioned in Dockerfile.</li>
+<li>Type of port. Can be: <code>HTTP</code>, <code>HTTPS</code>, <code>TCP</code>, <code>UDP</code>.</li>
+<li>Volumes to be mounted. Refer to <a href="#volume-specification">Volume Specification</a> for details.</li>
+<li>Path that will be visible inside the container for this mount.</li>
+<li>Actual path on the host machine for the mount.</li>
+<li>Mount mode can be <code>READ_WRITE</code> and <code>READ_ONLY</code></li>
+<li>Configuration to be injected as file inside the container. Please refer to <a href="#config-specification">Config Specification</a> for details.</li>
+<li>Type of config. Can be <code>INLINE</code>, <code>EXECUTOR_LOCAL_FILE</code>, <code>CONTROLLER_HTTP_FETCH</code> and <code>EXECUTOR_HTTP_FETCH</code>. Specifies how drove will get the contents to be injected..</li>
+<li>File name for the config inside the container.</li>
+<li>Serialized form of the data, this and other parameters will vary according to the <code>type</code> specified above.</li>
+<li>List of resources required to run this application. Check <a href="#resource-requirements-specification">Resource Requirements Specification</a> for more details.</li>
+<li>Number of CPU cores to be allocated.</li>
+<li>Amount of memory to be allocated expressed in Megabytes</li>
+<li>Specifies how the container will be placed on the cluster. Check <a href="#placement-policy-specification">Placement Policy</a> for details.</li>
+<li>Type of placement can be <code>ANY</code>, <code>ONE_PER_HOST</code>, <code>MATCH_TAG</code>, <code>NO_TAG</code>, <code>RULE_BASED</code>, <code>ANY</code> and <code>COMPOSITE</code>. Rest of the parameters in this section will depend on the type.</li>
+<li>Health check to ensure service is running fine. Refer to <a href="#check-specification">Check Specification</a> for details.</li>
+<li>Mode of health check, can be api call or command.</li>
+<li>Type of this check spec. Type can be <code>HTTP</code> or <code>CMD</code>. Rest of the options in this example are HTTP specific.</li>
+<li>API call protocol. Can be <code>HTTP</code>/<code>HTTPS</code></li>
+<li>Port name as mentioned in the <code>exposedPorts</code> section.</li>
+<li>HTTP path. Include query params here.</li>
+<li>HTTP method. Can be <code>GET</code>,<code>PUT</code> or <code>POST</code>.</li>
+<li>Set of HTTP status codes which can be considered as success.</li>
+<li>Payload to be sent for <code>POST</code> and <code>PUT</code> calls.</li>
+<li>Connection timeout for the port.</li>
+<li>Timeout for the check run.</li>
+<li>Interval between check runs.</li>
+<li>Max attempts after which the overall check is considered to be a failure.</li>
+<li>Time to wait before starting check runs.</li>
+<li>Readiness check to pass for the container to be considered as ready. Refer to <a href="#check-specification">Check Specification</a> for details.</li>
+<li>Key value metadata that can be used in external systems.</li>
+<li>Custom environment variables. Additional variables are injected by Drove as well. See <a href="#environment-variables">Environment Variables</a> section for details.</li>
+<li>Specifies the virtual host on which this container is exposed.</li>
+<li>FQDN for the virtual host.</li>
+<li>Port name as specified in <code>exposedPorts</code> section.</li>
+<li>Mode for exposure. Set this to <code>ALL</code> for now.</li>
+<li>Things to do before a container is shutdown. Check <a href="#configuring-pre-shutdown-behaviour">Pre Shutdown Behavior</a> for more details.</li>
+<li>Hooks (HTTP api call or shell command) to run before shutting down the container. Format is same as health/readiness checks. Refer to <a href="#http-check-options">HTTP Check Actions</a> and <a href="#command-check-options">Command Check Options</a> for details.</li>
+<li>Time to wait before killing the container. The container will be in <code>UNREADY</code> state during this time and hence won't have api calls routed to it via Drove Gateway.</li>
+<li>Specify how docker log files are configured. Refer to <a href="#logging-specification">Logging Specification</a></li>
+<li>Log to local file</li>
+<li>Maximum File Size</li>
+<li>Number of latest log files to retain</li>
+<li>Log files will be compressed</li>
+<li>List of command line arguments. See <a href="#command-line-arguments">Command Line Arguments</a> for details.</li>
+</ol>
+<h2 id="executable-specification">Executable Specification<a class="headerlink" href="#executable-specification" title="Permanent link">¶</a></h2>
+<p>Right now Drove supports <em>only</em> docker containers. However as engines, both docker and podman are supported. Drove executors will fetch the executable directly from the registry based on the configuration provided.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Type</td>
+<td><code>type</code></td>
+<td>Set type to <code>DOCKER</code>.</td>
+</tr>
+<tr>
+<td>URL</td>
+<td><code>url</code></td>
+<td>Docker container URL`.</td>
+</tr>
+<tr>
+<td>Timeout</td>
+<td><code>dockerPullTimeout</code></td>
+<td>Timeout for docker image pull.</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Drove supports docker registry authentication. This can be configured in the executor configuration file.</p>
+</div>
+<h2 id="resource-requirements-specification">Resource Requirements Specification<a class="headerlink" href="#resource-requirements-specification" title="Permanent link">¶</a></h2>
+<p>This section specifies the hardware resources required to run the container. Right now only CPU and MEMORY are supported as resource types that can be reserved for a container.</p>
+<h3 id="cpu-requirements">CPU Requirements<a class="headerlink" href="#cpu-requirements" title="Permanent link">¶</a></h3>
+<p>Specifies number of cores to be assigned to the container.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Type</td>
+<td><code>type</code></td>
+<td>Set type to <code>CPU</code> for this.</td>
+</tr>
+<tr>
+<td>Count</td>
+<td><code>count</code></td>
+<td>Number of cores to be assigned.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="memory-requirements">Memory Requirements<a class="headerlink" href="#memory-requirements" title="Permanent link">¶</a></h3>
+<p>Specifies amount of memory to be allocated to a container.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Type</td>
+<td><code>type</code></td>
+<td>Set type to <code>MEMORY</code> for this.</td>
+</tr>
+<tr>
+<td>Count</td>
+<td><code>sizeInMB</code></td>
+<td>Amount of memory (in Mega Bytes) to be allocated.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Sample</strong>
+</p><div class="highlight"><pre><span></span><code><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">"type"</span><span class="o">:</span><span class="w"> </span><span class="s2">"CPU"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"count"</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">"type"</span><span class="o">:</span><span class="w"> </span><span class="s2">"MEMORY"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"sizeInMB"</span><span class="o">:</span><span class="w"> </span><span class="mf">128</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">]</span>
+</code></pre></div><p></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Both <code>CPU</code> and <code>MEMORY</code> configurations are mandatory.</p>
+</div>
+<h2 id="volume-specification">Volume Specification<a class="headerlink" href="#volume-specification" title="Permanent link">¶</a></h2>
+<p>Files and directories can be mounted from the executor host into the container. The <code>volumes</code> section contains a list of volumes that need to be mounted.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Path In Container</td>
+<td><code>pathInContainer</code></td>
+<td>Path that will be visible inside the container for this mount.</td>
+</tr>
+<tr>
+<td>Path On Host</td>
+<td><code>pathOnHost</code></td>
+<td>Actual path on the host machine for the mount.</td>
+</tr>
+<tr>
+<td>Mount Mode</td>
+<td><code>mode</code></td>
+<td>Mount mode can be <code>READ_WRITE</code> and <code>READ_ONLY</code> to allow the containerized process to write or read to the volume.</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>We do not support mounting remote volumes as of now.</p>
+</div>
+<h2 id="config-specification">Config Specification<a class="headerlink" href="#config-specification" title="Permanent link">¶</a></h2>
+<p>Drove supports injection of configuration files into containers. The specifications for the same are discussed below.</p>
+<h3 id="inline-config">Inline config<a class="headerlink" href="#inline-config" title="Permanent link">¶</a></h3>
+<p>Inline configuration can be added in the Application Specification itself. This will manifest as a file inside the container.</p>
+<p>The following details are needed for this:</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Type</td>
+<td><code>type</code></td>
+<td>Set the value to <code>INLINE</code></td>
+</tr>
+<tr>
+<td>Local Filename</td>
+<td><code>localFilename</code></td>
+<td>File name for the config inside the container.</td>
+</tr>
+<tr>
+<td>Data</td>
+<td><code>data</code></td>
+<td>Base64 encoded string for the data. The value for this will be masked on UI.</td>
+</tr>
+</tbody>
+</table>
+<p>Config file:
+</p><div class="highlight"><pre><span></span><code><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8080</span>
+<span class="nt">logLevel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DEBUG</span>
+</code></pre></div>
+Corresponding config specification:
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="s2">"type"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">"INLINE"</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">"localFilename"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">"/config/service.yml"</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">"data"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">"cG9ydDogODA4MApsb2dMZXZlbDogREVCVUcK"</span>
+<span class="p">}</span>
+</code></pre></div><p></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The full base 64 encoded config data will get stored in Drove ZK and will be pushed to executors inline. It is <em>not recommended</em> to stream large config files to containers using this method. This will probably need additional configuration on your ZK cluster.</p>
+</div>
+<h3 id="locally-loaded-config">Locally loaded config<a class="headerlink" href="#locally-loaded-config" title="Permanent link">¶</a></h3>
+<p>Config file from a path on the executor directly. Such files can be distributed to the executor host using existing configuration management systems such as OpenTofu, Salt etc.</p>
+<p>The following details are needed for this:</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Type</td>
+<td><code>type</code></td>
+<td>Set the value to <code>EXECUTOR_LOCAL_FILE</code></td>
+</tr>
+<tr>
+<td>Local Filename</td>
+<td><code>localFilename</code></td>
+<td>File name for the config inside the container.</td>
+</tr>
+<tr>
+<td>File path</td>
+<td><code>filePathOnHost</code></td>
+<td>Path to the config file on executor host.</td>
+</tr>
+</tbody>
+</table>
+<p>Sample config specification:
+</p><div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="s2">"type"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">"EXECUTOR_LOCAL_FILE"</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">"localFilename"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">"/config/service.yml"</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">"data"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">"/mnt/configs/myservice/config.yml"</span>
+<span class="p">}</span>
+</code></pre></div><p></p>
+<h3 id="controller-fetched-config">Controller fetched Config<a class="headerlink" href="#controller-fetched-config" title="Permanent link">¶</a></h3>
+<p>Config file can be fetched from a remote server by the controller. Once fetched, these will be streamed to the executor as part of the instance specification for starting a container.</p>
+<p>The following details are needed for this:</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Type</td>
+<td><code>type</code></td>
+<td>Set the value to <code>CONTROLLER_HTTP_FETCH</code></td>
+</tr>
+<tr>
+<td>Local Filename</td>
+<td><code>localFilename</code></td>
+<td>File name for the config inside the container.</td>
+</tr>
+<tr>
+<td>HTTP Call Details</td>
+<td><code>http</code></td>
+<td>HTTP Call related details. Please refer to <a href="#http-call-specification">HTTP Call Specification</a> for details.</td>
+</tr>
+</tbody>
+</table>
+<p>Sample config specification:
+</p><div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="s2">"type"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">"CONTROLLER_HTTP_FETCH"</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">"localFilename"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">"/config/service.yml"</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">"http"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">"protocol"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">"HTTP"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"hostname"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">"configserver.internal.yourdomain.net"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"port"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="mf">8080</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"path"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">"/configs/myapp"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"username"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">"appuser"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"password"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">"secretpassword"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><p></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The controller will make an API call for every single time it asks an executor to spin up a container. Please make sure to account for this in your configuration management system.</p>
+</div>
+<h3 id="executor-fetched-config">Executor fetched Config<a class="headerlink" href="#executor-fetched-config" title="Permanent link">¶</a></h3>
+<p>Config file can be fetched from a remote server by the executor before spinning up a container. Once fetched, the payload will be injected as a config file into the container.</p>
+<p>The following details are needed for this:</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Type</td>
+<td><code>type</code></td>
+<td>Set the value to <code>EXECUTOR_HTTP_FETCH</code></td>
+</tr>
+<tr>
+<td>Local Filename</td>
+<td><code>localFilename</code></td>
+<td>File name for the config inside the container.</td>
+</tr>
+<tr>
+<td>HTTP Call Details</td>
+<td><code>http</code></td>
+<td>HTTP Call related details. Please refer to <a href="#http-call-specification">HTTP Call Specification</a> for details.</td>
+</tr>
+</tbody>
+</table>
+<p>Sample config specification:
+</p><div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="s2">"type"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">"EXECUTOR_HTTP_FETCH"</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">"localFilename"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">"/config/service.yml"</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">"http"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">"protocol"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">"HTTP"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"hostname"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">"configserver.internal.yourdomain.net"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"port"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="mf">8080</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"path"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">"/configs/myapp"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"username"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">"appuser"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"password"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">"secretpassword"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><p></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>All executors will make an API call for every single time they spin up a container for this application. Please make sure to account for this in your configuration management system.</p>
+</div>
+<h3 id="http-call-specification">HTTP Call Specification<a class="headerlink" href="#http-call-specification" title="Permanent link">¶</a></h3>
+<p>This section details the options that can set when making http calls to a configuration management system from controllers or executors.</p>
+<p>The following options are available for HTTP call:</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Protocol</td>
+<td><code>protocol</code></td>
+<td>Protocol to use for upstream call. Can be <code>HTTP</code> or <code>HTTPS</code>.</td>
+</tr>
+<tr>
+<td>Hostname</td>
+<td><code>hostname</code></td>
+<td>Host to call.</td>
+</tr>
+<tr>
+<td>Port</td>
+<td><code>port</code></td>
+<td>Provide custom port. Defaults to 80 for http and 443 for https.</td>
+</tr>
+<tr>
+<td>API Path</td>
+<td><code>path</code></td>
+<td>Path component of the URL. Include query parameters here. Defaults to <code>/</code></td>
+</tr>
+<tr>
+<td>HTTP Method</td>
+<td><code>verb</code></td>
+<td>Type of call, use <code>GET</code>, <code>POST</code> or <code>PUT</code>. Defaults to <code>GET</code>.</td>
+</tr>
+<tr>
+<td>Success Code</td>
+<td><code>successCodes</code></td>
+<td>List of HTTP status codes which is considered as success. Defaults to <code>[200]</code></td>
+</tr>
+<tr>
+<td>Payload</td>
+<td><code>payload</code></td>
+<td>Data to be used for POST and PUT calls</td>
+</tr>
+<tr>
+<td>Connection Timeout</td>
+<td><code>connectionTimeout</code></td>
+<td>Timeout for upstream connection.</td>
+</tr>
+<tr>
+<td>Operation timeout</td>
+<td><code>operationTimeout</code></td>
+<td>Timeout for actual operation.</td>
+</tr>
+<tr>
+<td>Username</td>
+<td><code>username</code></td>
+<td>Username to be used basic auth. This field is masked out on the UI.</td>
+</tr>
+<tr>
+<td>Password</td>
+<td><code>password</code></td>
+<td>Password to be used for basic auth. This field is masked on the UI.</td>
+</tr>
+<tr>
+<td>Authorization Header</td>
+<td><code>authHeader</code></td>
+<td>Data to be passed in HTTP <code>Authorization</code> header. This field is masked on the UI.</td>
+</tr>
+<tr>
+<td>Additional Headers</td>
+<td><code>headers</code></td>
+<td string="string" string_="string,">Any other headers to be passed to the upstream in the HTTP calls. This is a map of</td>
+</tr>
+<tr>
+<td>Skip SSL Checks</td>
+<td><code>insecure</code></td>
+<td>Skip hostname and certification checks during SSL handshake with the upstream.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="placement-policy-specification">Placement Policy Specification<a class="headerlink" href="#placement-policy-specification" title="Permanent link">¶</a></h2>
+<p>Placement policy governs how Drove deploys containers on the cluster. The following sections discuss the different placement policies available and how they can be configured to achieve optimal placement of containers.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>All policies will work only at a <code>{appName, version}</code> combination level. They will <strong><em>not</em></strong> ensure constraints at an <code>appName</code> level. This means that for somethinge like a one per node placement, for the same <code>appName</code>, multiple containers can run on the same host if multiple deployments with different <code>version</code>s are active in a cluster. Same applies for all policies like N per host and so on.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Important details about executor tagging</p>
+<ul>
+<li>All hosts have at-least one tag, it's own hostname.</li>
+<li>The <code>TAG</code> policy <em>will</em> consider them as valid tags. This can be used to place containers on <em>specific</em> hosts if needed.</li>
+<li>This is handled specially in <em>all</em> other policy types and they will consider executors having only the hostname tag as untagged.</li>
+<li>A host with a tag (other than host) will not have <em>any</em> containers running if not placed on them specifically using the <code>MATCH_TAG</code> policy</li>
+</ul>
+</div>
+<h3 id="any-placement">Any Placement<a class="headerlink" href="#any-placement" title="Permanent link">¶</a></h3>
+<p>Containers for a <code>{appName, version}</code> combination can run on any un-tagged executor host.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Policy Type</td>
+<td><code>type</code></td>
+<td>Put <code>ANY</code> as policy.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Sample:</strong>
+</p><div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="s2">"type"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">"ANY"</span>
+<span class="p">}</span>
+</code></pre></div><p></p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>For <em>most</em> use-cases this is the placement policy to use.</p>
+</div>
+<h3 id="one-per-host-placement">One Per Host Placement<a class="headerlink" href="#one-per-host-placement" title="Permanent link">¶</a></h3>
+<p>Ensures that <em>only</em> one container for a particular <code>{appName, version}</code> combination is running on an executor host at a time.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Policy Type</td>
+<td><code>type</code></td>
+<td>Put <code>ONE_PER_HOST</code> as policy.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Sample:</strong>
+</p><div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="s2">"type"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">"ONE_PER_HOST"</span>
+<span class="p">}</span>
+</code></pre></div><p></p>
+<h3 id="max-n-per-host-placement">Max N Per Host Placement<a class="headerlink" href="#max-n-per-host-placement" title="Permanent link">¶</a></h3>
+<p>Ensures that at most N containers for a <code>{appName, version}</code> combination is running on an executor host at a time.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Policy Type</td>
+<td><code>type</code></td>
+<td>Put <code>MAX_N_PER_HOST</code> as policy.</td>
+</tr>
+<tr>
+<td>Max count</td>
+<td><code>max</code></td>
+<td>The maximum num of containers that can run on an executor. Range: 1-64</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Sample:</strong>
+</p><div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="s2">"type"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">"MAX_N_PER_HOST"</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">"max"</span><span class="o">:</span><span class="w"> </span><span class="mf">3</span>
+<span class="p">}</span>
+</code></pre></div><p></p>
+<h3 id="match-tag-placement">Match Tag Placement<a class="headerlink" href="#match-tag-placement" title="Permanent link">¶</a></h3>
+<p>Ensures that containers for a <code>{appName, version}</code> combination are running on an executor host that has the tags as mentioned in the policy.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Policy Type</td>
+<td><code>type</code></td>
+<td>Put <code>MATCH_TAG</code> as policy.</td>
+</tr>
+<tr>
+<td>Max count</td>
+<td><code>tag</code></td>
+<td>The tag to match.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Sample:</strong>
+</p><div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="s2">"type"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">"MATCH_TAG"</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">"tag"</span><span class="o">:</span><span class="w"> </span><span class="s2">"gpu_enabled"</span>
+<span class="p">}</span>
+</code></pre></div><p></p>
+<h3 id="no-tag-placement">No Tag Placement<a class="headerlink" href="#no-tag-placement" title="Permanent link">¶</a></h3>
+<p>Ensures that containers for a <code>{appName, version}</code> combination are running on an executor host that has no tags.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Policy Type</td>
+<td><code>type</code></td>
+<td>Put <code>NO_TAG</code> as policy.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Sample:</strong>
+</p><div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="s2">"type"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">"NO_TAG"</span>
+<span class="p">}</span>
+</code></pre></div><p></p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>The NO_TAG policy is mostly for internal use, and does not need to be specified when deploying containers that do not need any special placement logic.</p>
+</div>
+<h3 id="composite-policy-based-placement">Composite Policy Based Placement<a class="headerlink" href="#composite-policy-based-placement" title="Permanent link">¶</a></h3>
+<p>Composite policy can be used to combine policies together to create complicated placement requirements.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Policy Type</td>
+<td><code>type</code></td>
+<td>Put <code>COMPOSITE</code> as policy.</td>
+</tr>
+<tr>
+<td>Polices</td>
+<td><code>policies</code></td>
+<td>List of policies to combine</td>
+</tr>
+<tr>
+<td>Combiner</td>
+<td><code>combiner</code></td>
+<td>Can be <code>AND</code> and <code>OR</code> and signify all-match and any-match logic on the <code>policies</code> mentioned.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Sample:</strong>
+</p><div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="s2">"type"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">"COMPOSITE"</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">"policies"</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">"type"</span><span class="o">:</span><span class="w"> </span><span class="s2">"ONE_PER_HOST"</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">"type"</span><span class="o">:</span><span class="w"> </span><span class="s2">"MATH_TAG"</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">"tag"</span><span class="o">:</span><span class="w"> </span><span class="s2">"gpu_enabled"</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="s2">"combiner"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">"AND"</span>
+<span class="p">}</span>
+</code></pre></div>
+The above policy will ensure that <em>only</em> one container of the relevant <code>{appName,version}</code> will run on GPU enabled machines.<p></p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>It is easy to go into situations where no executors match complicated placement policies. Internally, we tend to keep things rather simple and use the ANY placement for most cases and <em>maybe</em> tags in a few places with over-provisioning or for hosts having special hardware <img alt="🙂" class="twemoji" src="../assets/external/cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/1f642.svg" title=":slight_smile:"></p>
+</div>
+<h2 id="environment-variables">Environment variables<a class="headerlink" href="#environment-variables" title="Permanent link">¶</a></h2>
+<p>This config can be used to inject custom environment variables to containers. The values are defined as part of deployment specification, are same across the cluster and immutable to modifications from inside the container (ie any overrides from inside the container will not be visible across the cluster).</p>
+<p><strong>Sample:</strong>
+</p><div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="s2">"MY_VARIABLE_1"</span><span class="o">:</span><span class="w"> </span><span class="s2">"fizz"</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">"MY_VARIABLE_2"</span><span class="o">:</span><span class="w"> </span><span class="s2">"buzz"</span>
+<span class="p">}</span>
+</code></pre></div><p></p>
+<p>The following environment variables are injected by Drove to all containers:</p>
+<table>
+<thead>
+<tr>
+<th>Variable Name</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HOST</td>
+<td>Hostname where the container is running. This is for marathon compatibility.</td>
+</tr>
+<tr>
+<td>PORT_<code>PORT_NUMBER</code></td>
+<td>A variable for every port specified in <code>exposedPorts</code> section. The value is the actual port on the host, the specified port is mapped to.  For example if ports 8080 and 8081 are specified, two variables called <code>PORT_8080</code> and <code>PORT_8081</code> will be injected.</td>
+</tr>
+<tr>
+<td>DROVE_EXECUTOR_HOST</td>
+<td>Hostname where container is running.</td>
+</tr>
+<tr>
+<td>DROVE_CONTAINER_ID</td>
+<td>Container that is deployed</td>
+</tr>
+<tr>
+<td>DROVE_APP_NAME</td>
+<td>App name as specified in the Application Specification</td>
+</tr>
+<tr>
+<td>DROVE_INSTANCE_ID</td>
+<td>Actual instance ID generated by Drove</td>
+</tr>
+<tr>
+<td>DROVE_APP_ID</td>
+<td>Application ID as generated by Drove</td>
+</tr>
+<tr>
+<td>DROVE_APP_INSTANCE_AUTH_TOKEN</td>
+<td>A JWT string generated by Drove that can be used by this container to call <code>/apis/v1/internal/...</code> apis.</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><strong>Do not</strong> pass secrets using environment variables. These variables are all visible on the UI as is. Please use <a href="#config-specification">Configs</a> to inject secrets files and so on.</p>
+</div>
+<h2 id="command-line-arguments">Command line arguments<a class="headerlink" href="#command-line-arguments" title="Permanent link">¶</a></h2>
+<p>A list of command line arguments that are sent to the container engine to execute inside the container. This is provides ways for you to configure your container behaviour based off such arguments. Please refer to <a href="https://docs.docker.com/engine/containers/run/#commands-and-arguments" target="_blank" rel="noopener">docker documentation</a> for details.</p>
+<div class="admonition danger">
+<p class="admonition-title">Danger</p>
+<p>This might have security implications from a system point of view. As such Drove provides administrators a way to disable passing arguments at the cluster level by setting <code>disableCmdlArgs</code> to <code>true</code> in the controller configuration.</p>
+</div>
+<h2 id="check-specification">Check Specification<a class="headerlink" href="#check-specification" title="Permanent link">¶</a></h2>
+<p>One of the cornerstones of managing applications on the cluster is to ensure we keep track of instance health and manage their life cycle depending on their health state. We need to define how to monitor health for containers accordingly. The checks will be executed on Applications and a Check result is generated. The result consists of the following:</p>
+<ul>
+<li><strong>Status</strong> - Healthy, Unhealthy or Stopped if the container is already in stopping state</li>
+<li><strong>Message</strong> - Any error message as generated by a specific checker</li>
+</ul>
+<h4 id="common-options">Common Options<a class="headerlink" href="#common-options" title="Permanent link">¶</a></h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mode</td>
+<td><code>mode</code></td>
+<td>The definition of a HTTP call or a Command to be executed in the container. See following sections for details.</td>
+</tr>
+<tr>
+<td>Timeout</td>
+<td><code>timeout</code></td>
+<td>Duration for which we wait before declaring a check as failed</td>
+</tr>
+<tr>
+<td>Interval</td>
+<td><code>interval</code></td>
+<td>Interval at which check will be retried</td>
+</tr>
+<tr>
+<td>Attempts</td>
+<td><code>attempts</code></td>
+<td>Number of times a check is retried before it is declared as a failure</td>
+</tr>
+<tr>
+<td>Initial Delay</td>
+<td><code>initialDelay</code></td>
+<td>Delay before executing the check for the first time.</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code>initialDelay</code> is ignored when readiness checks and health checks are run in the recovery path as the container is already running at that point in time.</p>
+</div>
+<h4 id="http-check-options">HTTP Check Options<a class="headerlink" href="#http-check-options" title="Permanent link">¶</a></h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Type</td>
+<td><code>type</code></td>
+<td>Fixed to HTTP for HTTP checker</td>
+</tr>
+<tr>
+<td>Protocol</td>
+<td><code>protocol</code></td>
+<td>HTTP or HTTPS call to be made</td>
+</tr>
+<tr>
+<td>Port Name</td>
+<td><code>portName</code></td>
+<td>The name of the container port to make the http call on as specified in the Exposed Ports section in Application Spec</td>
+</tr>
+<tr>
+<td>Path</td>
+<td><code>path</code></td>
+<td>The api path to call</td>
+</tr>
+<tr>
+<td>HTTP method</td>
+<td><code>verb</code></td>
+<td>The HTTP Verb/Method to invoke. GET/PUT and POST are supported here</td>
+</tr>
+<tr>
+<td>Success Codes</td>
+<td><code>successCodes</code></td>
+<td>A set of HTTP status codes that we should consider as a success from this API.</td>
+</tr>
+<tr>
+<td>Payload</td>
+<td><code>payload</code></td>
+<td>A string payload that we can pass if the Verb is POST or PUT</td>
+</tr>
+<tr>
+<td>Connection Timeout</td>
+<td><code>connectionTimeout</code></td>
+<td>Maximum time for which the checker will wait for the connection to be set up with the container.</td>
+</tr>
+<tr>
+<td>Insecure</td>
+<td><code>insecure</code></td>
+<td>Skip hostname and certificate checks for HTTPS ports during checks.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="command-check-options">Command Check Options<a class="headerlink" href="#command-check-options" title="Permanent link">¶</a></h4>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Type</td>
+<td><code>type</code></td>
+<td>Fixed to CMD for command checker</td>
+</tr>
+<tr>
+<td>Command</td>
+<td><code>command</code></td>
+<td>Command to execute in the container. (Equivalent to <code>docker exec -it &lt;container&gt; command&gt;</code>)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="exposure-specification">Exposure Specification<a class="headerlink" href="#exposure-specification" title="Permanent link">¶</a></h2>
+<p>Exposure spec is used to specify the virtual host Drove Gateway exposes to outside world for communication with the containers.</p>
+<p>The following information needs to be specified:</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Virtual Host</td>
+<td><code>vhost</code></td>
+<td>The virtual host to be exposed on NGinx. This should be a fully qualified domain name.</td>
+</tr>
+<tr>
+<td>Port Name</td>
+<td><code>portName</code></td>
+<td>The portname to be exposed on the vhost. Port names are defined in <code>exposedPorts</code> section.</td>
+</tr>
+<tr>
+<td>Exposure Mode</td>
+<td><code>mode</code></td>
+<td>Use <code>ALL</code> here for now. Signifies that all healthy instances of the app are exposed to traffic.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Sample:</strong>
+</p><div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="s2">"vhost"</span><span class="o">:</span><span class="w"> </span><span class="s2">"teastapp.mydomain"</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">"port"</span><span class="o">:</span><span class="w"> </span><span class="s2">"main"</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">"mode"</span><span class="o">:</span><span class="w"> </span><span class="s2">"ALL"</span>
+<span class="p">}</span>
+</code></pre></div><p></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Application instances in any state other than <code>HEALTHY</code> are not considered for exposure. Please check <a href="instances.html#application-instance-state-machine">Application Instance State Machine</a> for an understanding of states of instances.</p>
+</div>
+<h2 id="configuring-pre-shutdown-behaviour">Configuring Pre Shutdown Behaviour<a class="headerlink" href="#configuring-pre-shutdown-behaviour" title="Permanent link">¶</a></h2>
+<p>Before a container is shut down, it is desirable to ensure things are spun down properly. This behaviour can be configured in the <code>preShutdown</code> section of the configuration.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hooks</td>
+<td><code>hooks</code></td>
+<td>List of api calls and commands to be run on the container before it is killed. Each hook is either a <a href="#http-call-specification">HTTP Call Spec</a> or <a href="#command-check-options">Command Spec</a></td>
+</tr>
+<tr>
+<td>Wait Time</td>
+<td><code>waitBeforeKill</code></td>
+<td>Time to wait before killing the container.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Sample</strong>
+</p><div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="s2">"hooks"</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">"type"</span><span class="o">:</span><span class="w"> </span><span class="s2">"HTTP"</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">"protocol"</span><span class="o">:</span><span class="w"> </span><span class="s2">"HTTP"</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">"portName"</span><span class="o">:</span><span class="w"> </span><span class="s2">"main"</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">"path"</span><span class="o">:</span><span class="w"> </span><span class="s2">"/"</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">"verb"</span><span class="o">:</span><span class="w"> </span><span class="s2">"GET"</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">"successCodes"</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="mf">200</span>
+<span class="w">            </span><span class="p">],</span>
+<span class="w">            </span><span class="s2">"payload"</span><span class="o">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">"connectionTimeout"</span><span class="o">:</span><span class="w"> </span><span class="s2">"1 second"</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="s2">"waitBeforeKill"</span><span class="o">:</span><span class="w"> </span><span class="s2">"3 seconds"</span><span class="c1">//(48)!</span>
+<span class="p">}</span>
+</code></pre></div><p></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code>waitBeforeKill</code> timed wait kicks in <em>after</em> all the hooks have been executed.</p>
+</div>
+<h2 id="logging-specification">Logging Specification<a class="headerlink" href="#logging-specification" title="Permanent link">¶</a></h2>
+<p>Can be used to configure how container logs are managed on the system. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This section affects the docker log driver. Drove will continue to stream logs to it's own logger which can be configured at executor level through the executor configuration file.</p>
+</div>
+<h3 id="local-logger-configuration">Local Logger configuration<a class="headerlink" href="#local-logger-configuration" title="Permanent link">¶</a></h3>
+<p>This is used to configure the <code>json-file</code> log driver.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Type</td>
+<td><code>type</code></td>
+<td>Set the value to <code>LOCAL</code></td>
+</tr>
+<tr>
+<td>Max Size</td>
+<td><code>maxSize</code></td>
+<td>Maximum file size. Anything bigger than this will lead to rotation.</td>
+</tr>
+<tr>
+<td>Max Files</td>
+<td><code>maxFiles</code></td>
+<td>Maximum number of logs files to keep. Range: 1-100</td>
+</tr>
+<tr>
+<td>Compress</td>
+<td><code>compress</code></td>
+<td>Enable log file compression.</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>If <code>logging</code> section is omitted, the following configuration is applied by default:
+- File size: 10m
+- Number of files: 3
+- Compression: on</p>
+</div>
+<h3 id="rsyslog-configuration">Rsyslog configuration<a class="headerlink" href="#rsyslog-configuration" title="Permanent link">¶</a></h3>
+<p>In case suers want to stream logs to an rsyslog server, the logging configuration needs to be set to RSYSLOG mode.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Type</td>
+<td><code>type</code></td>
+<td>Set the value to <code>RSYSLOG</code></td>
+</tr>
+<tr>
+<td>Server</td>
+<td><code>server</code></td>
+<td>URL for the rsyslog server.</td>
+</tr>
+<tr>
+<td>Tag Prefix</td>
+<td><code>tagPrefix</code></td>
+<td>Prefix to add at the start of a tag</td>
+</tr>
+<tr>
+<td>Tag Suffix</td>
+<td><code>tagSuffix</code></td>
+<td>Suffix to add at the en of a tag.</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The default tag is the <code>DROVE_INSTANCE_ID</code>. The <code>tagPrefix</code> and <code>tagSuffix</code> will to before and after this</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright © 2024  PhonePe Private Limited
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tracking", "navigation.path", "navigation.tabs", "navigation.tabs.sticky", "content.code.copy", "content.code.annotate", "navigation.expand", "toc.follow", "navigation.top", "search.suggest", "search.highlight", "search.share"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  
+<script id="init-glightbox">document.querySelectorAll('.glightbox').forEach(function(element) {
+    try {
+        var img = element.querySelector('img');
+        if (img && img.src) {
+            element.setAttribute('href', img.src);
+        } else {
+            console.log('No img element with src attribute found');
+        }
+    } catch (error) {
+        console.log('Error:', error);
+    }
+});
+const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(()=>{ lightbox.reload(); });
+</script></body></html>

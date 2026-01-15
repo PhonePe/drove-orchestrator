@@ -1,0 +1,3201 @@
+<!DOCTYPE html><html lang="en" class="no-js"><head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://phonepe.github.io/drove-orchestrator/cluster/setup/controller.html">
+      
+      
+        <link rel="prev" href="zookeeper.html">
+      
+      
+        <link rel="next" href="executor-setup.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Setting up Controllers - Drove Container Orchestrator</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+        <script src="../../assets/external/unpkg.com/iframe-worker/shim.js"></script>
+      
+    
+    
+      
+        
+        
+        
+        <link rel="stylesheet" href="../../assets/external/fonts.googleapis.com/css.49ea35f2.css">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  <link href="../../assets/stylesheets/glightbox.min.css" rel="stylesheet"><script src="../../assets/javascripts/glightbox.min.js"></script><style id="glightbox-style">
+            html.glightbox-open { overflow: initial; height: 100%; }
+            .gslide-title { margin-top: 0px; user-select: text; }
+            .gslide-desc { color: #666; user-select: text; }
+            .gslide-image img { background: white; }
+            .gscrollbar-fixer { padding-right: 15px; }
+            .gdesc-inner { font-size: 0.75rem; }
+            body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
+            body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
+            body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
+        </style></head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#setting-up-controllers" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../index.html" title="Drove Container Orchestrator" class="md-header__button md-logo" aria-label="Drove Container Orchestrator" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Drove Container Orchestrator
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Setting up Controllers
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo" aria-label="Switch to dark mode" type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo" aria-label="Switch to light mode" type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"></path></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo" aria-label="Switch to system preference" type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"></path></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/PhonePe/drove-orchestrator" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"></path></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../index.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Introduction
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../getting-started.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Getting Started
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../cluster.html" class="md-tabs__link">
+          
+  
+  
+  Cluster
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../applications/index.html" class="md-tabs__link">
+          
+  
+  
+  Applications
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../tasks/index.html" class="md-tabs__link">
+          
+  
+  
+  Tasks
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../apis/index.html" class="md-tabs__link">
+          
+  
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../cli/index.html" class="md-tabs__link">
+          
+  
+  
+  Drove CLI
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../extra/epoch.html" class="md-tabs__link">
+          
+  
+  
+  Extra
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../index.html" title="Drove Container Orchestrator" class="md-nav__button md-logo" aria-label="Drove Container Orchestrator" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+
+    </a>
+    Drove Container Orchestrator
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/PhonePe/drove-orchestrator" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"></path></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cluster
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Cluster
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cluster.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Anatomy of a Drove Cluster
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setup
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Setup
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="planning.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Planning your cluster
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="prerequisites.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setting up the prerequisites
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="zookeeper.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setting Up Zookeeper
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setting up Controllers
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="controller.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setting up Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#controller-configuration-file-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Controller Configuration File Reference
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Controller Configuration File Reference">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#zookeeper-connection-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Zookeeper Connection Configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#intra-node-authentication-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Intra Node Authentication Configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#user-authentication-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        User Authentication Configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#instance-authentication-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Instance Authentication Configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#controller-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Controller Options
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Controller Options">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#stale-data-cleanup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stale data cleanup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#internal-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Internal Operations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#security-related-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Security related options
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#relevant-directories" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Relevant directories
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setup-the-config-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Setup the config file
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setup-required-environment-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Setup required environment variables
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#create-systemd-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Create systemd file
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#start-the-service-on-all-servers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Start the service on all servers
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="executor-setup.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setting up Executor Nodes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="gateway.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setting up Drove Gateway
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="coredns-drove.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setting up CoreDNS Drove
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="maintenance.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Maintaining a Drove Cluster
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="units.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Units Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../metrics.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cluster Metrics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../maintenance.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Maintaining a Drove Cluster
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4">
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Applications
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Applications
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../applications/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../applications/instances.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Application Instances
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../applications/specification.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Application Specification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../applications/operations.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Application Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../applications/outage.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Outage Detection and Recovery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5">
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tasks
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tasks
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tasks/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tasks/specification.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Task Specification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tasks/operations.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Task Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6">
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apis/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apis/application.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Application Management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apis/task.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Task Management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apis/logs.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Log Related APIs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apis/cluster.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cluster Management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7">
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Drove CLI
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Drove CLI
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Drove CLI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli/configuration.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7_3">
+        
+          
+          <label class="md-nav__link" for="__nav_7_3" id="__nav_7_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Commands
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Commands
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli/commands/appinstances.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    drove appinstances
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli/commands/apps.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    drove apps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli/commands/cluster.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    drove cluster
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli/commands/config.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    drove config
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli/commands/describe.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    drove describe
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli/commands/executor.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    drove executor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli/commands/localservices.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    drove localservices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli/commands/lsinstances.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    drove lsinstances
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli/commands/tasks.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    drove tasks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8">
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extra
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Extra
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extra/epoch.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Epoch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extra/libraries.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Libraries
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extra/nvidia.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setting up Nvidia GPU computation on executor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#controller-configuration-file-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Controller Configuration File Reference
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Controller Configuration File Reference">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#zookeeper-connection-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Zookeeper Connection Configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#intra-node-authentication-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Intra Node Authentication Configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#user-authentication-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        User Authentication Configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#instance-authentication-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Instance Authentication Configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#controller-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Controller Options
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Controller Options">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#stale-data-cleanup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stale data cleanup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#internal-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Internal Operations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#security-related-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Security related options
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#relevant-directories" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Relevant directories
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setup-the-config-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Setup the config file
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setup-required-environment-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Setup required environment variables
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#create-systemd-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Create systemd file
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#start-the-service-on-all-servers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Start the service on all servers
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+  <nav class="md-path" aria-label="Navigation">
+    <ol class="md-path__list">
+      
+        
+  
+  
+    <li class="md-path__item">
+      <a href="../../index.html" class="md-path__link">
+        
+  <span class="md-ellipsis">
+    Introduction
+  </span>
+
+      </a>
+    </li>
+  
+
+      
+      
+        
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="../cluster.html" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    Cluster
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="planning.html" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    Setup
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ol>
+  </nav>
+
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="setting-up-controllers">Setting up Controllers<a class="headerlink" href="#setting-up-controllers" title="Permanent link">¶</a></h1>
+<p>Controllers are the brains of Drove cluster. For HA, at least 2 controllers should be set up.</p>
+<p>Please note the following behaviour about controllers:</p>
+<ul>
+<li><em>Only</em> one controller is <strong>leader</strong> at a time. A leader controller does not relinquish control till the process is stopped or dies</li>
+<li>A controller process will die when it loses connectivity to Zookeeper</li>
+<li>The process/container for controller should keep restarting till it gets connectivity</li>
+<li>All decisions for the cluster are taken by the leader controller only</li>
+<li>During maintenance and package upgrades etc, it is better to roll changes out on non-leaders first and then do the leader at the end</li>
+<li>The controller process holds all metadata about the cluster, the current states and other information in memory.<ul>
+<li>Some of this information is backed by Zookeeper based storage layer</li>
+<li>The other information is recreated dynamically based on updates from executors</li>
+</ul>
+</li>
+<li>Controllers being down does not affect running containers on executors</li>
+</ul>
+<h2 id="controller-configuration-file-reference">Controller Configuration File Reference<a class="headerlink" href="#controller-configuration-file-reference" title="Permanent link">¶</a></h2>
+<p>The Drove Controller is written on the <a href="https://www.dropwizard.io/en/release-2.1.x/">Dropwizard</a> framework. The configuration to the service is set using a YAML file which needs to be injected into the container. A typical controller configuration file will look like the following:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">server</span><span class="p">:</span><span class="w"> </span><span class="c1">#(1)!</span>
+<span class="w">  </span><span class="nt">applicationConnectors</span><span class="p">:</span><span class="w"> </span><span class="c1">#(2)!</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http</span>
+<span class="w">      </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4000</span>
+<span class="w">  </span><span class="nt">adminConnectors</span><span class="p">:</span><span class="w"> </span><span class="c1">#(3)!</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http</span>
+<span class="w">      </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4001</span>
+<span class="w">  </span><span class="nt">applicationContextPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/</span><span class="w"> </span><span class="c1">#(4)!</span>
+<span class="w">  </span><span class="nt">requestLog</span><span class="p">:</span><span class="w"> </span><span class="c1">#(5)!</span>
+<span class="w">    </span><span class="nt">appenders</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">console</span>
+<span class="w">        </span><span class="nt">timeZone</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${DROVE_TIMEZONE}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">file</span>
+<span class="w">        </span><span class="nt">timeZone</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${DROVE_TIMEZONE}</span>
+<span class="w">        </span><span class="nt">currentLogFilename</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/logs/drove-controller-access.log</span>
+<span class="w">        </span><span class="nt">archivedLogFilenamePattern</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/logs/drove-controller-access.log-%d-%i</span>
+<span class="w">        </span><span class="nt">archivedFileCount</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+<span class="w">        </span><span class="nt">maxFileSize</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100MiB</span>
+
+
+<span class="nt">logging</span><span class="p">:</span><span class="w"> </span><span class="c1">#(6)!</span>
+<span class="w">  </span><span class="nt">level</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">INFO</span>
+<span class="w">  </span><span class="nt">loggers</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">com.phonepe.drove</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${DROVE_LOG_LEVEL}</span>
+
+<span class="w">  </span><span class="nt">appenders</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">console</span><span class="w"> </span><span class="c1">#(7)!</span>
+<span class="w">      </span><span class="nt">threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ALL</span>
+<span class="w">      </span><span class="nt">timeZone</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${DROVE_TIMEZONE}</span>
+<span class="w">      </span><span class="nt">logFormat</span><span class="p">:</span><span class="w"> </span><span class="s">"%(%-5level)</span><span class="nv"> </span><span class="s">[%date]</span><span class="nv"> </span><span class="s">[%logger{0}</span><span class="nv"> </span><span class="s">-</span><span class="nv"> </span><span class="s">%X{appId}]</span><span class="nv"> </span><span class="s">%message%n"</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">file</span><span class="w"> </span><span class="c1">#(8)!</span>
+<span class="w">      </span><span class="nt">threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ALL</span>
+<span class="w">      </span><span class="nt">timeZone</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${DROVE_TIMEZONE}</span>
+<span class="w">      </span><span class="nt">currentLogFilename</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/logs/drove-controller.log</span>
+<span class="w">      </span><span class="nt">archivedLogFilenamePattern</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/logs/drove-controller.log-%d-%i</span>
+<span class="w">      </span><span class="nt">archivedFileCount</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+<span class="w">      </span><span class="nt">maxFileSize</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100MiB</span>
+<span class="w">      </span><span class="nt">logFormat</span><span class="p">:</span><span class="w"> </span><span class="s">"%(%-5level)</span><span class="nv"> </span><span class="s">[%date]</span><span class="nv"> </span><span class="s">[%logger{0}</span><span class="nv"> </span><span class="s">-</span><span class="nv"> </span><span class="s">%X{appId}]</span><span class="nv"> </span><span class="s">%message%n"</span>
+<span class="w">      </span><span class="nt">archive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
+
+<span class="nt">zookeeper</span><span class="p">:</span><span class="w"> </span><span class="c1">#(9)!</span>
+<span class="w">  </span><span class="nt">connectionString</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${ZK_CONNECTION_STRING}</span>
+
+<span class="nt">clusterAuth</span><span class="p">:</span><span class="w"> </span><span class="c1">#(10)!</span>
+<span class="w">  </span><span class="nt">secrets</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">nodeType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CONTROLLER</span>
+<span class="w">    </span><span class="nt">secret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${DROVE_CONTROLLER_SECRET}</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">nodeType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">EXECUTOR</span>
+<span class="w">    </span><span class="nt">secret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${DROVE_EXECUTOR_SECRET}</span>
+
+<span class="nt">userAuth</span><span class="p">:</span><span class="w"> </span><span class="c1">#(11)!</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">users</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">admin</span>
+<span class="w">      </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${DROVE_ADMIN_PASSWORD}</span>
+<span class="w">      </span><span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">EXTERNAL_READ_WRITE</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">guest</span>
+<span class="w">      </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${DROVE_GUEST_PASSWORD}</span>
+<span class="w">      </span><span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">EXTERNAL_READ_ONLY</span>
+
+<span class="nt">instanceAuth</span><span class="p">:</span><span class="w"> </span><span class="c1">#(12)!</span>
+<span class="w">  </span><span class="nt">secret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${DROVE_INSTANCE_AUTH_SECRET}</span>
+
+<span class="nt">options</span><span class="p">:</span><span class="w"> </span><span class="c1">#(13)!</span>
+<span class="w">  </span><span class="nt">maxStaleInstancesCount</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+<span class="w">  </span><span class="nt">staleCheckInterval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1m</span>
+<span class="w">  </span><span class="nt">staleAppAge</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1d</span>
+<span class="w">  </span><span class="nt">staleInstanceAge</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">18h</span>
+<span class="w">  </span><span class="nt">staleTaskAge</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1d</span>
+<span class="w">  </span><span class="nt">clusterOpParallelism</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+</code></pre></div>
+<ol>
+<li>Server listener configuration. See <a href="https://www.dropwizard.io/en/release-2.1.x/manual/configuration.html#servers" target="_blank" rel="noopener">Dropwizard Server Configuration</a> for the different options.</li>
+<li>Main port configuration. This is where the UI and APIs will be exposed. Check connector configuration <a href="https://www.dropwizard.io/en/release-2.1.x/manual/configuration.html#connectors" target="_blank" rel="noopener">docs</a> for details.</li>
+<li>Admin port. You can take thread dumps, metrics, run healthchecks on the Drove controller on this port.</li>
+<li>Base path for UI. Keep this as is.</li>
+<li>Access logs configuration. See <code>requestLog</code> <a href="https://www.dropwizard.io/en/release-2.1.x/manual/configuration.html#request-log" target="_blank" rel="noopener">docs</a>.</li>
+<li>Main logging configuration. See <a href="https://www.dropwizard.io/en/release-2.1.x/manual/configuration.html#logging" target="_blank" rel="noopener">logging docs</a>.</li>
+<li>Log to console. Useful in docker-compose.</li>
+<li>Log to rotating files. Useful for running servers.</li>
+<li>Configure how to connect to Zookeeper See <a href="#zookeeper-connection-configuration">Zookeeper Config</a> for details.</li>
+<li>Configuration for authentication between nodes in the cluster. Please check <a href="#intra-node-authentication-configuration">intra node auth config</a> for details.</li>
+<li>Configure user authentication to access the cluster. Please check <a href="#user-authentication-configuration">User auth config</a> for details.</li>
+<li>Signing secret for JWT to be embedded in application and task instances. Check <a href="#instance-authentication-configuration">Instance auth config</a> for details.</li>
+<li>Special options to configure controller behaviour. See <a href="#controller-options">Controller Options</a> for details.</li>
+</ol>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>In case you do not want to expose admin apis to outside the host, please set <code>bindHost</code> in the admin connectors section.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">adminConnectors</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http</span>
+<span class="w">    </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10001</span>
+<span class="w">    </span><span class="nt">bindHost</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">127.0.0.1</span>
+</code></pre></div>
+</div>
+<h3 id="zookeeper-connection-configuration">Zookeeper Connection Configuration<a class="headerlink" href="#zookeeper-connection-configuration" title="Permanent link">¶</a></h3>
+<p>The following details can be configured.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Connection String</td>
+<td><code>connectionString</code></td>
+<td>The connection string of the form: <code>zkserver:2181,zkserver2:2181...</code></td>
+</tr>
+<tr>
+<td>Data namespace</td>
+<td><code>namespace</code></td>
+<td>The top level node inside which all Drove data will be scoped. Defaults to <code>drove</code> if not set.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Sample</strong></p>
+<div class="highlight"><pre><span></span><code><span class="nt">zookeeper</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">connectionString</span><span class="p">:</span><span class="w"> </span><span class="s">"192.168.3.10:2181,192.168.3.11:2181,192.168.3.12:2181"</span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">drovetest</span>
+</code></pre></div>
+<h3 id="intra-node-authentication-configuration">Intra Node Authentication Configuration<a class="headerlink" href="#intra-node-authentication-configuration" title="Permanent link">¶</a></h3>
+<p>Communication between controller and executor is protected by a shared-secret based authentication. The following configuration is meant to configure this. This section consists of a list of 2 members:</p>
+<ul>
+<li>Config for controller to talk to executors</li>
+<li>Config for executors to talk to controller</li>
+</ul>
+<p>Each section consists of the following:</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Node Type</td>
+<td><code>nodeType</code></td>
+<td>Type of node in the cluster. Can be <code>CONTROLLER</code> or <code>EXECUTOR</code></td>
+</tr>
+<tr>
+<td>Secret</td>
+<td><code>secret</code></td>
+<td>The actual secret to be passed.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Sample</strong>
+</p><div class="highlight"><pre><span></span><code><span class="nt">clusterAuth</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">secrets</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">nodeType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CONTROLLER</span>
+<span class="w">    </span><span class="nt">secret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ControllerSecretValue</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">nodeType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">EXECUTOR</span>
+<span class="w">    </span><span class="nt">secret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ExecutorSecret</span>
+</code></pre></div><p></p>
+<div class="admonition danger">
+<p class="admonition-title">Danger</p>
+<p>The values are passed in the header as is. Please manage the config file ownership to ensure that the files are not world readable.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>You can use <code>pwgen -s 32</code> to generate secure random strings for usage as secrets.</p>
+</div>
+<h3 id="user-authentication-configuration">User Authentication Configuration<a class="headerlink" href="#user-authentication-configuration" title="Permanent link">¶</a></h3>
+<p>This section is used to configure user details for human and other systems that need to call Drove APIs or access the Drove UI. This is implemented using basic auth.</p>
+<p>The configuration consists of:</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Enabled</td>
+<td><code>enabled</code></td>
+<td>Enable basic auth for the cluster</td>
+</tr>
+<tr>
+<td>Encoding</td>
+<td><code>encoding</code></td>
+<td>The actual encoding of the password. Can be <code>PLAIN</code> or <code>CRYPT</code></td>
+</tr>
+<tr>
+<td>Caching</td>
+<td><code>cachingPolicy</code></td>
+<td>Caching policy for the authentication and authorization of the user. Please check <a href="https://github.com/ben-manes/caffeine/wiki/Specification" target="target">CaffeineSpec</a> docs for more details. Set to <code>maximumSize=500, expireAfterAccess=30m</code> by default</td>
+</tr>
+<tr>
+<td>List of users</td>
+<td><code>users</code></td>
+<td>A list of users recognized by the system</td>
+</tr>
+</tbody>
+</table>
+<p>Each entry in the user list consists of:</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>User Name</td>
+<td><code>username</code></td>
+<td>The actual login username</td>
+</tr>
+<tr>
+<td>Password</td>
+<td><code>password</code></td>
+<td>The password for the user. Needs to be set to bcrypt string of the actual password if <code>encoding</code> is set to <code>CRYPT</code> in the parent section.</td>
+</tr>
+<tr>
+<td>User Role</td>
+<td><code>role</code></td>
+<td>The role of the user in the cluster. Can be <code>EXTERNAL_READ_WRITE</code> for users who have both read and write permissions or <code>EXTERNAL_READ_ONLY</code> for users with read-only permissions.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Sample</strong>
+</p><div class="highlight"><pre><span></span><code><span class="nt">userAuth</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">encoding</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CRYPT</span>
+<span class="w">  </span><span class="nt">users</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">admin</span>
+<span class="w">      </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">"$2y$10$pfGnPkYrJEGzasvVNPjRu.IJldV9TDa0Vh.u1UdimILWDuhvapc2O"</span>
+<span class="w">      </span><span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">EXTERNAL_READ_WRITE</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">guest</span>
+<span class="w">      </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">"$2y$10$uCJ7WxIvd13C.1oOTs28p.xpJShGiTWuDLY/sGH9JE8nrkSGBFkc6"</span>
+<span class="w">      </span><span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">EXTERNAL_READ_ONLY</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">noread</span>
+<span class="w">      </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">"$2y$10$8mr/zXL5rMW/s/jlBcgXHu0UvyzfdDDvyc.etfuoR.991sn9UOX/K"</span>
+</code></pre></div><p></p>
+<div class="admonition tip">
+<p class="admonition-title">No authentication</p>
+<p>To configure a cluster without authentication, remove this section entirely.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Operator role</p>
+<p>If <code>role</code> is not set, the user will be able to access the UI, but will <em>not</em> have access to application logs. This comes in handy to provide access to other teams to explore your deployment topology, but not get access to your logs that might contain sensitive information.</p>
+</div>
+<div class="admonition danger">
+<p class="admonition-title">Password Hashing</p>
+<p>We strongly recommend using bcrypt passwords for authentication. You can use the following command to generate hashed password strings:</p>
+<div class="highlight"><pre><span></span><code>htpasswd<span class="w"> </span>-nbBC<span class="w"> </span><span class="m">10</span><span class="w"> </span>&lt;username&gt;<span class="w"> </span>&lt;password&gt;<span class="p">|</span>cut<span class="w"> </span>-d<span class="w"> </span><span class="s1">':'</span><span class="w"> </span>-f2
+</code></pre></div>
+</div>
+<h3 id="instance-authentication-configuration">Instance Authentication Configuration<a class="headerlink" href="#instance-authentication-configuration" title="Permanent link">¶</a></h3>
+<p>All application and task instances, get access to an unique JWT that is injected into it by Drove as the environment variable <code>DROVE_APP_INSTANCE_AUTH_TOKEN</code>. This token is signed using a secret. This secret can be configured by setting the <code>secret</code> parameter in the <code>instanceAuth</code> section.</p>
+<p><strong>Sample</strong>
+</p><div class="highlight"><pre><span></span><code><span class="nt">instanceAuth</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">secret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RandomSecret</span>
+</code></pre></div><p></p>
+<h3 id="controller-options">Controller Options<a class="headerlink" href="#controller-options" title="Permanent link">¶</a></h3>
+<p>The following options can be set to influence the behavior of the Drove cluster and the controller.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Stale Check Interval</td>
+<td><code>staleCheckInterval</code></td>
+<td>Interval at which Drove checks for stale application and task metadata for cleanup. Defaults to 1 hour. Expressed in <a href="units.html#duration">duration</a>.</td>
+</tr>
+<tr>
+<td>Stale App Age</td>
+<td><code>staleAppAge</code></td>
+<td>Apps in <code>MONITORING</code> state are cleaned up after some time by Drove. This variable can be used to control the max time for which such apps are maintained in the cluster. Defaults to 7 days. Expressed in <a href="units.html#duration">duration</a>.</td>
+</tr>
+<tr>
+<td>Stale App Instances Count</td>
+<td><code>maxStaleInstancesCount</code></td>
+<td>Maximum number of application instances metadata for stopped or lost instances to be maintained in the cluster. Defaults to 100.</td>
+</tr>
+<tr>
+<td>Stale Instance Age</td>
+<td><code>staleInstanceAge</code></td>
+<td>Maximum age for a stale application instance to be retained. Defaults to 7 days. Expressed in <a href="units.html#duration">duration</a>.</td>
+</tr>
+<tr>
+<td>Stale Task Age</td>
+<td><code>staleTaskAge</code></td>
+<td>Maximum time for which metadata for a finished task is retained on the cluster. Defaults to 2 days. Expressed in <a href="units.html#duration">duration</a>.</td>
+</tr>
+<tr>
+<td>Event Storage Duration</td>
+<td><code>maxEventsStorageDuration</code></td>
+<td>Maximum time for which cluster events are retained on the cluster. Defaults to 1 hour. Expressed in <a href="units.html#duration">duration</a>.</td>
+</tr>
+<tr>
+<td>Default Operation Timeout</td>
+<td><code>clusterOpTimeout</code></td>
+<td>Timeout for operations that are initiated by drove itself. For example, instance spin up in case of executor failure, instance migrations etc. Defaults to 5 minutes. Expressed in <a href="units.html#duration">duration</a>.</td>
+</tr>
+<tr>
+<td>Operation threads</td>
+<td><code>clusterOpParallelism</code></td>
+<td>Signified the parallelism for operations internal to the cluster. Defaults to: 1. Range: 1-32.</td>
+</tr>
+<tr>
+<td>Audited Methods</td>
+<td><code>auditedHttpMethods</code></td>
+<td>Drove prints an audit log with user details when an api is called by an user. Defaults to <code>["POST", "PUT"]</code>.</td>
+</tr>
+<tr>
+<td>Allowed mount directories</td>
+<td><code>allowedMountDirs</code></td>
+<td>If provided, Drove will ensure that application and task spec can mount only the directories mentioned in this set on executor host.</td>
+</tr>
+<tr>
+<td>Disable read-only auth</td>
+<td><code>disableReadAuth</code></td>
+<td>When <code>userAuth</code> is enabled, setting this option, will enforce authorization only on write operations.</td>
+</tr>
+<tr>
+<td>Disable command line arguments</td>
+<td><code>disableCmdlArgs</code></td>
+<td>When set to <code>true</code>, passing command line arguments will be disabled. Default: <code>false</code> (users can pass arguments.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Sample</strong>
+</p><div class="highlight"><pre><span></span><code><span class="nt">options</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">staleCheckInterval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5m</span>
+<span class="w">  </span><span class="nt">staleAppAge</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2d</span>
+<span class="w">  </span><span class="nt">maxStaleInstancesCount</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span>
+<span class="w">  </span><span class="nt">staleInstanceAge</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1d</span>
+<span class="w">  </span><span class="nt">staleTaskAge</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2d</span>
+<span class="w">  </span><span class="nt">maxEventsStorageDuration</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30m</span>
+<span class="w">  </span><span class="nt">clusterOpParallelism</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">32</span>
+<span class="w">  </span><span class="nt">allowedMountDirs</span><span class="p">:</span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/mnt/scratch</span>
+</code></pre></div><p></p>
+<h4 id="stale-data-cleanup">Stale data cleanup<a class="headerlink" href="#stale-data-cleanup" title="Permanent link">¶</a></h4>
+<p>In order to keep internal memory footprint low, reduce the amount of data stored on Zookeeper, and provide a faster experience on the UI,Drove keeps cleaning up data for stale applications, application instances, task instances and cluster events.</p>
+<p>The retention for such metadata can be controlled using the following config options:</p>
+<ul>
+<li><code>staleAppAge</code></li>
+<li><code>maxStaleInstancesCount</code></li>
+<li><code>staleInstanceAge</code></li>
+<li><code>staleTaskAge</code></li>
+<li><code>maxEventsStorageDuration</code></li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Configuration changes done to these parameters will have direct impact on memory usage by the controller and memory and disk utilization on the Zookeeper cluster.</p>
+</div>
+<h4 id="internal-operations">Internal Operations<a class="headerlink" href="#internal-operations" title="Permanent link">¶</a></h4>
+<p>Drove may need to create and issue operations on applications and tasks to manage cluster stability, for maintenance and other reasons. The following parameters can be used to control the speed and parallelism of such operations:</p>
+<ul>
+<li><code>clusterOpTimeout</code></li>
+<li><code>clusterOpParallelism</code></li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The default value of <code>1</code> for the <code>clusterOpParallelism</code> parameter is generally too low for most clusters. Unless there is a specific problem, it would be advisable to set this to at least 4. If number of instances is quite high for applications (order of tens or hundreds), feel free to set this to 32.</p>
+<blockquote>
+<p>Increasing <code>clusterOpParallelism</code> will make recovery faster in case of executor failures, but it will increase cpu utilization on the controller by a little bit.</p>
+</blockquote>
+</div>
+<h4 id="security-related-options">Security related options<a class="headerlink" href="#security-related-options" title="Permanent link">¶</a></h4>
+<p>The <code>auditedHttpMethods</code> parameter contains a list of all HTTP methods that need to be audited. This means that if the <code>auditedHttpMethods</code> contains <code>POST</code> and <code>PUT</code>, any drove HTTP POST or PUT apis being called will lead to a audit in the controller logs with the details of the user that made the call.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>It would be advisable to not add <code>GET</code> to the list. This is because the UI keeps making calls to <code>GET</code> apis on drove to fetch data to render. These calls are automated and happen every few seconds from the browser. This <em>will</em> blow up controller logs size.</p>
+</div>
+<p>The <code>allowedMountDirs</code> option whitelists only some directories to be mounted on containers. If this is not provided, containers will be able to mount any directory on the executors. </p>
+<div class="admonition danger">
+<p class="admonition-title">Danger</p>
+<p>It is <strong>highly</strong> recommended to set <code>allowedMountDirs</code> to a designated directory that containers might want to use as scratch space if needed. Keeping this empty <em>will almost definitely</em> cause security issues in the long run.</p>
+</div>
+<h2 id="relevant-directories">Relevant directories<a class="headerlink" href="#relevant-directories" title="Permanent link">¶</a></h2>
+<p>Location for data and logs are as follows:</p>
+<ul>
+<li><code>/etc/drove/controller/</code> - Configuration files</li>
+<li><code>/var/log/drove/controller/</code> - Logs</li>
+</ul>
+<p>We shall be volume mounting the config and log directories with the same name.</p>
+<div class="admonition warning">
+<p class="admonition-title">Prerequisite Setup</p>
+<p>If not done already, please complete the <a href="prerequisites.html">prerequisite setup</a> on all machines earmarked for the cluster.</p>
+</div>
+<h2 id="setup-the-config-file">Setup the config file<a class="headerlink" href="#setup-the-config-file" title="Permanent link">¶</a></h2>
+<p>Create a relevant configuration file in <code>/etc/drove/controller/controller.yml</code>.</p>
+<p><strong>Sample</strong>
+</p><div class="highlight"><pre><span></span><code><span class="nt">server</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">applicationConnectors</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http</span>
+<span class="w">      </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10000</span>
+<span class="w">  </span><span class="nt">adminConnectors</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http</span>
+<span class="w">      </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10001</span>
+<span class="w">  </span><span class="nt">requestLog</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">appenders</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">file</span>
+<span class="w">        </span><span class="nt">timeZone</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">IST</span>
+<span class="w">        </span><span class="nt">currentLogFilename</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/var/log/drove/controller/drove-controller-access.log</span>
+<span class="w">        </span><span class="nt">archivedLogFilenamePattern</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/var/log/drove/controller/drove-controller-access.log-%d-%i</span>
+<span class="w">        </span><span class="nt">archivedFileCount</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+<span class="w">        </span><span class="nt">maxFileSize</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100MiB</span>
+
+<span class="nt">logging</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">level</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">INFO</span>
+<span class="w">  </span><span class="nt">loggers</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">com.phonepe.drove</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">INFO</span>
+
+
+<span class="w">  </span><span class="nt">appenders</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">file</span>
+<span class="w">      </span><span class="nt">threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ALL</span>
+<span class="w">      </span><span class="nt">timeZone</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">IST</span>
+<span class="w">      </span><span class="nt">currentLogFilename</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/var/log/drove/controller/drove-controller.log</span>
+<span class="w">      </span><span class="nt">archivedLogFilenamePattern</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/var/log/drove/controller/drove-controller.log-%d-%i</span>
+<span class="w">      </span><span class="nt">archivedFileCount</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+<span class="w">      </span><span class="nt">maxFileSize</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100MiB</span>
+<span class="w">      </span><span class="nt">logFormat</span><span class="p">:</span><span class="w"> </span><span class="s">"%(%-5level)</span><span class="nv"> </span><span class="s">[%date]</span><span class="nv"> </span><span class="s">[%logger{0}</span><span class="nv"> </span><span class="s">-</span><span class="nv"> </span><span class="s">%X{appId}]</span><span class="nv"> </span><span class="s">%message%n"</span>
+
+<span class="nt">zookeeper</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">connectionString</span><span class="p">:</span><span class="w"> </span><span class="s">"192.168.56.10:2181"</span>
+
+<span class="nt">clusterAuth</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">secrets</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">nodeType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CONTROLLER</span>
+<span class="w">    </span><span class="nt">secret</span><span class="p">:</span><span class="w"> </span><span class="s">"0v8XvJrDc7r86ZY1QCByPTDPninI4Xii"</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">nodeType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">EXECUTOR</span>
+<span class="w">    </span><span class="nt">secret</span><span class="p">:</span><span class="w"> </span><span class="s">"pOd9sIEXhv0wrGOVc7ebwNvR7twZqyTN"</span>
+
+<span class="nt">userAuth</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">encoding</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CRYPT</span>
+<span class="w">  </span><span class="nt">users</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">admin</span>
+<span class="w">      </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">"$2y$10$pfGnPkYrJEGzasvVNPjRu.IJldV9TDa0Vh.u1UdimILWDuhvapc2O"</span>
+<span class="w">      </span><span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">EXTERNAL_READ_WRITE</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">guest</span>
+<span class="w">      </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">"$2y$10$uCJ7WxIvd13C.1oOTs28p.xpJShGiTWuDLY/sGH9JE8nrkSGBFkc6"</span>
+<span class="w">      </span><span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">EXTERNAL_READ_ONLY</span>
+
+
+<span class="nt">instanceAuth</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">secret</span><span class="p">:</span><span class="w"> </span><span class="s">"bd2SIgz9OMPG2L8wA6zxj21oLVLbuLFC"</span>
+
+<span class="nt">options</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">maxStaleInstancesCount</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+<span class="w">  </span><span class="nt">staleCheckInterval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1m</span>
+<span class="w">  </span><span class="nt">staleAppAge</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2d</span>
+<span class="w">  </span><span class="nt">staleInstanceAge</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1d</span>
+<span class="w">  </span><span class="nt">staleTaskAge</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1d</span>
+<span class="w">  </span><span class="nt">clusterOpParallelism</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">  </span><span class="nt">allowedMountDirs</span><span class="p">:</span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/dev/null</span>
+</code></pre></div><p></p>
+<h2 id="setup-required-environment-variables">Setup required environment variables<a class="headerlink" href="#setup-required-environment-variables" title="Permanent link">¶</a></h2>
+<p>Environment variables need to run the drove controller are setup in <code>/etc/drove/controller/controller.env</code>.</p>
+<div class="highlight"><pre><span></span><code>CONFIG_FILE_PATH<span class="s">=/etc/drove/controller/controller.yml</span>
+JAVA_PROCESS_MIN_HEAP<span class="s">=2g</span>
+JAVA_PROCESS_MAX_HEAP<span class="s">=2g</span>
+ZK_CONNECTION_STRING<span class="s">="192.168.3.10</span><span class="p">:</span><span class="m">2181</span><span class="s">"</span>
+JAVA_OPTS<span class="s">="-Xlog</span><span class="p">:</span>gc<span class="p">:</span><span class="s">/var/log/drove/controller/gc.log -Xlog</span><span class="p">:</span>gc<span class="p">:::</span>filecount<span class="s">=3,filesize=10M -Xlog</span><span class="p">:</span>gc<span class="p">::</span>time,level,tags -XX<span class="p">:</span><span class="s">+UseNUMA -XX</span><span class="p">:</span><span class="s">+ExitOnOutOfMemoryError -Djava.security.egd=file</span><span class="p">:</span><span class="s">/dev/urandom -Dfile.encoding=utf-8 -Djute.maxbuffer=0x9fffff"</span>
+</code></pre></div>
+<h2 id="create-systemd-file">Create systemd file<a class="headerlink" href="#create-systemd-file" title="Permanent link">¶</a></h2>
+<p>Create a <code>systemd</code> file. Put the following in <code>/etc/systemd/system/drove.controller.service</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="k">[Unit]</span>
+<span class="na">Description</span><span class="o">=</span><span class="s">Drove Controller Service</span>
+<span class="na">After</span><span class="o">=</span><span class="s">docker.service</span>
+<span class="na">Requires</span><span class="o">=</span><span class="s">docker.service</span>
+
+<span class="k">[Service]</span>
+<span class="na">User</span><span class="o">=</span><span class="s">drove</span>
+<span class="na">Group</span><span class="o">=</span><span class="s">docker</span>
+<span class="na">TimeoutStartSec</span><span class="o">=</span><span class="s">0</span>
+<span class="na">Restart</span><span class="o">=</span><span class="s">always</span>
+<span class="na">ExecStartPre</span><span class="o">=</span><span class="s">-/usr/bin/docker pull ghcr.io/phonepe/drove-controller:latest</span>
+<span class="na">ExecStart</span><span class="o">=</span><span class="s">/usr/bin/docker run  </span>\
+<span class="w">    </span><span class="s">--env-file /etc/drove/controller/controller.env </span>\
+<span class="w">    </span><span class="s">--volume /etc/drove/controller:/etc/drove/controller:ro </span>\
+<span class="w">    </span><span class="s">--volume /var/log/drove/controller:/var/log/drove/controller </span>\
+<span class="w">    </span><span class="s">--publish 10000:10000  </span>\
+<span class="w">    </span><span class="s">--publish 10001:10001 </span>\
+<span class="w">    </span><span class="s">--hostname %H </span>\
+<span class="w">    </span><span class="s">--rm </span>\
+<span class="w">    </span><span class="s">--name drove.controller </span>\
+<span class="w">    </span><span class="s">ghcr.io/phonepe/drove-controller:latest</span>
+
+<span class="k">[Install]</span>
+<span class="na">WantedBy</span><span class="o">=</span><span class="s">multi-user.target</span>
+</code></pre></div>
+<p>Verify the file with the following command:
+</p><div class="highlight"><pre><span></span><code>systemd-analyze<span class="w"> </span>verify<span class="w"> </span>drove.controller.service
+</code></pre></div><p></p>
+<p>Set permissions
+</p><div class="highlight"><pre><span></span><code>chmod<span class="w"> </span><span class="m">664</span><span class="w"> </span>/etc/systemd/system/drove.controller.service
+</code></pre></div><p></p>
+<h2 id="start-the-service-on-all-servers">Start the service on all servers<a class="headerlink" href="#start-the-service-on-all-servers" title="Permanent link">¶</a></h2>
+<p>Use the following to start the service:</p>
+<div class="highlight"><pre><span></span><code>systemctl<span class="w"> </span>daemon-reload
+systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>drove.controller
+systemctl<span class="w"> </span>start<span class="w"> </span>drove.controller
+</code></pre></div>
+<p>You can tail the logs at <code>/var/log/drove/controller/drove-controller.log</code>.</p>
+<p>The console would be available at <code>http://&lt;ip&gt;:10000</code> and admin functionality will be available on <code>http://&lt;ip&gt;:10001</code> according to the above config.</p>
+<p>Health checks can be performed by running a curl as follows:</p>
+<div class="highlight"><pre><span></span><code>curl<span class="w"> </span>http://localhost:10001/healthcheck
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul>
+<li>The healthcheck check api is available on <code>admin</code> port.</li>
+<li>HTTP status is 200/OK if things are fine.</li>
+</ul>
+</div>
+<p>Once controllers are up, one of them will become the leader. You can check the leader by running the following command:</p>
+<div class="highlight"><pre><span></span><code>curl<span class="w"> </span>http://&lt;ip&gt;:10000/apis/v1/ping
+</code></pre></div>
+<p>Only on the leader you should get the following response along with a HTTP status 200/OK:
+</p><div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="s2">"status"</span><span class="o">:</span><span class="s2">"SUCCESS"</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">"data"</span><span class="o">:</span><span class="s2">"pong"</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">"message"</span><span class="o">:</span><span class="s2">"success"</span>
+<span class="p">}</span>
+</code></pre></div><p></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright © 2024  PhonePe Private Limited
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tracking", "navigation.path", "navigation.tabs", "navigation.tabs.sticky", "content.code.copy", "content.code.annotate", "navigation.expand", "toc.follow", "navigation.top", "search.suggest", "search.highlight", "search.share"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  
+<script id="init-glightbox">document.querySelectorAll('.glightbox').forEach(function(element) {
+    try {
+        var img = element.querySelector('img');
+        if (img && img.src) {
+            element.setAttribute('href', img.src);
+        } else {
+            console.log('No img element with src attribute found');
+        }
+    } catch (error) {
+        console.log('Error:', error);
+    }
+});
+const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(()=>{ lightbox.reload(); });
+</script></body></html>
