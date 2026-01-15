@@ -47,7 +47,7 @@ plugins:
   - search
   - awesome-pages
   - privacy:
-      enabled: true
+      enabled: !ENV [CI, false]
       cache: true
       cache_dir: .cache/plugins/privacy
       assets: true

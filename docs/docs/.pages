@@ -5,4 +5,5 @@ nav:
   - applications
   - tasks
   - apis
+  - cli
   - extra
