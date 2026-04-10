@@ -1,0 +1,152 @@
+# ── Scalar project settings ──────────────────────────────────────────────────
+[project]
+site_name = "Drove Container Orchestrator"
+site_url  = "https://phonepe.github.io/drove-orchestrator"
+repo_url  = "https://github.com/PhonePe/drove-orchestrator"
+copyright = "Copyright &copy; 2024  PhonePe Private Limited"
+
+nav = [
+  {"Home" = "index.md"},
+  {"Cluster" = [
+    {"Cluster" = "cluster/cluster.md"},
+    {"Setup" = [
+      {"Planning" = "cluster/setup/planning.md"},
+      {"Prerequisites" = "cluster/setup/prerequisites.md"},
+      {"Zookeeper" = "cluster/setup/zookeeper.md"},
+      {"Controller" = "cluster/setup/controller.md"},
+      {"Executor Setup" = "cluster/setup/executor-setup.md"},
+      {"Gateway" = "cluster/setup/gateway.md"},
+      {"Coredns Drove" = "cluster/setup/coredns-drove.md"}
+    ]},
+    {"Metrics" = "cluster/metrics.md"},
+    {"Maintenance" = "cluster/maintenance.md"}
+  ]},
+  {"Applications" = [
+    {"Overview" = "applications/index.md"},
+    {"Instances" = "applications/instances.md"},
+    {"Specification" = "applications/specification.md"},
+    {"Operations" = "applications/operations.md"},
+    {"Outage" = "applications/outage.md"}
+  ]},
+  {"Tasks" = [
+    {"Overview" = "tasks/index.md"},
+    {"Specification" = "tasks/specification.md"},
+    {"Operations" = "tasks/operations.md"}
+  ]},
+  {"API Reference" = [
+    {"Overview" = "apis/index.md"},
+    {"Application" = "apis/application.md"},
+    {"Task" = "apis/task.md"},
+    {"Logs" = "apis/logs.md"},
+    {"Cluster" = "apis/cluster.md"}
+  ]},
+  {"Drove CLI" = [
+    {"Overview" = "cli/index.md"},
+    {"Configuration" = "cli/configuration.md"},
+    {"Commands" = [
+      {"App Instances" = "cli/commands/appinstances.md"},
+      {"Apps" = "cli/commands/apps.md"},
+      {"Cluster" = "cli/commands/cluster.md"},
+      {"Config" = "cli/commands/config.md"},
+      {"Describe" = "cli/commands/describe.md"},
+      {"Executor" = "cli/commands/executor.md"},
+      {"Local Services" = "cli/commands/localservices.md"},
+      {"List Instances" = "cli/commands/lsinstances.md"},
+      {"Tasks" = "cli/commands/tasks.md"}
+    ]}
+  ]},
+  {"Extra" = [
+    {"Epoch" = "extra/epoch.md"},
+    {"Libraries" = "extra/libraries.md"},
+    {"Nvidia" = "extra/nvidia.md"}
+  ]}
+]
+
+extra_css = ["stylesheets/extra.css"]
+
+# ── Theme ────────────────────────────────────────────────────────────────────
+[project.theme]
+features = [
+  "navigation.tracking",
+  "navigation.path",
+  "navigation.tabs",
+  "navigation.tabs.sticky",
+  "content.code.copy",
+  "content.code.annotate",
+  "navigation.expand",
+  "toc.follow",
+  "navigation.top",
+  "search.suggest",
+  "search.highlight",
+  "search.share"
+]
+
+[[project.theme.palette]]
+media  = "(prefers-color-scheme: light)"
+scheme = "default"
+
+[project.theme.palette.toggle]
+icon = "material/brightness-7"
+name = "Switch to dark mode"
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme)"
+
+[project.theme.palette.toggle]
+icon = "material/brightness-auto"
+name = "Switch to light mode"
+
+[[project.theme.palette]]
+media  = "(prefers-color-scheme: dark)"
+scheme = "slate"
+
+[project.theme.palette.toggle]
+icon = "material/brightness-4"
+name = "Switch to system preference"
+
+# ── Plugins (search and minify are built-in — omitted) ───────────────────────
+[project.plugins.glightbox]
+
+[project.plugins.awesome-pages]
+
+[project.plugins.privacy]
+enabled          = false
+cache            = true
+cache_dir        = ".cache/plugins/privacy"
+assets           = true
+assets_fetch     = true
+assets_fetch_dir = "assets/external"
+links            = true
+links_noopener   = true
+
+[project.plugins.offline]
+enabled = true
+
+# ── Markdown extensions ──────────────────────────────────────────────────────
+[project.markdown_extensions.toc]
+permalink = true
+
+[project.markdown_extensions.attr_list]
+
+[project.markdown_extensions.md_in_html]
+
+[project.markdown_extensions.admonition]
+
+[project.markdown_extensions.tables]
+
+[project.markdown_extensions."pymdownx.details"]
+
+[project.markdown_extensions."pymdownx.superfences"]
+custom_fences = [
+  {name = "mermaid", class = "mermaid", format = "pymdownx.superfences.fence_code_format"}
+]
+
+[project.markdown_extensions."pymdownx.emoji"]
+emoji_index     = "zensical.extensions.emoji.twemoji"
+emoji_generator = "zensical.extensions.emoji.to_svg"
+
+[project.markdown_extensions."markdown_include.include"]
+base_path = "snippets"
+
+[project.markdown_extensions."pymdownx.tabbed"]
+alternate_style = true

@@ -3,6 +3,9 @@ on:
   push:
     branches:
       - master 
+    paths:
+      - 'docs/**'
+      - 'zensical.toml'
 permissions:
   contents: write
 jobs:
@@ -23,13 +26,13 @@ jobs:
       - name: Setup Cache
         uses: actions/cache@v4
         with:
-          key: mkdocs-material-${{ env.cache_id }}
+          key: zensical-${{ env.cache_id }}
           path: .cache
           restore-keys: |
-            mkdocs-material-
-      - name: Install mkdocs and plugins
-        run: pip install markdown-include pymdown-extensions mkdocs-material mkdocs-material-extensions mkdocs-awesome-pages-plugin mkdocs-glightbox mkdocs-get-deps mkdocs-glightbox mkdocs-nav-weight mkdocs-pdf-export-plugin
+            zensical-
+      - name: Install zensical and plugins
+        run: pip install markdown-include pymdown-extensions zensical mkdocs-awesome-pages-plugin mkdocs-glightbox
         working-directory: ./docs
       - name: Deploy Site
-        run: mkdocs gh-deploy --force
+        run: zensical gh-deploy --force
         working-directory: ./docs
