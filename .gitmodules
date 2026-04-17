@@ -1,18 +1,18 @@
 [submodule "drove"]
 	path = drove
-	url = git@github.com:PhonePe/drove.git
+	url = https://github.com/PhonePe/PhonePe/drove.git
 [submodule "drove-cli"]
 	path = drove-cli
-	url = git@github.com:PhonePe/drove-cli.git
+	url = https://github.com/PhonePe/PhonePe/drove-cli.git
 [submodule "epoch"]
 	path = epoch
-	url = git@github.com:PhonePe/epoch.git
+	url = https://github.com/PhonePe/PhonePe/epoch.git
 [submodule "drove-gateway"]
 	path = drove-gateway
-	url = git@github.com:PhonePe/drove-gateway.git
+	url = https://github.com/PhonePe/PhonePe/drove-gateway.git
 [submodule "coredns-drove"]
 	path = coredns-drove
-	url = git@github.com:PhonePe/coredns-drove.git
+	url = https://github.com/PhonePe/PhonePe/coredns-drove.git
 [submodule "epoch-cli"]
 	path = epoch-cli
 	url = https://github.com/phonepe/epoch-cli

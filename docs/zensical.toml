@@ -55,6 +55,7 @@ nav = [
       {"Tasks" = "cli/commands/tasks.md"}
     ]}
   ]},
+  {"Drove Gateway" = "../../drove-gateway/README.md"},
   {"Extra" = [
     {"Epoch" = "extra/epoch.md"},
     {"Libraries" = "extra/libraries.md"},
