@@ -1,1 +1,0 @@
-../../drove-gateway/README.md

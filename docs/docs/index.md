@@ -23,7 +23,7 @@ The following sections go over the features.
 * Supports **discovery for sibling containers** to support dynamic cluster reconfiguration in frameworks like Hazelcast.
 * Support extra metadata in the form of **tags** on instances. This can be used in external systems for routing or other use-cases, as this information is available at the endpoint as well.
 * [**CLI**](https://github.com/PhonePe/drove-cli) system for easy deployments and app/task lifecycle management.
-* Router called [drove-gateway](drove-gateway.md) that de-links the performance limitations of the router by using industry standard engines like NGINX, NGINX+, and HAProxy. It manages only the routing table, letting these extensively used tools handle all the complexities of scalable and low-latency traffic management, while providing extensive configurability through templating and API-based upstream updates.
+* Router called [drove-gateway](../../drove-gateway/README.md) that de-links the performance limitations of the router by using industry standard engines like NGINX, NGINX+, and HAProxy. It manages only the routing table, letting these extensively used tools handle all the complexities of scalable and low-latency traffic management, while providing extensive configurability through templating and API-based upstream updates.
 
 
 ### Operations
@@ -89,7 +89,7 @@ Before we delve into the details, let's get acquainted with the required termino
 - **Controller Nodes** - The brains of the cluster. Only one cluster is the leader and hence the decision maker in the system.
 - **Executor Nodes** - The workhorse nodes of the cluster where the actual containers are run.
 - **Drove CLI** - A command line client to interact with the cluster.
-- **Drove Gateway** - Used to provide ingress to the leader and containers running on the cluster. For more details see [drove-gateway](drove-gateway.md).
+- **Drove Gateway** - Used to provide ingress to the leader and containers running on the cluster. For more details see [drove-gateway](../../drove-gateway/README.md).
 - **Epoch** - A cron-type scheduler to spin up *tasks* on a Drove cluster based on pre-defined schedules.
 
 ## Github Repositories
