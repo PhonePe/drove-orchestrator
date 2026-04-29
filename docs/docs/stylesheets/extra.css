@@ -2,3 +2,9 @@
 [data-md-color-scheme="slate"] img {
     background-color: lightgray;
 }
+
+/* Monospace documentation typography */
+:root {
+    --md-text-font: "JetBrains Mono", "Fira Code", "Source Code Pro", "DejaVu Sans Mono", monospace;
+    --md-code-font: "JetBrains Mono", "Fira Code", "Source Code Pro", "DejaVu Sans Mono", monospace;
+}
