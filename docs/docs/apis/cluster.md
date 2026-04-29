@@ -164,6 +164,8 @@ curl --location 'http://drove.local:7000/apis/v1/cluster/executors' \
 !!!note
     Executor `state` can also be `BLACKLIST_REQUESTED` while blacklisting is in progress.
 
+    For full state semantics, see [Executor states](../cluster/cluster.md#executor-states).
+
 ### Get detailed info for one executor
 `GET /apis/v1/cluster/executors/{id}`
 
@@ -428,6 +430,5 @@ This is applicable for both the APIs listed above
 !!!tip
     Java programs should _definitely_ look at using the [event listener library](https://github.com/PhonePe/drove/packages/2186474) 
     to listen to cluster events
-
 
 

@@ -144,6 +144,8 @@ To blacklist executors do the following:
 !!!note
     Blacklisting is now a two-stage flow: executors are first moved to `BLACKLIST_REQUESTED`, then Drove migrates healthy app instances out, and finally marks them as `BLACKLISTED`. The `approxCompletionTimeMs` field is an estimate for this process.
 
+    See [Executor states](cluster.md#executor-states) for the full state definitions.
+
 To un-blacklist executors do the following:
 
 === "Drove CLI"

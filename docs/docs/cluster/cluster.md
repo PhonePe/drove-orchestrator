@@ -6,7 +6,7 @@ The overall topology consists of the following components:
 - An **Apache ZooKeeper** cluster for state persistence and coordination
 - A set of **controller nodes** one of which (the leader) manages the cluster
 - A set of **executor nodes** on which the containers actually execute
-- **NGinx + drove-gateway** nodes that expose virtual hosts for the leader controller as well as for the vhosts defined for the various applications running on the cluster
+- **drove-gateway + NGINX/HAProxy** nodes that expose virtual hosts for the leader controller as well as for the vhosts defined for the various applications running on the cluster
 
 ## Apache ZooKeeper
 Zookeeper is a central component in a Drove cluster. It is used in the following manner:
@@ -64,7 +64,25 @@ Executors are the agents running on the nodes where the containers are deployed.
 - Find and kill any **zombie containers** that are not supposed to exist on that node. The check is done every 30 seconds.
 - Provide container **log-file** listing and offset based content delivery APIs to container
 
-## NGinx and Drove-Gateway
+### Executor states
+
+Executor nodes in Drove move through the following states:
+
+| State | Meaning |
+|-------|---------|
+| `ACTIVE` | Executor is healthy and can receive new workloads. |
+| `UNREADY` | Executor is not ready for normal scheduling yet. This is used while node-level reconciliation/bootstrap is in progress. |
+| `BLACKLIST_REQUESTED` | Executor blacklisting has been requested and migration is in progress. |
+| `BLACKLISTED` | Executor is out of rotation and does not receive new workloads. |
+| `REMOVED` | Executor has been removed from the cluster topology. |
+
+!!!note
+    For normal scheduling, only `ACTIVE` executors are considered for new application/task placements.
+
+!!!note
+    When an executor starts up or is brought back into rotation, it can remain `UNREADY` until required local service containers are reconciled and running on that node. Only after that does it move to `ACTIVE`.
+
+## Drove-Gateway with NGINX or HAProxy
 Almost all of the traffic between service containers is routed via the internal Ranger based service discovery system at PhonePe. However, traffic from the edge as well and between different protected environments are routed using the well-established **virtual host** (and additionally, in some unusual cases, header) based routing.
 
 - All applications on Drove can specify a Vhost and a port name as endpoint for such routing.
@@ -76,12 +94,12 @@ Nixy plays the following role in a cluster:
 - **Track the leader** controller for a Drove cluster by making ping calls to all specified controllers
 - Provide a special data structure that can be used by a template to expose a **vhost** that points to the leader controller in a Drove cluster. This can be used for any tools that need to interact with a Drove cluster for deployments, monitoring as well as callback endpoints for OAuth etc etc
 - **Listen to relevant events** from the Drove cluster to trigger upstream refresh as necessary
-- Provide data structures that include the vhost, upstream endpoints (host:port) and metadata (application level tags) that can be used to build templates that generate NGinx configurations to enable progressively complicated routing of calls from downstream to upstreams hosted on Drove clusters. Data structure exposed to templates, groups all upstream host:port tuples by using the vhost. This allows for multiple deployments for the same VHost to exist. This is needed for a variety of situations including online-updates of services.
+- Provide data structures that include the vhost, upstream endpoints (host:port) and metadata (application level tags) that can be used to build templates that generate NGINX or HAProxy configurations to enable progressively complicated routing of calls from downstream to upstreams hosted on Drove clusters. Data structure exposed to templates groups all upstream host:port tuples by using the vhost. This allows for multiple deployments for the same VHost to exist. This is needed for a variety of situations including online-updates of services.
 - Supports username/password based **authentication** and header based (used internally) to Drove clusters.
-- Support for both NGinx Plus and OSS products. Drove-Nixy can make appropriate api calls to corresponding NGinx plus server to only refresh existing VHost on topology change, as well as affect a full reload when new Vhosts are detected. This ensures that there are no connection drops for critical path applications where NGinx Plus might be used. This also solves the issue of NGinx workers going into a hung state due to frequent reloads on busy clusters like our dev testing environment.
+- Support for NGINX (OSS/Plus) as well as HAProxy based gateway setups.
 
 !!!tip
-    The NGinx deployment is standard across all Drove clusters. However, for clusters that receive a lot of traffic using Nginx, the cluster exposing the VHost for Drove itself might be separated from the one exposing the application virtual hosts to allow for easy scalability of the latter. The template for these are configured differently as needed respectively.
+    Gateway deployment is standard across Drove clusters, with NGINX or HAProxy as the proxy layer. For high-traffic clusters, the cluster exposing the VHost for Drove itself might be separated from the one exposing application virtual hosts to allow easier independent scaling.
 
 ## Other components
 There are a few more components that are used for operational management and observability.
@@ -91,5 +109,3 @@ PhonePe’s internal metric management system uses a HTTP based metric collector
 
 ### Log Management
 Drove provides a special logger called drove that can be configured to handle compression rotation and archival of container logs. Such container logs are stored on specialised partitions by application/application-instance-id or by source app name/ task id for application and task instances respectively. PhonePe’s standardised log rotation tools are used to monitor and ship out such logs to our central log management system. The same can be replaced or enhanced by running something like promtail on Drove logs to ship out logs to tools like Grafana Loki.
-
-

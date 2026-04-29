@@ -1,7 +1,10 @@
 # Setting up Drove Gateway
 The Drove Gateway works as a gateway to expose apps running on a drove cluster to rest of the world.
 
-Drove Gateway container uses [NGinx](https://nginx.org){:target="_blank"} and a modified version of [Nixy](https://github.com/martensson/nixy){:target="_blank"} to track drove endpoints. More details about this can be found in the [drove-gateway](https://github.com/PhonePe/drove-gateway){:target="_blank"} project.
+Drove Gateway supports both [NGINX](https://nginx.org){:target="_blank"} and HAProxy as the proxy layer, using Nixy to track Drove endpoints. More details are available in the [drove-gateway](https://github.com/PhonePe/drove-gateway){:target="_blank"} project.
+
+!!!note
+    This page uses **NGINX-based examples** (`nginx_*` options and `nginx.tmpl`). For HAProxy mode, configure `proxy_platform="haproxy"` and the corresponding `haproxy_*` options as documented in the drove-gateway README.
 
 ## Drove Gateway Nixy Configuration Reference
 The nixy running inside the gateway container is configured using a custom TOML file. This section looks into this file:
@@ -29,14 +32,14 @@ routing_tag = "externally_exposed"#(4)!
 realm = "api.mydomain,support.mydomain"#(8)!
 realm_suffix = "-external.mydomain"#(9)!
 
-# Nginx related config
+# NGINX related config
 
 nginx_config = "/etc/nginx/nginx.conf"#(10)!
 nginx_template = "/etc/drove/gateway/nginx.tmpl"#(11)!
 nginx_cmd = "nginx"#(12)!
 nginx_ignore_check = true#(13)!
 
-# NGinx plus specific options
+# NGINX Plus specific options
 nginxplusapiaddr="127.0.0.1"#(14)!
 nginx_reload_disabled=true#(15)!
 maxfailsupstream = 0#(16)!
@@ -55,9 +58,9 @@ slowstartupstream = "0s"
 
 4. If some special routing behaviour needs to be implemented in  the template based on some tag metadata of the deployed apps, set the routing_tag option to set the tag name to be used. The actual value is derived from app instances and exposed to the template engine as the variable: `RoutingTag`. Optional.
     
-    > In this example, the RoutingTag variable will be set to the value specified in the `routing_tag` tag key specified when deploying the Drove Application. For example, if we want to expose the app we can set it to `yes`, and filter the VHost to be exposed in NGinx template when `RoutingTag == "yes"`.
+    > In this example, the RoutingTag variable will be set to the value specified in the `routing_tag` tag key specified when deploying the Drove Application. For example, if we want to expose the app we can set it to `yes`, and filter the VHost to be exposed in NGINX template when `RoutingTag == "yes"`.
 
-5. Drove Gateway/Nixy works on event polling on controller. This is the polling interval. Especially if number of NGinx nodes is high. Default is `2 seconds`. Unless cluster is really busy with a high rate of change of containers, this strikes a good balance between apps becoming discoverable vs putting the leader controller under heavy load.
+5. Drove Gateway/Nixy works on event polling on controller. This is the polling interval. Especially if number of NGINX nodes is high. Default is `2 seconds`. Unless cluster is really busy with a high rate of change of containers, this strikes a good balance between apps becoming discoverable vs putting the leader controller under heavy load.
 
 6. `user` and `pass` are optional params can be used to set basic auth credentials to the calls made to Drove controllers if basic auth is enabled on the cluster. Leave empty if no basic auth is required.
 
@@ -67,29 +70,29 @@ slowstartupstream = "0s"
 
 9. Beside perfect vhost matching, Drove Gateway supports suffix based matches as well. A single suffix is supported. Optional.
 
-10. Path to NGinx config.
+10. Path to NGINX config.
 
 11. Path to the template file, based on which the template will be generated.
 
-12. NGinx command to use to reload the config. Set this to `openresty` optionally to use openresty.
+12. NGINX command to use to reload the config. Set this to `openresty` optionally to use openresty.
 
-13. Ignore calling NGinx command to test the config. Set this to false or delete this line on production. Default: false.
+13. Ignore calling NGINX command to test the config. Set this to false or delete this line on production. Default: false.
 
-14. If using NGinx plus, set the endpoint to the local server here. If left empty, NGinx plus api based vhost update will be disabled.
+14. If using NGINX Plus, set the endpoint to the local server here. If left empty, NGINX Plus api based vhost update will be disabled.
 
-15. If specific vhosts are exposed, auto-discovery and updation of config (and NGinx reloads) might not be desired as it will cause connection drops. Set the following parameter to true to disable reloads. Nixy will only update upstreams using the nplus APIs. Default: false.
+15. If specific vhosts are exposed, auto-discovery and updation of config (and NGINX reloads) might not be desired as it will cause connection drops. Set the following parameter to true to disable reloads. Nixy will only update upstreams using the nplus APIs. Default: false.
 
-16. Connection parameters for NGinx plus.
+16. Connection parameters for NGINX Plus.
 
 
-!!!danger "NGinx plus"
-    NGinx plus is _not_ shipped with this docker. If you want to use NGinx plus, please build nixy from the source tree [here](https://github.com/PhonePe/drove-gateway){:target="_blank"} and build your own container.
+!!!danger "NGINX Plus"
+    NGINX Plus is _not_ shipped with this docker. If you want to use NGINX Plus, please build nixy from the source tree [here](https://github.com/PhonePe/drove-gateway){:target="_blank"} and build your own container.
 
 ## Relevant directories
 Location for data and logs are as follows:
 
 - `/etc/drove/gateway/` - Configuration files
-- `/var/log/drove/gateway/` - NGinx Logs
+- `/var/log/drove/gateway/` - NGINX Logs
 
 We shall be volume mounting the config and log directories with the same name.
 
@@ -119,7 +122,7 @@ user = "guest"
 pass = "guest"
 
 
-# Nginx related config
+# NGINX related config
 nginx_config = "/etc/nginx/nginx.conf"
 nginx_template = "/etc/drove/gateway/nginx.tmpl"
 nginx_cmd = "nginx"
@@ -129,9 +132,9 @@ nginx_ignore_check = true
 !!!danger "Replace domain names"
     Please remember to update `mydomain` to a valid domain you want to use.
 
-## Create template for NGinx
+## Create template for NGINX
 
-Create a NGinx template with the following config in `/etc/drove/gateway/nginx.tmpl`
+Create an NGINX template with the following config in `/etc/drove/gateway/nginx.tmpl`
 
 ```nginx
 # Generated by drove-gateway {{datetime}}
@@ -217,7 +220,7 @@ http {
 
 The above template will do the following:
 
-- Set NGinx port to 7000. This is the port exposed on the Docker container for the gateway. **Do not change this.**
+- Set NGINX port to 7000. This is the port exposed on the Docker container for the gateway. **Do not change this.**
 - Sets up error and access logs to `/var/log/nginx`. Log rotation is setup for this path already.
 - Set up a Vhost `drove-staging.mydomain` that will get auto-updated with the current leader of the Drove cluster
 - Setup automatically updated virtual hosts for all apps on the cluster.
@@ -286,9 +289,9 @@ You can check logs using:
 journalctl -u drove.gateway -f
 ```
 
-NGinx logs would be available at `/var/log/drove/gateway`. 
+Gateway proxy logs would be available at `/var/log/drove/gateway` in this NGINX-based setup.
 
-### Log rotation for NGinx
+### Log rotation for NGINX
     
 The gateway sets up log rotation for the access and errors logs with the following config:
 ```logrotate
@@ -311,4 +314,3 @@ The gateway sets up log rotation for the access and errors logs with the followi
 > This will rotate both error and access logs when they hit 10MB and keep 5 logs.
 
 Configure the above if you want and volume mount your config to `/etc/logrotate.d/nginx` to use different scheme as per your requirements.
-

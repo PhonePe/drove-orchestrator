@@ -72,6 +72,16 @@ drove cluster ping
 
 See [Configuration](configuration.md) for auth options and multi-cluster setup.
 
+## AI Agent skill
+
+`drove-cli` ships an AI Agent skill that helps coding agents operate Drove using the correct CLI commands and workflows.
+
+- Skill file: `drove-cli/drove-cli/SKILL.md`
+- Covers: apps, app instances, local services, local service instances, tasks, executors, and cluster operations
+- Includes recommended sequence for local services (`create -> conftest -> activate`)
+
+Use this skill in your agent setup if you want the agent to run Drove operations reliably without manual command lookup.
+
 ## Enabling Command Completion
 
 You can generate shell completions file for `bash`, `zfs` and `tcsh` using the `--print-completion` option.

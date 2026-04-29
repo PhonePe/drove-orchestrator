@@ -44,8 +44,7 @@ Controllers will manage the cluster with application instances spread across mul
 ### Gateways
 
 - **Container Networking**:  It is recommended to use Port forwarding based container networking if you choose to use Drove Gateways to route application traffic
-- **Load balancing**: Gateways use Nginx as a web server and can use many different approaches to load balancing among multiple gateway nodes. Some examples include:
+- **Load balancing**: Gateways can use NGINX or HAProxy and can use many different approaches to load balancing among multiple gateway nodes. Some examples include:
     - ***DNS Load balancing***: Multiple gateway IP's can be added as A records to the virtual host domain to let clients use round-robin DNS and split load across gateway nodes
     - ***Anycast/Network Load balancing***: If any sort of anycast/network load balancing functionality is available in your network, it can be used to split traffic across gateway nodes
-- **High Availability and Scaling**: Many different methods are available to achieve high availability and scale NGINX. Any method can be used by adequately modifying the template used by Gateway to render Nginx configuration.
-
+- **High Availability and Scaling**: Many different methods are available to achieve high availability and scale the proxy tier (NGINX/HAProxy). Any method can be used by adequately modifying the template used by Gateway to render proxy configuration.

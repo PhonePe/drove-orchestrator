@@ -14,7 +14,7 @@ The following sections go over the features.
 ### Functional
 * **Application** (service) and application container lifecycle management including *mandated* readiness checks, health checks, and pre-shutdown hooks to enable operators to take containers out of rotation easily and shut them down gracefully if needed.
 * Ensures the required (specified) number of containers will always be present in the cluster. It will detect **failures** across the cluster and bring containers up/down to maintain the required instance count.
-* Provides **endpoint** information to be consumed by routers like drove-gateway+nginx/traefik, etc., to expose containers over vhost.
+* Provides **endpoint** information to be consumed by routers like drove-gateway + NGINX/HAProxy/Traefik, etc., to expose containers over vhost.
 * Supports short-lived container-based **tasks**. This helps folks build newer systems that can spin up containers as needed on the cluster. (See [epoch](https://github.com/PhonePe/epoch)).
 * Supports **local services** for executor-wide infrastructure workloads such as metric collectors, DNS resolvers, and node agents.
 * Provides functionality for real-time **log streaming and log download** for all instances.
@@ -24,7 +24,7 @@ The following sections go over the features.
 * Supports **discovery for sibling containers** to support dynamic cluster reconfiguration in frameworks like Hazelcast.
 * Support extra metadata in the form of **tags** on instances. This can be used in external systems for routing or other use-cases, as this information is available at the endpoint as well.
 * [**CLI**](https://github.com/PhonePe/drove-cli) system for easy deployments and app/task lifecycle management.
-* NGinx based router called [drove-gateway](https://github.com/PhonePe/drove-gateway) for efficient communication with the cluster itself and containers deployed on it.
+* [drove-gateway](https://github.com/PhonePe/drove-gateway) based router support for both NGINX and HAProxy for efficient communication with the cluster itself and containers deployed on it.
 
 
 ### Operations

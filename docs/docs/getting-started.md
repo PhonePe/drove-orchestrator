@@ -6,7 +6,7 @@ hide:
 
 To get a trivial cluster up and running on a machine, the [compose file](https://raw.githubusercontent.com/PhonePe/drove-orchestrator/master/compose/compose.yaml) can be used.
 
-## Update etc hosts to interact wih nginx
+## Update etc hosts to interact with the gateway
 Add the following lines to `/etc/hosts`
 ```
 127.0.0.1   drove.local
@@ -24,7 +24,7 @@ wget https://raw.githubusercontent.com/PhonePe/drove-orchestrator/master/compose
 cd compose
 docker-compose up
 ```
-This will start zookeeper,drove controller, executor and nginx/drove-gateway.
+This will start zookeeper, drove controller, executor and drove-gateway (with NGINX in this demo setup).
 The following ports are used:
 
 - Zookeeper - 2181

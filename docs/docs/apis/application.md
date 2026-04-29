@@ -400,7 +400,7 @@ curl --location 'http://drove.local:7000/apis/v1/applications/TEST_APP-1/instanc
     This API provides up-to-date information about the host and port information about application instances running on the cluster. This information can be used for Service Discovery systems to keep their information in sync with changes in the topology of applications running on the cluster.
 
 !!!tip
-    Any `tag` specified in the application specification is also exposed on endpoint. This can be used to implement complicated routing logic if needed in the NGinx template on Drove Gateway.
+    Any `tag` specified in the application specification is also exposed on endpoint. This can be used to implement complicated routing logic if needed in the NGINX template on Drove Gateway.
 
 **Request**
 ```shell
@@ -447,4 +447,3 @@ curl --location 'http://drove.local:7000/apis/v1/endpoints' \
     "message": "success"
 }
 ```
-

@@ -3,7 +3,7 @@
 This section lists all the APIs that a user can communicate with.
 
 ## Making an API call
-Use a standard HTTP client in the language of your choice to make a call to the leader controller (the cluster virtual host exposed by drove-gateway-nginx).
+Use a standard HTTP client in the language of your choice to make a call to the leader controller (the cluster virtual host exposed by drove-gateway using NGINX or HAProxy).
 
 !!!tip
     In case you are using Java, we recommend using the [drove-client](https://github.com/PhonePe/drove/packages/2186471) library along with the [http-transport](https://github.com/PhonePe/drove/packages/2186472).

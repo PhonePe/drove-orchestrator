@@ -237,7 +237,7 @@ The following information needs to be specified:
 
 | Name        | Option | Description                                                                                        |
 |-------------|--------|----------------------------------------------------------------------------------------------------|
-| Virtual Host | `vhost` | The virtual host to be exposed on NGinx. This should be a fully qualified domain name.           |
+| Virtual Host | `vhost` | The virtual host to be exposed on the gateway (NGINX/HAProxy). This should be a fully qualified domain name. |
 | Port Name | `portName` | The portname to be exposed on the vhost. Port names are defined in `exposedPorts` section.       |
 | Exposure Mode | `mode` | Use `ALL` here for now. Signifies that all healthy instances of the app are exposed to traffic.  |
 
