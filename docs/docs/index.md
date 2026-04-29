@@ -8,6 +8,8 @@ Drove is a container orchestrator built at [PhonePe](https://phonepe.com). It is
 
 ![Drove Home](images/drove-home.png)
 
+!!!note "[Join our Discord](https://discord.com/channels/1499047503025410148/1499049023229792327) for help, discussions and announcements"
+
 ## Features
 The following sections go over the features.
 

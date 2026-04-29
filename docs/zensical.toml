@@ -158,3 +158,10 @@ base_path = "snippets"
 
 [project.markdown_extensions."pymdownx.tabbed"]
 alternate_style = true
+
+[[project.extra.social]]
+icon = "fontawesome/brands/discord"
+link = "https://discord.com/channels/1499047503025410148/1499049023229792327"
+name = "Join our Discord"
+
+
