@@ -37,6 +37,7 @@ The response format is standard for all API calls:
 APIs in Drove belong to the following major classes:
 
 * [Application Management](application.md)
+* [Local Service Management](localservice.md)
 * [Task Management](task.md)
 * [Cluster Management](cluster.md)
 * [Log Access](logs.md)

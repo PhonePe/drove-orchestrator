@@ -3,6 +3,7 @@ nav:
   - ...
   - cluster
   - applications
+  - localservices
   - tasks
   - apis
   - cli

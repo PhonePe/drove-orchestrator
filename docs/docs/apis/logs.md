@@ -29,6 +29,12 @@ curl --location 'http://drove.local:7000/apis/v1/logfiles/applications/TEST_APP-
 }
 ```
 
+**Local Service Request**
+```shell
+curl --location 'http://drove.local:7000/apis/v1/logfiles/localservices/NODE_EXPORTER-1/LSI-5efbb94f-835c-4c62-a073-a68437e60339/list' \
+--header 'Authorization: Basic YWRtaW46YWRtaW4='
+```
+
 ## Download Log Files
 
 **Application**
@@ -52,6 +58,12 @@ curl --location 'http://drove.local:7000/apis/v1/logfiles/applications/TEST_APP-
 
 **Response**
 <file content>
+
+**Local Service Request**
+```shell
+curl --location 'http://drove.local:7000/apis/v1/logfiles/localservices/NODE_EXPORTER-1/LSI-5efbb94f-835c-4c62-a073-a68437e60339/download/output.log?rename=true' \
+--header 'Authorization: Basic YWRtaW46YWRtaW4='
+```
 
 !!!note
     The `Content-Disposition` header is set properly to the response filename. For the above example it would be set to `attachment; filename=output.log`.
@@ -87,6 +99,12 @@ curl --location 'http://drove.local:7000/apis/v1/logfiles/applications/TEST_APP-
     "data": "", //(1)!
     "offset": 43318 //(2)!
 }
+```
+
+**Local Service Request**
+```shell
+curl --location 'http://drove.local:7000/apis/v1/logfiles/localservices/NODE_EXPORTER-1/LSI-5efbb94f-835c-4c62-a073-a68437e60339/read/output.log?offset=-1&length=4096' \
+--header 'Authorization: Basic YWRtaW46YWRtaW4='
 ```
 
 1. Will contain raw data or empty string (in case of first call)

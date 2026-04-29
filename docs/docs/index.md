@@ -16,6 +16,7 @@ The following sections go over the features.
 * Ensures the required (specified) number of containers will always be present in the cluster. It will detect **failures** across the cluster and bring containers up/down to maintain the required instance count.
 * Provides **endpoint** information to be consumed by routers like drove-gateway+nginx/traefik, etc., to expose containers over vhost.
 * Supports short-lived container-based **tasks**. This helps folks build newer systems that can spin up containers as needed on the cluster. (See [epoch](https://github.com/PhonePe/epoch)).
+* Supports **local services** for executor-wide infrastructure workloads such as metric collectors, DNS resolvers, and node agents.
 * Provides functionality for real-time **log streaming and log download** for all instances.
 * Log generation is handled by Drove in a file layout suitable for existing log shipping mechanisms as well as for streaming to rsyslog servers (if needed).
 * Provides a functional read-only web-based console for checking cluster, application, task, and instance states, log streaming, etc.
@@ -85,6 +86,7 @@ The following sections go over the features.
 Before we delve into the details, let's get acquainted with the required terminology:
 
 - **Application** - A service running on the cluster. Such a service can have an exposed port and will have an automatically configured virtual host on Drove Gateway.
+- **Local Service** - A per-executor infrastructure workload designed to run on cluster nodes for platform concerns.
 - **Task** - A transient container-based task.
 - **Controller Nodes** - The brains of the cluster. Only one cluster is the leader and hence the decision maker in the system.
 - **Executor Nodes** - The workhorse nodes of the cluster where the actual containers are run.

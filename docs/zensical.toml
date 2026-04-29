@@ -28,6 +28,13 @@ nav = [
     {"Operations" = "applications/operations.md"},
     {"Outage" = "applications/outage.md"}
   ]},
+  {"Local Services" = [
+    {"Overview" = "localservices/index.md"},
+    {"Instances" = "localservices/instances.md"},
+    {"Specification" = "localservices/specification.md"},
+    {"Operations" = "localservices/operations.md"},
+    {"Outage" = "localservices/outage.md"}
+  ]},
   {"Tasks" = [
     {"Overview" = "tasks/index.md"},
     {"Specification" = "tasks/specification.md"},
@@ -36,6 +43,7 @@ nav = [
   {"API Reference" = [
     {"Overview" = "apis/index.md"},
     {"Application" = "apis/application.md"},
+    {"Local Service" = "apis/localservice.md"},
     {"Task" = "apis/task.md"},
     {"Logs" = "apis/logs.md"},
     {"Cluster" = "apis/cluster.md"}
@@ -51,7 +59,7 @@ nav = [
       {"Describe" = "cli/commands/describe.md"},
       {"Executor" = "cli/commands/executor.md"},
       {"Local Services" = "cli/commands/localservices.md"},
-      {"List Instances" = "cli/commands/lsinstances.md"},
+      {"Local Service Instances" = "cli/commands/lsinstances.md"},
       {"Tasks" = "cli/commands/tasks.md"}
     ]}
   ]},

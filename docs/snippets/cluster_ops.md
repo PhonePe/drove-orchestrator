@@ -6,7 +6,7 @@ The following aspects of an operation can be configured:
 | Name             | Option            | Description                                                               |
 |------------------|-------------------|---------------------------------------------------------------------------|
 | Timeout          | `timeout`         | The duration after which Drove considers the operation to have timed out. |
-| Parallelism      | `parallelism`     | Parallelism of the task. (Range: 1-32)                                    |
+| Parallelism      | `parallelism`     | Parallelism of the task. (Range: 1-512)                                   |
 | Failure Strategy | `failureStrategy` | Set this to `STOP`.                                                       |
 
 !!!note

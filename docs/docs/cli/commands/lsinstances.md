@@ -12,13 +12,13 @@ drove lsinstances <command> [options]
 
 | Command | Description |
 |---------|-------------|
-| `list` | List instances |
-| `info` | Show instance details |
-| `logs` | List log files |
-| `tail` | Tail log output |
-| `download` | Download log file |
-| `replace` | Replace instances |
-| `kill` | Kill instances |
+| `list` | List local service instances |
+| `info` | Show local service instance details |
+| `logs` | List local service instance log files |
+| `tail` | Tail local service instance logs |
+| `download` | Download local service instance log file |
+| `replace` | Replace local service instances |
+| `kill` | Kill local service instances |
 
 ---
 
@@ -57,8 +57,13 @@ drove lsinstances logs <service-id> <instance-id>
 Tail instance logs.
 
 ```bash
-drove lsinstances tail <service-id> <instance-id> [--log FILE]
+drove lsinstances tail <service-id> <instance-id> [--log FILE] [--skip-chars N]
 ```
+
+| Option | Description |
+|--------|-------------|
+| `-l, --log` | Log filename to tail (`output.log` by default) |
+| `-S, --skip-chars` | Skip leading characters per line before printing |
 
 ---
 

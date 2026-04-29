@@ -18,6 +18,7 @@ drove localservices <command> [options]
 | `create` | Create service |
 | `destroy` | Delete service |
 | `activate` | Start service |
+| `conftest` | Deploy test instance |
 | `deactivate` | Stop service |
 | `update` | Update instance count |
 | `restart` | Rolling restart |
@@ -89,6 +90,16 @@ drove localservices activate <service-id>
 
 ---
 
+## drove localservices conftest
+
+Deploy one test instance for validation.
+
+```bash
+drove localservices conftest <service-id>
+```
+
+---
+
 ## drove localservices deactivate
 
 Deactivate a local service. Stops all instances.
@@ -120,6 +131,9 @@ drove localservices restart <service-id> [--stop] [--parallelism N] [--timeout D
 | Option | Description |
 |--------|-------------|
 | `-s, --stop` | Stop before starting new |
+| `-p, --parallelism` | Parallel tasks for operation |
+| `-t, --timeout` | Cluster operation timeout (for example `5m`) |
+| `-w, --wait` | Wait until replacement is complete |
 
 ---
 

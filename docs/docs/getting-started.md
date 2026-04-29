@@ -83,6 +83,34 @@ drove -c local apps scale TEST_APP-1 0 -w
 drove -c local apps destroy TEST_APP-1
 ```
 
+## Deploy your first local service
+
+Get a sample local service spec:
+
+```shell
+wget https://raw.githubusercontent.com/PhonePe/drove-cli/master/sample/test_localservice.json
+```
+
+Create the local service:
+
+```shell
+drove -c local localservices create test_localservice.json --instances 1
+```
+
+Verify instances across executors:
+
+```shell
+drove -c local localservices list
+drove -c local lsinstances list TEST_LOCALSERVICE-1
+```
+
+Deactivate and destroy when done:
+
+```shell
+drove -c local localservices deactivate TEST_LOCALSERVICE-1
+drove -c local localservices destroy TEST_LOCALSERVICE-1
+```
+
 ## Accessing the code
 Code is hosted on github.
 
