@@ -95,6 +95,9 @@ curl --location 'http://drove.local:7000/apis/v1/localservices/operations' \
 !!!note
     Operation payloads use `opSpec` for timeout/parallelism/failure strategy.
 
+!!!tip
+    Recommended rollout sequence is `CREATE -> DEPLOY_TEST_INSTANCE -> ACTIVATE` so spec/config/check validation happens before full activation.
+
 ## Cancel currently running operation
 
 `POST /apis/v1/localservices/operations/{serviceId}/cancel`
@@ -180,3 +183,6 @@ Optionally filter by state:
 
 !!!warning
     For host-level services (`placementPolicy.hostLevel=true`), use `stopFirst=true` in restart/replace operations to avoid fixed host-port conflicts.
+
+!!!note
+    If a local service enters `EMERGENCY_DEACTIVATION_REQUESTED`, controller safety logic issues a deactivation path. In this state, only `DEACTIVATE` is accepted by operation validation.

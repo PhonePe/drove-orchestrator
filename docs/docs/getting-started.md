@@ -88,27 +88,39 @@ drove -c local apps destroy TEST_APP-1
 Get a sample local service spec:
 
 ```shell
-wget https://raw.githubusercontent.com/PhonePe/drove-cli/master/sample/test_localservice.json
+wget https://raw.githubusercontent.com/PhonePe/drove-cli/master/sample/test_service.json
 ```
 
 Create the local service:
 
 ```shell
-drove -c local localservices create test_localservice.json --instances 1
+drove -c local localservices create test_service.json --instances 1
+```
+
+Run a test instance to validate configuration before activation:
+
+```shell
+drove -c local localservices conftest TEST_LOCAL_SERVICE-1
+```
+
+Activate the service:
+
+```shell
+drove -c local localservices activate TEST_LOCAL_SERVICE-1
 ```
 
 Verify instances across executors:
 
 ```shell
 drove -c local localservices list
-drove -c local lsinstances list TEST_LOCALSERVICE-1
+drove -c local lsinstances list TEST_LOCAL_SERVICE-1
 ```
 
 Deactivate and destroy when done:
 
 ```shell
-drove -c local localservices deactivate TEST_LOCALSERVICE-1
-drove -c local localservices destroy TEST_LOCALSERVICE-1
+drove -c local localservices deactivate TEST_LOCAL_SERVICE-1
+drove -c local localservices destroy TEST_LOCAL_SERVICE-1
 ```
 
 ## Accessing the code

@@ -11,6 +11,9 @@ This page discusses operations relevant to local service management. Please read
 !!!warning
     Only the leader controller accepts write operations. Use the leader endpoint exposed via Drove Gateway.
 
+!!!tip
+    Recommended rollout sequence for local services is `create -> conftest -> activate`. Run a test instance first to validate configuration and checks before full activation.
+
 !!!note
     For services created with `placementPolicy.hostLevel=true`, run restart/replace operations in stop-first mode to avoid host-port conflicts.
 
@@ -24,6 +27,17 @@ This page discusses operations relevant to local service management. Please read
 
 !!!note
     API operation payloads use the `opSpec` field. Some model classes/OpenAPI annotations may refer to `clusterOpSpec`; use `opSpec` in request JSON.
+
+## Emergency deactivation behavior
+
+Drove has an internal emergency deactivation safety path for local services.
+
+- If adjustment/replacement style operations are cancelled while a service is `ACTIVE` or `CONFIG_TESTING`, state can move to `EMERGENCY_DEACTIVATION_REQUESTED`.
+- In this state, controller automatically submits a `DEACTIVATE` operation to move service to a safe inactive state.
+- While in `EMERGENCY_DEACTIVATION_REQUESTED`, only `DEACTIVATE` is accepted by command validation.
+
+!!!warning
+    `EMERGENCY_DEACTIVATION_REQUESTED` is a system safety state. Users should not treat it as a normal steady state.
 
 ## How to initiate an operation
 
@@ -90,6 +104,9 @@ Creates local service metadata and starts instances based on `instancesPerHost`.
 ## Activate a local service
 
 Starts instances for a previously inactive local service.
+
+!!!tip
+    Before activation, run `conftest` (`DEPLOY_TEST_INSTANCE`) once to verify spec/config/checks on a test instance.
 
 **Preconditions:**
 
@@ -299,6 +316,9 @@ Deploys a test instance for validation workflows.
 
 !!!note
     CLI command name is `conftest`. It maps to the `DEPLOY_TEST_INSTANCE` local service operation.
+
+!!!tip
+    This operation is recommended before `ACTIVATE`, but it does not replace full rollout validation after activation.
 
 ## Destroy a local service
 

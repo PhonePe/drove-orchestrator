@@ -70,6 +70,9 @@ In addition to lifecycle state, every local service has an activation state:
 - `CONFIG_TESTING`
 - `INACTIVE`
 
+!!!note
+    `EMERGENCY_DEACTIVATION_REQUESTED` is a safety state entered by the controller in specific cancellation/failure paths. In this state, controller drives the service toward deactivation.
+
 ### Local service operations
 
 The following operations are supported:

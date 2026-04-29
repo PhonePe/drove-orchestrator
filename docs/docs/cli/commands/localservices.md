@@ -84,6 +84,8 @@ drove localservices destroy <service-id>
 
 Activate a local service. Starts instances on all executors.
 
+Recommended sequence: run `drove localservices conftest <service-id>` first, then activate.
+
 ```bash
 drove localservices activate <service-id>
 ```
@@ -93,6 +95,8 @@ drove localservices activate <service-id>
 ## drove localservices conftest
 
 Deploy one test instance for validation.
+
+This is recommended before `activate` to verify spec/config/checks before full rollout.
 
 ```bash
 drove localservices conftest <service-id>
