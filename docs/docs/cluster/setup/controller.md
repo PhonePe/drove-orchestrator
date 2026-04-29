@@ -21,7 +21,7 @@ The Drove Controller is written on the [Dropwizard](https://www.dropwizard.io/en
 server: #(1)!
   applicationConnectors: #(2)!
     - type: http
-      port: 4000
+      port: 10000
   adminConnectors: #(3)!
     - type: http
       port: 4001
@@ -231,11 +231,13 @@ The following options can be set to influence the behavior of the Drove cluster 
 | Stale Task Age | `staleTaskAge` | Maximum time for which metadata for a finished task is retained on the cluster. Defaults to 2 days. Expressed in [duration](units.md#duration). |
 | Event Storage Duration | `maxEventsStorageDuration` | Maximum time for which cluster events are retained on the cluster. Defaults to 1 hour. Expressed in [duration](units.md#duration). |
 | Default Operation Timeout | `clusterOpTimeout` | Timeout for operations that are initiated by drove itself. For example, instance spin up in case of executor failure, instance migrations etc. Defaults to 5 minutes. Expressed in [duration](units.md#duration). |
-| Operation threads | `clusterOpParallelism` | Signified the parallelism for operations internal to the cluster. Defaults to: 1. Range: 1-32. |
+| Operation threads | `clusterOpParallelism` | Signified the parallelism for operations internal to the cluster. Defaults to: 1. Range: 1-512. |
 | Audited Methods | `auditedHttpMethods` | Drove prints an audit log with user details when an api is called by an user. Defaults to `["POST", "PUT"]`. |
 | Allowed mount directories | `allowedMountDirs` | If provided, Drove will ensure that application and task spec can mount only the directories mentioned in this set on executor host. |
 | Disable read-only auth | `disableReadAuth` | When `userAuth` is enabled, setting this option, will enforce authorization only on write operations. |
 | Disable command line arguments | `disableCmdlArgs` | When set to `true`, passing command line arguments will be disabled. Default: `false` (users can pass arguments. |
+| Allowed rule import packages | `allowedRuleImportPackages` | A whitelist of Java package prefixes that placement rules can import when using MVEL rules. Keep this strict in production. |
+| Stale executor age | `staleExecutorAge` | Maximum age of executor heartbeat data before the controller considers it stale and excludes it from active topology calculations. Defaults to 45 seconds. |
 
 **Sample**
 ```yaml

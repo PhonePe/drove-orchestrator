@@ -151,6 +151,12 @@ options: #(11)!
   logBufferSize: 5m
   cacheFileSize: 10m
   cacheFileCount: 3
+  remoteUpdateMode: RPC
+
+controllers: #(12)!
+  endpoints:
+    - http://controller-1:10000
+    - http://controller-2:10000
 
 ```
 
@@ -165,6 +171,7 @@ options: #(11)!
 9. Configuration for authentication between nodes in the cluster. Please check [intra node auth config](#intra-node-authentication-configuration) for details.
 10. Resource configuration for this node.
 11. Options to configure executor behaviour. Check [executor options](#executor-options) section for details.
+12. Controller endpoint configuration for RPC-based update mode.
 
 !!!tip
 	In case you do not want to expose admin apis to outside the host, please set `bindHost` in the admin connectors section.
@@ -194,6 +201,9 @@ zookeeper:
 
 !!!note
     This section is same across the cluster including both controller and executor.
+
+!!!note
+    Executors can run in `RPC` remote update mode with direct controller endpoints. In that setup, controller communication uses `controllers.endpoints`, while discovery-store configuration remains relevant for store-based fallback and cluster metadata.
 
 ### Intra Node Authentication Configuration
 Communication between controller and executor is protected by a shared-secret based authentication. The following configuration is meant to configure this. This section consists of a list of 2 members:
@@ -330,6 +340,7 @@ The following options can be set to influence the behavior for the Drove executo
 |Log Buffer Size|`logBufferSize`|The size of the buffer the executor uses to read logs from container. Unit [DataSize](units.md#data-size). Range: 1-128MB. Default: 10MB|
 |Cache File Size | `cacheFileSize` | To limit disk usage, configure fixed size log file cache for containers. Unit: [DataSize](units.md#data-size). Range: 10MB-100GB. Default: 20MB. Compression is always enabled.|
 |Cache File Count | `cacheFileSize` | To limit disk usage, configure fixed count of log file cache for containers. Unit: `integer`. Max: 1024. Default: 3|
+|Remote update mode|`remoteUpdateMode`|How executor sends updates to controller. `STORE` writes via discovery store. `RPC` sends updates over HTTP(S) and falls back to store if needed.|
 
 **Sample**
 ```yaml
@@ -426,8 +437,17 @@ options:
   cacheFileSize: 30m
   cacheFileCount: 3
   cacheImages: true
+  remoteUpdateMode: RPC
+
+controllers:
+  endpoints:
+    - http://controller-1:10000
+    - http://controller-2:10000
 
 ```
+
+!!!note
+    If `remoteUpdateMode` is `RPC`, configure `controllers.endpoints` so executors can reach controller nodes directly.
 
 ## Setup required environment variables
 Environment variables need to run the drove controller are setup in `/etc/drove/executor/executor.env`.

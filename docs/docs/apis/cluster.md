@@ -53,6 +53,32 @@ curl --location 'http://drove.local:7000/apis/v1/cluster' \
 }
 ```
 
+### Get dashboard data
+`GET /apis/v1/cluster/dashboard`
+
+This endpoint returns aggregated dashboard data for cluster, applications, tasks, local services, and executors.
+
+**Request**
+```shell
+curl --location 'http://drove.local:7000/apis/v1/cluster/dashboard' \
+--header 'Authorization: Basic YWRtaW46YWRtaW4='
+```
+
+**Response**
+```js
+{
+    "status": "SUCCESS",
+    "data": {
+        "clusterSummary": {
+            "leader": "ppessdev:10000",
+            "state": "NORMAL"
+        },
+        "generatedAt": 1730000000000
+    },
+    "message": "success"
+}
+```
+
 ### Set maintenance mode on cluster
 `POST /apis/v1/cluster/maintenance/set`
 
@@ -134,6 +160,9 @@ curl --location 'http://drove.local:7000/apis/v1/cluster/executors' \
     "message": "success"
 }
 ```
+
+!!!note
+    Executor `state` can also be `BLACKLIST_REQUESTED` while blacklisting is in progress.
 
 ### Get detailed info for one executor
 `GET /apis/v1/cluster/executors/{id}`
@@ -256,7 +285,9 @@ curl --location --request POST 'http://drove.local:7000/apis/v1/cluster/executor
         "successful": [
             "a45442a1-d4d0-3479-ab9e-3ed0aa5f7d2d"
         ],
-        "failed": []
+        "failed": [],
+        "approxCompletionTimeMs": 150000,
+        "message": "Blacklisting successful and app movement scheduled"
     },
     "message": "success"
 }
@@ -282,7 +313,9 @@ curl --location --request POST 'http://drove.local:7000/apis/v1/cluster/executor
         "successful": [
             "a45442a1-d4d0-3479-ab9e-3ed0aa5f7d2d"
         ],
-        "failed": []
+        "failed": [],
+        "approxCompletionTimeMs": 0,
+        "message": "Unblacklisting successful for all executors"
     },
     "message": "success"
 }
@@ -369,6 +402,7 @@ curl --location 'http://drove.local:7000/apis/v1/cluster/events/summary?lastSync
         "eventsCount": {
             "INSTANCE_STATE_CHANGE": 8,
             "APP_STATE_CHANGE": 17,
+            "EXECUTOR_BLACKLIST_REQUESTED": 1,
             "EXECUTOR_BLACKLISTED": 1,
             "EXECUTOR_UN_BLACKLISTED": 1
         },
@@ -394,7 +428,6 @@ This is applicable for both the APIs listed above
 !!!tip
     Java programs should _definitely_ look at using the [event listener library](https://github.com/PhonePe/drove/packages/2186474) 
     to listen to cluster events
-
 
 
 

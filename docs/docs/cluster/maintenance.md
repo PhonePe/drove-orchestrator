@@ -127,6 +127,8 @@ To blacklist executors do the following:
     {
         "status": "SUCCESS",
         "data": {
+            "approxCompletionTimeMs": 150000,
+            "message": "Blacklisting successful and app movement scheduled",
             "failed": [
                 "ex2",
                 "ex1"
@@ -138,6 +140,9 @@ To blacklist executors do the following:
         "message": "success"
     }
     ```
+
+!!!note
+    Blacklisting is now a two-stage flow: executors are first moved to `BLACKLIST_REQUESTED`, then Drove migrates healthy app instances out, and finally marks them as `BLACKLISTED`. The `approxCompletionTimeMs` field is an estimate for this process.
 
 To un-blacklist executors do the following:
 
@@ -160,6 +165,8 @@ To un-blacklist executors do the following:
     {
         "status": "SUCCESS",
         "data": {
+            "approxCompletionTimeMs": 0,
+            "message": "Unblacklisting successful for some executors. Check logs for details.",
             "failed": [
                 "ex2",
                 "ex1"

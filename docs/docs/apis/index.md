@@ -44,5 +44,8 @@ APIs in Drove belong to the following major classes:
 !!!tip
     Response models for these apis can be found in [drove-models](https://github.com/PhonePe/drove/tree/master/drove-models/src/main/java/com/phonepe/drove/models)
 
+!!!tip
+    Drove controller APIs are OpenAPI-annotated, and OpenAPI metadata is bundled with controller builds for schema generation and integration use cases.
+
 !!!note
     There are _no_ publicly accessible APIs exposed by individual executors.

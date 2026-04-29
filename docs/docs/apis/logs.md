@@ -8,6 +8,9 @@
 **Task**
 `GET /apis/v1/logfiles/tasks/{sourceAppName}/{taskId}/list`
 
+**Local Service**
+`GET /apis/v1/logfiles/localservices/{serviceId}/{instanceId}/list`
+
 
 **Request**
 ```shell
@@ -34,6 +37,13 @@ curl --location 'http://drove.local:7000/apis/v1/logfiles/applications/TEST_APP-
 **Task**
 `GET /apis/v1/logfiles/tasks/{sourceAppName}/{taskId}/download/{fileName}`
 
+**Local Service**
+`GET /apis/v1/logfiles/localservices/{serviceId}/{instanceId}/download/{fileName}`
+
+| Query Parameter | Validation | Description |
+|-----------------|------------|-------------|
+| rename          | true/false | If `true`, response filename is renamed to include deployable and instance ids with timestamp. |
+
 **Request**
 ```shell
 curl --location 'http://drove.local:7000/apis/v1/logfiles/applications/TEST_APP-1/AI-5efbb94f-835c-4c62-a073-a68437e60339/download/output.log' \
@@ -44,7 +54,10 @@ curl --location 'http://drove.local:7000/apis/v1/logfiles/applications/TEST_APP-
 <file content>
 
 !!!note
-    The `Content-Disposition` header is set properly to the actual filename. For the above example it would be set to `attachment; filename=output.log`.
+    The `Content-Disposition` header is set properly to the response filename. For the above example it would be set to `attachment; filename=output.log`.
+
+!!!note
+    Download APIs support binary files (for example compressed logs) and set `Content-Type` based on filename where possible.
 
 ## Read chunks from log
 
@@ -53,6 +66,9 @@ curl --location 'http://drove.local:7000/apis/v1/logfiles/applications/TEST_APP-
 
 **Task**
 `GET /apis/v1/logfiles/tasks/{sourceAppName}/{taskId}/read/{fileName}`
+
+**Local Service**
+`GET /apis/v1/logfiles/localservices/{serviceId}/{instanceId}/read/{fileName}`
 
 | Query Parameter | Validation                            | Description                          |
 |-----------------|---------------------------------------|--------------------------------------|
