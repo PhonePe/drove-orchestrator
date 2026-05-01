@@ -114,6 +114,13 @@ name = "Switch to system preference"
 
 # ── Plugins (search and minify are built-in — omitted) ───────────────────────
 [project.plugins.glightbox]
+width = "auto"
+height = "auto"
+skip_classes = []
+auto = true
+auto_themed = false
+auto_caption = false
+caption_position = "bottom"
 
 [project.plugins.awesome-pages]
 
