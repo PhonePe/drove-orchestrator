@@ -122,7 +122,7 @@ drove describe app MY_APP-1
 ```bash
 drove appinstances list MY_APP-1
 drove describe instance MY_APP-1 AI-xxxxx
-drove appinstances tail MY_APP-1 AI-xxxxx
+drove appinstances tail MY_APP-1 AI-xxxxx --log output.log
 ```
 
 ### Switch clusters

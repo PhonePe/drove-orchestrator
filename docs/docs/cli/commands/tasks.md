@@ -81,8 +81,12 @@ drove tasks logs <source-app> <task-id>
 Tail task logs.
 
 ```bash
-drove tasks tail <source-app> <task-id> [--file FILE]
+drove tasks tail <source-app> <task-id> [--log FILE]
 ```
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| `-l, --log` | Log file name | output.log |
 
 ---
 
