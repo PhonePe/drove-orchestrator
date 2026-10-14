@@ -4,11 +4,11 @@ hide:
 ---
 # Introduction
 
-Drove is a container orchestrator built at [PhonePe](https://phonepe.com). It is focused on simplicity, container performance, and easy operations.
+Drove is a container orchestrator built at [PhonePe](https://phonepe.com){:target="_blank"}. It is focused on simplicity, container performance, and easy operations.
 
 ![Drove Home](images/drove-home.png)
 
-!!!note "[Join our Discord](https://discord.com/channels/1499047503025410148/1499049023229792327) for help, discussions and announcements"
+!!!note "[Join our Discord](https://discord.com/channels/1499047503025410148/1499049023229792327){:target="_blank"} for help, discussions and announcements"
 
 ## Features
 The following sections go over the features.
@@ -17,7 +17,7 @@ The following sections go over the features.
 * **Application** (service) and application container lifecycle management including *mandated* readiness checks, health checks, and pre-shutdown hooks to enable operators to take containers out of rotation easily and shut them down gracefully if needed.
 * Ensures the required (specified) number of containers will always be present in the cluster. It will detect **failures** across the cluster and bring containers up/down to maintain the required instance count.
 * Provides **endpoint** information to be consumed by routers like drove-gateway + NGINX/HAProxy/Traefik, etc., to expose containers over vhost.
-* Supports short-lived container-based **tasks**. This helps folks build newer systems that can spin up containers as needed on the cluster. (See [epoch](https://github.com/PhonePe/epoch)).
+* Supports short-lived container-based **tasks**. This helps folks build newer systems that can spin up containers as needed on the cluster. (See [epoch](https://github.com/PhonePe/epoch){:target="_blank"}).
 * Supports **local services** for executor-wide infrastructure workloads such as metric collectors, DNS resolvers, and node agents.
 * Provides functionality for real-time **log streaming and log download** for all instances.
 * Log generation is handled by Drove in a file layout suitable for existing log shipping mechanisms as well as for streaming to rsyslog servers (if needed).
@@ -25,8 +25,8 @@ The following sections go over the features.
 * Provides **APIs** for both read and write operations.
 * Supports **discovery for sibling containers** to support dynamic cluster reconfiguration in frameworks like Hazelcast.
 * Support extra metadata in the form of **tags** on instances. This can be used in external systems for routing or other use-cases, as this information is available at the endpoint as well.
-* [**CLI**](https://github.com/PhonePe/drove-cli) system for easy deployments and app/task lifecycle management.
-* [drove-gateway](https://github.com/PhonePe/drove-gateway) based router support for both NGINX and HAProxy for efficient communication with the cluster itself and containers deployed on it.
+* [**CLI**](https://github.com/PhonePe/drove-cli){:target="_blank"} system for easy deployments and app/task lifecycle management.
+* [drove-gateway](https://github.com/PhonePe/drove-gateway){:target="_blank"} based router support for both NGINX and HAProxy for efficient communication with the cluster itself and containers deployed on it.
 
 
 ### Operations
@@ -53,13 +53,13 @@ The following sections go over the features.
 * **Small** number of **moving pieces**. Keeps the minimal amount of dependencies in the system. This reduces the exposure to failures by effectively reducing the number of external dependencies and possible failure points.
 * Controller stores state on external system (Zookeeper) for now.
 * Executor stores all container specific states in the container metadata itself. No other state is maintained/needed by executor.
-* Containers keep running even when most of the system is down. This means that even when the cluster coordinators, executors, state storage, etc. are down, the already deployed containers keep on running as is. If a service discovery mechanism is implemented properly, this effectively protects the system against service disruptions, even in the face of failure of critical cluster components. At PhonePe, we use [Ranger](https://github.com/appform-io/ranger) for service discovery. 
+* Containers keep running even when most of the system is down. This means that even when the cluster coordinators, executors, state storage, etc. are down, the already deployed containers keep on running as is. If a service discovery mechanism is implemented properly, this effectively protects the system against service disruptions, even in the face of failure of critical cluster components. At PhonePe, we use [Ranger](https://github.com/appform-io/ranger){:target="_blank"} for service discovery.
 * **Container state reconciliation** is part of the executor system, so that executor service can be restarted easily without affecting application or task deployments. In other words, the executor needs to recognise the containers started by itself on restarts and report their state as usual to the controller.
 * Keeps things as simple as possible. Drove uses a few simple constructs (scale up/scale down) and implements all application/task features using that.
 * **Multi-mode cluster messaging** ensures that faster updates will be sent to controller via sync channels, while the controller(s) keep refreshing the cluster state periodically, irrespective of the last synced data. Drove assumes that communication failures would happen. Even if new changes can’t be propagated from executor to controller, it tries to keep existing topology as updated as possible.
 * Built in safeguards to detect and kill any rogue (Zombie) container instances that have remained back for some reason (maybe some bug in the orchestrator, etc.).
 * Controller is **highly available** with one leader active at a time. Any communication issues with Zookeeper will lead to quick death of the controller so that another controller can take up its place as quickly as possible.
-* Leader can be tracked using the `ping` api and is used by components such as [drove-gateway](https://github.com/PhonePe/drove-gateway) to provide a Virtual Host that can be used to interact with the cluster via the UI or the CLI, and other tools.
+* Leader can be tracked using the `ping` api and is used by components such as [drove-gateway](https://github.com/PhonePe/drove-gateway){:target="_blank"} to provide a Virtual Host that can be used to interact with the cluster via the UI or the CLI, and other tools.
 
 ### Security
 * Clearly designate roles for read and write operations. Write operations include cluster maintenance and app and task lifecycle maintenance.

@@ -7,18 +7,25 @@ copyright = "Copyright &copy; 2024  PhonePe Private Limited"
 
 nav = [
   {"Home" = "index.md"},
-  {"Cluster" = [
-    {"Cluster" = "cluster/cluster.md"},
-    {"Setup" = [
-      {"Planning" = "cluster/setup/planning.md"},
-      {"Prerequisites" = "cluster/setup/prerequisites.md"},
-      {"Zookeeper" = "cluster/setup/zookeeper.md"},
-      {"Controller" = "cluster/setup/controller.md"},
-      {"Executor Setup" = "cluster/setup/executor-setup.md"},
-      {"Gateway" = "cluster/setup/gateway.md"},
-      {"Coredns Drove" = "cluster/setup/coredns-drove.md"}
-    ]},
+  {"Concepts" = [
+    {"Overview" = "concepts/index.md"},
+    {"Cluster Anatomy" = "concepts/cluster.md"},
+    {"Scheduling" = "concepts/scheduling.md"},
+    {"Placement Policies" = "concepts/placement-policies.md"},
+    {"CPU, NUMA and Memory" = "concepts/cpu-numa-memory.md"},
+    {"GPU Scheduling" = "concepts/gpu.md"},
+    {"Security Profiles" = "concepts/security-profiles.md"}
+  ]},
+  {"Setup" = [
+    {"Planning" = "cluster/setup/planning.md"},
+    {"Prerequisites" = "cluster/setup/prerequisites.md"},
+    {"Zookeeper" = "cluster/setup/zookeeper.md"},
+    {"Controller" = "cluster/setup/controller.md"},
+    {"Executor Setup" = "cluster/setup/executor-setup.md"},
+    {"Gateway" = "cluster/setup/gateway.md"},
+    {"Coredns Drove" = "cluster/setup/coredns-drove.md"},
     {"Metrics" = "cluster/metrics.md"},
+    {"Environment Info" = "cluster/environment-info.md"},
     {"Maintenance" = "cluster/maintenance.md"}
   ]},
   {"Applications" = [
@@ -66,7 +73,7 @@ nav = [
   {"Extra" = [
     {"Epoch" = "extra/epoch.md"},
     {"Libraries" = "extra/libraries.md"},
-    {"Nvidia" = "extra/nvidia.md"}
+    {"CLI" = "extra/cli.md"}
   ]}
 ]
 

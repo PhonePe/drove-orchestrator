@@ -153,10 +153,11 @@ A local service is defined using JSON. The structure is similar to application s
 
 !!!note
     Number of running instances per executor is controlled at operation time using `instancesPerHost` in create/update operations.
-
 !!!warning
     Only `LOCAL` placement is allowed for local services. Any other placement policy (for example `ANY`, `MATCH_TAG`, `RULE_BASED`) is rejected by controller validation.
 
+!!!note
+    Local services support CPU and memory resources only. GPU resources are not supported. `RULE_BASED` placement is also not supported. Local services do not have an `exposureSpec`; the controller returns an empty exposure list for them.
 !!!note
     `exposedPorts` are mandatory in local service specs because health/readiness checks resolve target ports using port names.
 

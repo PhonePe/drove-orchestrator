@@ -4,7 +4,7 @@ hide:
 ---
 # Getting Started
 
-To get a trivial cluster up and running on a machine, the [compose file](https://raw.githubusercontent.com/PhonePe/drove-orchestrator/master/compose/compose.yaml) can be used.
+To get a trivial cluster up and running on a machine, the [compose file](https://raw.githubusercontent.com/PhonePe/drove-orchestrator/master/compose/compose.yaml){:target="_blank"} can be used.
 
 ## Update etc hosts to interact with the gateway
 Add the following lines to `/etc/hosts`
@@ -34,7 +34,7 @@ The following ports are used:
 
 Drove credentials would be `admin/admin` and `guest/guest` for read-write and read-only permissions respectively.
 
-You should be able to access the UI at [http://drove.local:7000](http://drove.local:7000)
+You should be able to access the UI at [http://drove.local:7000](http://drove.local:7000){:target="_blank"}
 
 ## Install drove-cli
 Install the CLI for drove
@@ -68,7 +68,7 @@ drove -c local apps create test_app.json
 ```
 drove -c local apps scale TEST_APP-1 1 -w
 ```
-This would expose the app as `testapp.local`. Endpoint would be: [http://testapp.local:7000](http://testapp.local:7000).
+This would expose the app as `testapp.local`. Endpoint would be: [http://testapp.local:7000](http://testapp.local:7000){:target="_blank"}.
 
 You can test the app by running the following commands:
 

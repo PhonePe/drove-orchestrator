@@ -96,6 +96,32 @@ curl --location 'http://drove.local:7000/apis/v1/tasks' \
 }
 ```
 
+## Delete Task Instance
+
+`DELETE /apis/v1/tasks/{sourceAppName}/instances/{taskId}`
+
+**Roles:** `EXTERNAL_READ_WRITE` or `ROOT`
+
+**Request**
+```shell
+curl --location --request DELETE 'http://drove.local:7000/apis/v1/tasks/TEST_APP/instances/T0012' \
+--header 'Authorization: Basic YWRtaW46YWRtaW4='
+```
+
+**Response**
+```js
+{
+    "status": "SUCCESS",
+    "data": {
+        "deleted": true
+    },
+    "message": "success"
+}
+```
+
+!!!note
+    This API removes the task record from the controller database. It does not stop a running task. Stop the task with a `KILL` operation before you delete it.
+
 ## Get Task Instance Details
 
 `GET /apis/v1/tasks/{sourceAppName}/instances/{taskId}`

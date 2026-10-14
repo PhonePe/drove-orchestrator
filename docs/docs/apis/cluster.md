@@ -47,11 +47,20 @@ curl --location 'http://drove.local:7000/apis/v1/cluster' \
         "totalCores": 10,
         "freeMemory": 18898,
         "usedMemory": 128,
-        "totalMemory": 19026
+        "totalMemory": 19026,
+        "freeGpus": 1,
+        "usedGpus": 1,
+        "totalGpus": 2,
+        "gpuVendorCounts": {
+            "NVIDIA": 2
+        }
     },
     "message": "success"
 }
 ```
+
+!!!note
+    The fields `freeGpus`, `usedGpus`, `totalGpus`, and `gpuVendorCounts` are set only when the cluster has GPUs. Clusters without GPUs omit these fields.
 
 ### Get dashboard data
 `GET /apis/v1/cluster/dashboard`
@@ -144,27 +153,31 @@ curl --location 'http://drove.local:7000/apis/v1/cluster/executors' \
     "data": [
         {
             "executorId": "a45442a1-d4d0-3479-ab9e-3ed0aa5f7d2d",
-            "hostname": "ppessdev",
-            "port": 3000,
-            "transportType": "HTTP",
-            "freeCores": 9,
-            "usedCores": 1,
-            "freeMemory": 18898,
-            "usedMemory": 128,
-            "tags": [
-                "ppessdev"
-            ],
-            "state": "ACTIVE"
-        }
-    ],
-    "message": "success"
+              "freeCores": 9,
+              "usedCores": 1,
+              "freeMemory": 18898,
+              "usedMemory": 128,
+              "freeGpus": 1,
+              "usedGpus": 1,
+              "gpuVendor": "NVIDIA",
+              "gpuModel": "A100-SXM4-40GB",
+              "tags": [
+                  "ppessdev"
+              ],
+              "state": "ACTIVE"
+          }
+      ],
+      "message": "success"
 }
 ```
 
 !!!note
+    The fields `freeGpus`, `usedGpus`, `gpuVendor`, and `gpuModel` are set only when the executor has GPUs. Executors without GPUs omit these fields.
+
+!!!note
     Executor `state` can also be `BLACKLIST_REQUESTED` while blacklisting is in progress.
 
-    For full state semantics, see [Executor states](../cluster/cluster.md#executor-states).
+    For full state semantics, see [Executor states](../concepts/cluster.md#executor-states).
 
 ### Get detailed info for one executor
 `GET /apis/v1/cluster/executors/{id}`
@@ -215,6 +228,16 @@ curl --location 'http://drove.local:7000/apis/v1/cluster/executors/a45442a1-d4d0
                 "usedMemory": {
                     "0": 128
                 }
+            },
+            "layout": {
+                "cores": {
+                    "0": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+                },
+                "memory": {
+                    "0": 19026
+                },
+                "cpuScalingFactor": 1.0,
+                "memoryScalingFactor": 1.0
             }
         },
         "instances": [
@@ -323,8 +346,97 @@ curl --location --request POST 'http://drove.local:7000/apis/v1/cluster/executor
 }
 ```
 
-## Drove Cluster Events
-The following APIs can be used to monitor events on Drove. If the data needs to be consumed, the `/latest` API should be used. For simply knowing if an event of a certain type has occurred or not, the `/summary` is sufficient.
+## Placement Simulation
+
+Use this API to test where a deployable can be placed. The cluster does not change when you call this API.
+
+!!!note
+    The older dry-run deployment API is removed. Use this API to simulate a placement.
+
+### Simulate placement
+`POST /apis/v1/cluster/placement/simulate`
+
+**Roles:** `EXTERNAL_READ_WRITE` or `ROOT`
+
+**Request**
+```shell
+curl --location --request POST 'http://drove.local:7000/apis/v1/cluster/placement/simulate?detail=true' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Basic YWRtaW46YWRtaW4=' \
+--data '{
+    "spec": {
+        "name": "TEST_APP",
+        "version": "1",
+        "executable": {
+            "type": "DOCKER",
+            "url": "ghcr.io/appform-io/perf-test-server-httplib"
+        },
+        "type": "SERVICE",
+        "resources": [
+            {
+                "type": "CPU",
+                "count": 1
+            },
+            {
+                "type": "MEMORY",
+                "sizeInMB": 128
+            }
+        ],
+        "placementPolicy": {
+            "type": "ANY"
+        }
+    },
+    "placementPolicy": {
+        "type": "ANY"
+    },
+    "numInstances": 2
+}'
+```
+
+| Field            | Type            | Required | Description                                                                                       |
+|------------------|-----------------|----------|---------------------------------------------------------------------------------------------------|
+| spec             | DeployableSpec  | Yes      | The application, task, or local service spec to simulate.                                         |
+| placementPolicy  | PlacementPolicy | No       | The policy to use for the simulation. The controller uses the policy from the spec if this is absent. |
+| numInstances     | int             | No       | The number of instances to simulate. The range is 1 to 2048. The default is 1.                     |
+
+| Query Parameter | Type    | Description                                              |
+|-----------------|---------|----------------------------------------------------------|
+| detail          | boolean | Set to `true` to include per-instance placements. Defaults to `false`. |
+
+**Response**
+```js
+{
+    "status": "SUCCESS",
+    "data": {
+        "requested": 2,
+        "placed": 2,
+        "errors": [],
+        "placements": [
+            {
+                "instanceId": "SIM-a45442a1-0001",
+                "node": {
+                    "executorId": "a45442a1-d4d0-3479-ab9e-3ed0aa5f7d2d",
+                    "hostname": "ppessdev"
+                }
+            },
+            {
+                "instanceId": "SIM-a45442a1-0002",
+                "node": {
+                    "executorId": "a45442a1-d4d0-3479-ab9e-3ed0aa5f7d2d",
+                    "hostname": "ppessdev"
+                }
+            }
+        ]
+    },
+    "message": "success"
+}
+```
+
+!!!note
+    The `placements` list contains the simulated allocations only when `detail` is `true`.
+
+!!!warning
+    This API returns an error when the cluster is in maintenance mode.
 
 ### Event List
 `GET /apis/v1/cluster/events/latest`
@@ -425,10 +537,10 @@ This is applicable for both the APIs listed above
 - This api is cheap enough, you should plan to make calls to it every few seconds
 
 !!!info
-    Model for the events can be found [here](https://github.com/PhonePe/drove/tree/master/drove-models/src/main/java/com/phonepe/drove/models/events).
+    Model for the events can be found [here](https://github.com/PhonePe/drove/tree/master/drove-models/src/main/java/com/phonepe/drove/models/events){:target="_blank"}.
 
 !!!tip
-    Java programs should _definitely_ look at using the [event listener library](https://github.com/PhonePe/drove/packages/2186474) 
+    Java programs should _definitely_ look at using the [event listener library](https://central.sonatype.com/artifact/com.phonepe.drove/drove-events-client){:target="_blank"}
     to listen to cluster events
 
 

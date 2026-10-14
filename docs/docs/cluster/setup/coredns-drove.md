@@ -4,7 +4,7 @@ The Drove Plugin for CoreDNS allows for DNS based service discovery of applicati
 We provide a Docker to deploy Drove plugin enabled CoreDNS easily. More details about this can be found in the [coredns-drove](https://github.com/PhonePe/coredns-drove){:target="_blank"} project.
 
 ## CoreDNS Drove plugin options reference
-This section discusses the configuration options for the Drove plugin. For detailed coredns options please refer to the [coredns manual](https://coredns.io/manual/toc/).
+This section discusses the configuration options for the Drove plugin. For detailed coredns options please refer to the [coredns manual](https://coredns.io/manual/toc/){:target="_blank"}.
 
 The plugin configuration is part of the `Corefile`, the configuration file taken as input by CoreDNS. To use the provided container the configuration can be provided in one of two ways:
 - For a standard simpler setup, environment variables can be provided to the container to set it up

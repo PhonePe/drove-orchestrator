@@ -88,7 +88,7 @@ Almost all of the traffic between service containers is routed via the internal 
 - All applications on Drove can specify a Vhost and a port name as endpoint for such routing.
 - Upstream information for such VHosts or endpoints is available from an API from the leading Drove controller.
 - This information can be used to configure any load-balancer or tourer or reverse proxy to expose applications running on Drove to the outside world.
-- We modified an existing project called [Nixy](https://github.com/martensson/nixy) so that it gets the upstream information from Drove instead of Marathon.
+- We modified an existing project called [Nixy](https://github.com/martensson/nixy){:target="_blank"} so that it gets the upstream information from Drove instead of Marathon.
 Nixy plays the following role in a cluster:
 
 - **Track the leader** controller for a Drove cluster by making ping calls to all specified controllers

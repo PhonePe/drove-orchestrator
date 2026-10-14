@@ -14,7 +14,7 @@ Please note the following important differences between a task instance and appl
 * Unlike applications there is no task + task instance, the only representation of task on a Drove cluster is a task instance.
 
 !!!tip
-    Use [**epoch**](https://github.com/PhonePe/epoch) to spin up tasks in a periodic manner
+    Use [**epoch**](https://github.com/PhonePe/epoch){:target="_blank"} to spin up tasks in a periodic manner
 
 A **task specification** contains the following sections:
 

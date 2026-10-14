@@ -84,11 +84,13 @@ An application is defined using JSON. We use a sample configuration below to exp
         "attempts": 3,
         "initialDelay": "0 seconds"
     },
-    "exposureSpec": {//(42)!
-        "vhost": "testapp.local", //(43)!
-        "portName": "main", //(44)!
-        "mode": "ALL"//(45)!
-    },
+    "exposureSpec": [//(42)!
+        {
+            "vhost": "testapp.local", //(43)!
+            "portName": "main", //(44)!
+            "mode": "ALL"//(45)!
+        }
+    ],
     "env": {//(41)!
         "CORES": "8"
     },
@@ -148,9 +150,9 @@ An application is defined using JSON. We use a sample configuration below to exp
 19. Serialized form of the data, this and other parameters will vary according to the `type` specified above.
 20. List of resources required to run this application. Check [Resource Requirements Specification](#resource-requirements-specification) for more details.
 21. Number of CPU cores to be allocated.
-22. Amount of memory to be allocated expressed in Megabytes
-23. Specifies how the container will be placed on the cluster. Check [Placement Policy](#placement-policy-specification) for details.
-24. Type of placement can be `ANY`, `ONE_PER_HOST`, `MATCH_TAG`, `NO_TAG`, `RULE_BASED`, `ANY` and `COMPOSITE`. Rest of the parameters in this section will depend on the type.
+22. Amount of memory to be allocated expressed in Megabytes.
+23. Specifies how the container will be placed on the cluster. Check [Placement Policy Specification](#placement-policy-specification) for details.
+24. Type of placement can be `ANY`, `ONE_PER_HOST`, `MAX_N_PER_HOST`, `MATCH_TAG`, `NO_TAG`, `RULE_BASED` and `COMPOSITE`. Rest of the parameters in this section will depend on the type.
 25. Health check to ensure service is running fine. Refer to [Check Specification](#check-specification) for details.
 26. Mode of health check, can be api call or command.
 27. Type of this check spec. Type can be `HTTP` or `CMD`. Rest of the options in this example are HTTP specific.
@@ -168,7 +170,7 @@ An application is defined using JSON. We use a sample configuration below to exp
 39. Readiness check to pass for the container to be considered as ready. Refer to [Check Specification](#check-specification) for details.
 40. Key value metadata that can be used in external systems.
 41. Custom environment variables. Additional variables are injected by Drove as well. See [Environment Variables](#environment-variables) section for details.
-42. Specifies the virtual host on which this container is exposed.
+42. Specifies the virtual hosts on which this container is exposed. This is a list. Multiple vhosts are supported.
 43. FQDN for the virtual host.
 44. Port name as specified in `exposedPorts` section.
 45. Mode for exposure. Set this to `ALL` for now.
@@ -231,9 +233,9 @@ One of the cornerstones of managing applications on the cluster is to ensure we 
 
 
 ## Exposure Specification
-Exposure spec is used to specify the virtual host Drove Gateway exposes to outside world for communication with the containers.
+Exposure spec is used to specify the virtual hosts Drove Gateway exposes to the outside world for communication with the containers. An application can be exposed on multiple virtual hosts.
 
-The following information needs to be specified:
+The following information needs to be specified for each entry:
 
 | Name        | Option | Description                                                                                        |
 |-------------|--------|----------------------------------------------------------------------------------------------------|
@@ -243,11 +245,18 @@ The following information needs to be specified:
 
 **Sample:**
 ```js
-{
-    "vhost": "teastapp.mydomain",
-    "port": "main",
-    "mode": "ALL"
-}
+[
+    {
+        "vhost": "testapp.mydomain",
+        "portName": "main",
+        "mode": "ALL"
+    },
+    {
+        "vhost": "testapp-alt.mydomain",
+        "portName": "main",
+        "mode": "ALL"
+    }
+]
 ```
 
 !!!note

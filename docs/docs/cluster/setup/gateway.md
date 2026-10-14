@@ -314,3 +314,82 @@ The gateway sets up log rotation for the access and errors logs with the followi
 > This will rotate both error and access logs when they hit 10MB and keep 5 logs.
 
 Configure the above if you want and volume mount your config to `/etc/logrotate.d/nginx` to use different scheme as per your requirements.
+
+## Template functions
+
+The template engine provides these functions. Use them inside `nginx.tmpl` or `haproxy.tmpl`.
+
+| Function  | Signature            | Description                                                            |
+|-----------|----------------------|------------------------------------------------------------------------|
+| hostport  | hostport host port   | Returns `host:port` with correct IPv6 brackets. Example: `[2001:db8::1]:8080`. |
+| hasPrefix | hasPrefix s prefix   | Checks whether the string starts with the prefix.                       |
+| hasSuffix | hasSuffix s suffix   | Checks whether the string ends with the suffix.                         |
+| contains | contains s substr     | Checks whether the string contains the substring.                        |
+| split     | split s sep          | Splits the string into a list.                                          |
+| join      | join list sep        | Joins a list into a string.                                             |
+| trim      | trim s cutset        | Removes the cutset characters from both ends.                           |
+| replace   | replace s old new n  | Replaces the first `n` occurrences.                                    |
+| tolower   | tolower s           | Converts the string to lower case.                                     |
+| getenv    | getenv key           | Reads an environment variable.                                          |
+| datetime  | datetime             | Returns the current time.                                               |
+
+!!!warning "IPv6 support"
+    Templates must use `hostport` to build server addresses. Do not use `{{ .Host }}:{{ .Port }}`. Direct concatenation breaks IPv6 addresses.
+
+    ```nginx
+    # Correct - works with IPv4 and IPv6
+    server {{ hostport .Host .Port }};
+
+    # Incorrect - breaks IPv6 addresses
+    server {{ .Host }}:{{ .Port }};
+    ```
+
+All bundled templates use `hostport`. Update your custom templates the same way.
+
+## Advanced usage
+
+This section covers advanced gateway options. The drove-gateway README on GitHub has the full reference.
+
+### State persistence
+
+The gateway keeps its datamanager state in memory. It also writes the state to disk. This helps the gateway recover after a restart.
+
+| Option                             | Default               | Description                                                        |
+|------------------------------------|-----------------------|--------------------------------------------------------------------|
+| state_persistence_enabled          | true                  | Write the last successful state to disk. The gateway reconciles from this file when controllers are unavailable. |
+| state_persistence_dir              | /var/lib/drove-gateway | Directory for the persisted state file `datamanager-state.json`.   |
+| startup_controller_sync_tries      | 2                     | Number of full fresh-sync attempts on startup before the gateway uses the persisted state. |
+| startup_controller_sync_retry_delay_sec | 1                | Delay in seconds between startup sync attempts. Values less than 1 use 1. |
+
+### Signal handling
+
+The gateway systemd unit sends signals to the gateway process. The signals trigger reconciliation.
+
+- `SIGUSR1`: Sent by `ExecStartPre` and `ExecReload`. Prepares the gateway state.
+- `SIGUSR2`: Sent by `ExecStartPost` and `ExecReload`. Triggers a full reconciliation. The gateway re-adds dynamic upstreams through the runtime API.
+
+See the `examples` directory in the drove-gateway repo for the systemd drop-in config.
+
+### HAProxy server state file management
+
+When you disable HAProxy reloads, dynamic servers are lost on HAProxy restart. The gateway can persist and restore them.
+
+| Option                                | Default | Description                                                        |
+|---------------------------------------|---------|--------------------------------------------------------------------|
+| haproxy_manage_global_server_state_file | false | Write HAProxy `show servers state` output to the state file after each successful reconcile. |
+| haproxy_global_server_state_file_path | ""      | Path to the HAProxy state file. Required when the option above is enabled. The path must match `server-state-file` in `haproxy.cfg`. |
+
+How this works:
+
+1. After each successful reconcile, the gateway writes the HAProxy state to the state file.
+2. The command `nixy -sync-haproxy-state-config` reads the state file. It fills the `#DROVE-SERVERS-BEGIN` and `#DROVE-SERVERS-END` blocks in `haproxy.cfg`.
+3. HAProxy loads the servers with `load-server-state-from-file` when it starts.
+
+!!!warning
+    When state file management is enabled together with `haproxy_reload_disabled = true`, you must add at least one `#DROVE-SERVERS-BEGIN`/`#DROVE-SERVERS-END` block in `haproxy.cfg`. The gateway refuses to start without it.
+
+    The backend name after `#DROVE-SERVERS-BEGIN` must match the backend the servers belong to. HAProxy ignores these comment lines. The config stays valid when a block is empty.
+
+### Building from source
+
+Refer to `BUILD.md` and `PACKAGING.md` in the drove-gateway repo for build and packaging steps. The repo supports Debian and RPM packages.

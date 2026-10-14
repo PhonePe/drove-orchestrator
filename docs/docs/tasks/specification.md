@@ -75,7 +75,7 @@ A task is defined using JSON. We use a sample configuration below to explain the
 16. Number of CPU cores to be allocated.
 17. Amount of memory to be allocated expressed in Megabytes
 18. Specifies how the container will be placed on the cluster. Check [Placement Policy](#placement-policy-specification) for details.
-19. Type of placement can be `ANY`, `ONE_PER_HOST`, `MATCH_TAG`, `NO_TAG`, `RULE_BASED`, `ANY` and `COMPOSITE`. Rest of the parameters in this section will depend on the type.
+19. Type of placement can be `ANY`, `ONE_PER_HOST`, `MATCH_TAG`, `NO_TAG`, `RULE_BASED` and `COMPOSITE`. Rest of the parameters in this section will depend on the type.
 20. Custom environment variables. Additional variables are injected by Drove  as well. See [Environment Variables](#environment-variables) section for tails.
 21. Key value metadata that can be used in external systems.
 22. Specify how docker log files are configured. Refer to [Logging Specification](#logging-specification)
@@ -89,6 +89,9 @@ A task is defined using JSON. We use a sample configuration below to explain the
     Please make sure `sourceAppName` is set to a correct application _name_ as specified in the `name` parameter of a running application on the cluster.
 
     If this is not done, stale task metadata **will not be cleaned up** and your metadata store performance will get affected over time.
+
+!!!warning "Experimental feature"
+    `RULE_BASED` placement and `GPU` resources for tasks are experimental features.
 
 {!common_configs.md!}
 {!common_configs_logging.md!}

@@ -1,9 +1,0 @@
-nav:
-  - planning.md
-  - prerequisites.md
-  - zookeeper.md
-  - controller.md
-  - executor-setup.md
-  - gateway.md
-  - coredns-drove.md
-  - ...

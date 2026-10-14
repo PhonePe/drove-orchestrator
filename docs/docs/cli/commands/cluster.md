@@ -17,6 +17,7 @@ drove cluster <command> [options]
 | `leader` | Show current leader |
 | `endpoints` | List exposed endpoints |
 | `events` | Stream cluster events |
+| `simulate-placement` | Simulate placement for a deployable spec |
 | `maintenance-on` | Enable maintenance mode |
 | `maintenance-off` | Disable maintenance mode |
 
@@ -102,6 +103,29 @@ drove cluster events -f
 
 # Filter by type
 drove cluster events -t APP_STATE_CHANGE -c 50
+```
+
+---
+
+## drove cluster simulate-placement
+
+Simulate placement for a deployable spec. The command sends the spec to the cluster simulation API. The cluster does not change.
+
+```bash
+drove cluster simulate-placement SPEC_FILE [--num-instances N] [--placement-policy FILE] [--detail] [--json]
+```
+
+| Option | Description |
+|--------|-------------|
+| `spec_file` | Path to a spec file. The spec can be an application, task, or local service. |
+| `-n, --num-instances` | Number of instances to simulate. The default is 1. |
+| `--placement-policy` | Path to a JSON file with a placement policy. The policy overrides the spec policy. |
+| `--detail` | Show per-instance placements. |
+| `--json` | Print the raw JSON response. |
+
+Example:
+```bash
+drove cluster simulate-placement app-spec.json -n 4 --detail
 ```
 
 ---

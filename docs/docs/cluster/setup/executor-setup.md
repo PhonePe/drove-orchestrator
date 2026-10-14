@@ -8,6 +8,8 @@ In the following sections we discus some aspects of scheduling, hardware and set
 
 ### CPU and Memory considerations
 
+A detailed explanation of NUMA-aware allocation, core and memory pinning, performance scaling and over provisioning lives in [CPU, NUMA and Memory](../../concepts/cpu-numa-memory.md).
+
 The executor nodes are the servers that host and run the actual docker containers. Drove will take into consideration the NUMA topology of these machines to optimize the placement for containers to extract the maximum performance. Along with this, Drove will `cpuset` the containers to the allocated cores in a non overlapping manner, so that the cores allocated to a container are dedicated to it. Memory allocated to a container is pinned as well and selected from the same NUMA node.
 
 Needless to say the minimum amount of CPU that can be given to an application or task is 1. Fractional cpu allocation can be achieved in a predictable manner by configuring over provisioning on executor nodes.
@@ -69,16 +71,18 @@ The expected output should be:
 Cpus_allowed_list:	0-3
 ```
 !!!note
-    Refer to [this](https://access.redhat.com/solutions/2884991) for more details.
+    Refer to [this](https://access.redhat.com/solutions/2884991){:target="_blank"} for more details.
 
 ### GPU Computation
-Nvidia based GPU compute can be enabled at executor level by installing relevant drivers. Please follow the [setup guide](../../extra/nvidia.md) to enable this. Remember to tag these nodes to isolate them from the primary cluster and use tags to deploy apps and tasks that need GPU.
+How GPU discovery and allocation works is explained in [GPU Scheduling](../../concepts/gpu.md).
+
+Nvidia based GPU compute can be enabled at executor level by installing relevant drivers. Please follow the [setup guide](../../concepts/gpu.md) to enable this. Remember to tag these nodes to isolate them from the primary cluster and use tags to deploy apps and tasks that need GPU.
 
 ### Storage consideration
 On executor nodes the disk might be under pressure if container (re)deployments are frequent or the containers log very heavily. As such, we recommend the logging directory for Drove be mounted on hardware that will be able to handle this load. Similar considerations need to be given to the log and package directory for docker or podman.
 
 ## Executor Configuration Reference
-The Drove Executor is written on the [Dropwizard](https://www.dropwizard.io/en/release-2.1.x/) framework. The configuration to the service is set using a YAML file which needs to be injected into the container. A typical controller configuration file will look like the following:
+The Drove Executor is written on the [Dropwizard](https://www.dropwizard.io/en/release-2.1.x/){:target="_blank"} framework. The configuration to the service is set using a YAML file which needs to be injected into the container. A typical controller configuration file will look like the following:
 
 ```yaml
 server: #(1)!
@@ -129,9 +133,6 @@ logging:
       logFormat: "%(%-5level) | %-23date | %-30logger{0} | %message%n"
       archive: true
 
-zookeeper: #(8)!
-  connectionString: ${ZK_CONNECTION_STRING}
-
 clusterAuth: #(9)!
   secrets:
   - nodeType: CONTROLLER
@@ -143,7 +144,8 @@ resources: #(10)!
   osCores: [ 0, 1 ]
   exposedMemPercentage: 60
   disableNUMAPinning: ${DROVE_DISABLE_NUMA_PINNING}
-  enableNvidiaGpu: ${DROVE_ENABLE_NVIDIA_GPU}
+  nvidiaGPULoaderConfig:
+    enabled: ${DROVE_ENABLE_MANAGED_GPU}
 
 options: #(11)!
   cacheImages: true
@@ -151,7 +153,6 @@ options: #(11)!
   logBufferSize: 5m
   cacheFileSize: 10m
   cacheFileCount: 3
-  remoteUpdateMode: RPC
 
 controllers: #(12)!
   endpoints:
@@ -167,12 +168,10 @@ controllers: #(12)!
 5. Log to console. Useful in docker-compose.
 6. Log to rotating files. Useful for running servers.
 7. Drove application logger configuration. See [drove logger config](#drove-application-logger-configuration) for details.
-8. Configure how to connect to Zookeeper See [Zookeeper Config](#zookeeper-connection-configuration) for details.
-9. Configuration for authentication between nodes in the cluster. Please check [intra node auth config](#intra-node-authentication-configuration) for details.
-10. Resource configuration for this node.
-11. Options to configure executor behaviour. Check [executor options](#executor-options) section for details.
-12. Controller endpoint configuration for RPC-based update mode.
-
+8. Configuration for authentication between nodes in the cluster. Please check [intra node auth config](#intra-node-authentication-configuration) for details.
+9. Resource configuration for this node.
+10. Options to configure executor behaviour. Check [executor options](#executor-options) section for details.
+11. Controller endpoints. Executors send all updates to controllers over HTTP(S). This section is required.
 !!!tip
 	In case you do not want to expose admin apis to outside the host, please set `bindHost` in the admin connectors section.
 
@@ -184,49 +183,15 @@ controllers: #(12)!
 	```
 
 ### Zookeeper Connection Configuration
-The following details can be configured.
+Executors no longer connect to Zookeeper. Zookeeper is used by controllers only. Executors talk to controllers directly over HTTP(S) using the `controllers.endpoints` configuration.
 
-| Name              | Option             | Description                                                                                    |
-|-------------------|--------------------|------------------------------------------------------------------------------------------------|
-| Connection String | `connectionString` | The connection string of the form: `zkserver:2181,zkserver2:2181...`                           |
-| Data namespace    | `namespace`        | The top level node inside which all Drove data will be scoped. Defaults to `drove` if not set. |
-
-**Sample**
-
-```yaml
-zookeeper:
-  connectionString: "192.168.3.10:2181,192.168.3.11:2181,192.168.3.12:2181"
-  namespace: drovetest
-```
+A leftover `zookeeper` key in the executor config is ignored for backwards compatibility. This key can be removed safely from existing executor configuration files.
 
 !!!note
-    This section is same across the cluster including both controller and executor.
-
-!!!note
-    Executors can run in `RPC` remote update mode with direct controller endpoints. In that setup, controller communication uses `controllers.endpoints`, while discovery-store configuration remains relevant for store-based fallback and cluster metadata.
+    Ensure `controllers.endpoints` lists all controller endpoints. Executors use these endpoints to register themselves and send all state updates.
 
 ### Intra Node Authentication Configuration
-Communication between controller and executor is protected by a shared-secret based authentication. The following configuration is meant to configure this. This section consists of a list of 2 members:
-
-* Config for controller to talk to executors
-* Config for executors to talk to controller
-
-Each section consists of the following:
-
-| Name      | Option     | Description                                                    |
-|-----------|------------|----------------------------------------------------------------|
-| Node Type | `nodeType` | Type of node in the cluster. Can be `CONTROLLER` or `EXECUTOR` |
-| Secret    | `secret`   | The actual secret to be passed.                                |
-
-**Sample**
-```yaml
-clusterAuth:
-  secrets:
-  - nodeType: CONTROLLER
-    secret: ControllerSecretValue
-  - nodeType: EXECUTOR
-    secret: ExecutorSecret
-```
+{!intra_node_auth.md!}
 
 !!!note
     This section is same across the cluster including both controller and executor.
@@ -236,7 +201,7 @@ Drove will segregate application and task instance logs in a directory of your c
 - `<application id>/<instance id>` for Application Instances
 - `<sourceAppName>/<task id>` for Task Instances
 
-The Drove Log Appender is based of LogBack's [Sifting Appender](https://logback.qos.ch/manual/appenders.html#SiftingAppender).
+The Drove Log Appender is based of LogBack's [Sifting Appender](https://logback.qos.ch/manual/appenders.html#SiftingAppender){:target="_blank"}.
 
 The following configuration options are supported:
 
@@ -274,14 +239,24 @@ logging:
 ### Resource Configuration
 This section can be used to configure how resources are exposed from an executor to the cluster. We have [discussed](#considerations-and-tuning-for-hardware-and-operating-system) a few of the considerations that will drive the configuration that is being setup.
 
+
 |Name|Option|Description|
 |----|------|-----------|
 |OS Cores| `osCores` | A list of cores reserved for use by operating system processes. See the [relevant section](#isolating-container-and-os-processes) for details on the pre-steps needed to achieve this.|
 |Exposed Memory|`exposedMemPercentage`| What percentage of the system memory can be used by the containers running on the host collectively. Range: 50-100 `integer`|
 |NUMA Pinning|`disableNUMAPinning`| Disable NUMA and CPU core pinning for containers. Pinning is on by default. (default: `false`)|
-|Nvidia GPU| `enableNvidiaGpu` | Enable GPU support on containers. This setting makes all available Nvidia GPUs on the current executor machine available for any container running on this executor. GPU resources are not discovered on the executor, managed and rationed between containers. Needs to be used in conjunction with tagging (see `tags` below) to ensure only the applications which require a GPU end up on the executor with GPUs.|
+|Managed GPU Loader| `nvidiaGPULoaderConfig` | Enable managed GPU discovery and allocation. When enabled (`nvidiaGPULoaderConfig.enabled: true`), the executor discovers Nvidia GPUs on the host using `nvidia-smi` (including MIG slices), registers them with the resource manager and allocates them per-container based on the `GPU` resource requirements in the spec. See the [Nvidia setup guide](../../concepts/gpu.md) for driver and toolkit installation.|
+|Nvidia GPU (legacy)| `enableNvidiaGpu` | **Deprecated.** Legacy pass-through mode. Makes all available Nvidia GPUs on the current executor machine available to _any_ container running on this executor. GPU resources are not discovered, managed or rationed between containers. Needs to be used in conjunction with tagging (see `tags` below) to ensure only the applications which require a GPU end up on the executor with GPUs. Use `nvidiaGPULoaderConfig` instead.|
 |Tags|`tags`| A set of strings that can be used in `TAG` placement policy to route application and task instances to this executor. |
 |Over Provisioning|`overProvisioning`|Setup over provisioning configuration. |
+|Performance Scaling|`performanceScaling`|Setup performance scaling factors for CPU and memory. See [performance scaling configuration](#performance-scaling-configuration) for details.|
+
+!!!warning "GPU modes are mutually exclusive"
+    `enableNvidiaGpu` (legacy pass-through) and `nvidiaGPULoaderConfig` (managed GPU) cannot be enabled at the same time. The executor fails validation if both are enabled.
+
+!!!warning "Experimental feature"
+    Managed GPU discovery and allocation (`nvidiaGPULoaderConfig`) is experimental.
+
 
 
 !!!warning "Tagging"
@@ -327,9 +302,33 @@ resources:
 !!!tip
     This feature was developed to allow us to run our development environments cheaper. In such environments there is not much pressure on CPU or memory, but a large number of containers run as developers can spin up containers for features they are working on. There was no point is wasting a full core on containers that get hit twice a minute or less. On production we tend to err on the side of caution and allocate at least one core even to the most trivial applications as of the time of writing this.
 
-### Executor Options
-The following options can be set to influence the behavior for the Drove executors.
+#### Performance scaling configuration
+Executor hosts in a cluster can have different CPU and memory performance. For example, an Ice Lake host can be 1.5x faster than a Skylake host. The `performanceScaling` configuration tells the controller how much faster (or slower) this host is compared to the cluster baseline.
 
+The controller uses these factors when it allocates resources. The required CPU count and memory are divided by the scaling factor and rounded up. A host that is 1.5x faster than the baseline reserves fewer cores for the same spec. For example, a spec that asks for 3 cores needs only 2 cores on a host with `cpuScalingFactor: 1.5`.
+
+**Example:**
+- Baseline host family is Skylake. An Ice Lake host is 1.5x faster. Set `cpuScalingFactor: 1.5` on the Ice Lake hosts.
+- A spec that requires 3 cores reserves 2 cores on the Ice Lake host (`ceil(3 / 1.5)`). The same spec reserves 3 cores on a Skylake host.
+
+|Name|Option|Description|
+|----|------|-----------|
+|CPU Scaling Factor|`cpuScalingFactor`| How many times faster the host CPU is compared to the cluster baseline. The controller divides the required core count by this factor. Default: `1.0`. A value of `0` or missing is treated as `1.0`.|
+|Memory Scaling Factor|`memoryScalingFactor`| How many times faster the host memory is compared to the cluster baseline. The controller divides the required memory by this factor. Default: `1.0`. A value of `0` or missing is treated as `1.0`.|
+
+**Sample**
+```yaml
+resources:
+  exposedMemPercentage: 90
+  performanceScaling:
+    cpuScalingFactor: 1.5
+    memoryScalingFactor: 1.2
+```
+
+!!!note
+    Scaling changes only how many cores and how much memory the controller _reserves_ on a host for a spec. The actual containers see the full allocated cores. A spec that asks for 3 cores always gets 3 cores inside the container.
+
+### Executor Options
 | Name | Option | Description |
 |------|--------|-------------|
 |Hostname|`hostname`| Override the hostname that gets exposed to the controller. Make sure this is resolvable. |
@@ -339,8 +338,14 @@ The following options can be set to influence the behavior for the Drove executo
 |Max Open Files|`maxOpenFiles`| Override the maximum number of file descriptors a container can open. Default: 470,000|
 |Log Buffer Size|`logBufferSize`|The size of the buffer the executor uses to read logs from container. Unit [DataSize](units.md#data-size). Range: 1-128MB. Default: 10MB|
 |Cache File Size | `cacheFileSize` | To limit disk usage, configure fixed size log file cache for containers. Unit: [DataSize](units.md#data-size). Range: 10MB-100GB. Default: 20MB. Compression is always enabled.|
-|Cache File Count | `cacheFileSize` | To limit disk usage, configure fixed count of log file cache for containers. Unit: `integer`. Max: 1024. Default: 3|
-|Remote update mode|`remoteUpdateMode`|How executor sends updates to controller. `STORE` writes via discovery store. `RPC` sends updates over HTTP(S) and falls back to store if needed.|
+|Cache File Count | `cacheFileCount` | To limit disk usage, configure fixed count of log file cache for containers. Unit: `integer`. Max: 1024. Default: 3|
+|Default User Spec|`defaultUserSpec`| Default user and group (for example `user: 1000`, `group: 1000`) to run containers as when no user is specified in the spec.|
+|Environment Info Path|`environmentInfoPath`| Path inside the container where the environment info JSON file is injected. Default: `/etc/drove/environment-info.json`. See [Environment Info Injection](../environment-info.md) for details.|
+|Controller Connect Timeout|`controllerConnectTimeout`| Timeout for connecting to controllers. Default: 1 second.|
+|Controller Response Timeout|`controllerResponseTimeout`| Timeout for controller responses. Default: 1 second.|
+
+!!!note
+    Executors send all updates to controllers over HTTP(S) using `controllers.endpoints`. The `remoteUpdateMode` option has been removed. A leftover `remoteUpdateMode` key in the config is ignored for backwards compatibility.
 
 **Sample**
 ```yaml
@@ -367,7 +372,7 @@ We shall be volume mounting the config and log directories with the same name.
 ## Setup the config file
 
 
-Create a relevant configuration file in `/etc/drove/controller/executor.yml`.
+Create a relevant configuration file in `/etc/drove/executor/executor.yml`.
 
 **Sample**
 ```yaml
@@ -412,9 +417,6 @@ logging:
       logFormat: "%(%-5level) | %-23date | %-30logger{0} | %message%n"
       archive: true
 
-zookeeper:
-  connectionString: "192.168.56.10:2181"
-
 clusterAuth:
   secrets:
   - nodeType: CONTROLLER
@@ -436,33 +438,28 @@ options:
   logBufferSize: 20m
   cacheFileSize: 30m
   cacheFileCount: 3
-  cacheImages: true
-  remoteUpdateMode: RPC
 
 controllers:
   endpoints:
     - http://controller-1:10000
     - http://controller-2:10000
-
 ```
 
 !!!note
-    If `remoteUpdateMode` is `RPC`, configure `controllers.endpoints` so executors can reach controller nodes directly.
+    Executors send all updates to controllers over HTTP(S). Configure `controllers.endpoints` so executors can reach all controller nodes directly.
 
 ## Setup required environment variables
-Environment variables need to run the drove controller are setup in `/etc/drove/executor/executor.env`.
+Environment variables needed to run the drove executor are setup in `/etc/drove/executor/executor.env`.
 
 ```unixconfig
 CONFIG_FILE_PATH=/etc/drove/executor/executor.yml
 JAVA_PROCESS_MIN_HEAP=1g
 JAVA_PROCESS_MAX_HEAP=1g
-ZK_CONNECTION_STRING="192.168.56.10:2181"
 JAVA_OPTS="-Xlog:gc:/var/log/drove/executor/gc.log -Xlog:gc:::filecount=3,filesize=10M -Xlog:gc::time,level,tags -XX:+UseNUMA -XX:+ExitOnOutOfMemoryError -Djava.security.egd=file:/dev/urandom -Dfile.encoding=utf-8 -Djute.maxbuffer=0x9fffff"
 ```
 
 ## Create systemd file
 Create a `systemd` file. Put the following in `/etc/systemd/system/drove.executor.service`:
-
 ```systemd
 [Unit]
 Description=Drove Executor Service

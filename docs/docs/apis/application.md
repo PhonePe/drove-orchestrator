@@ -73,6 +73,7 @@ curl --location 'http://drove.local:7000/apis/v1/applications' \
             "healthyInstances": 0,
             "totalCPUs": 0,
             "totalMemory": 0,
+            "totalGPUs": 0,
             "state": "MONITORING",
             "created": 1719826995764,
             "updated": 1719892126096
@@ -102,6 +103,7 @@ curl --location 'http://drove.local:7000/apis/v1/applications/TEST_APP-1' \
         "healthyInstances": 1,
         "totalCPUs": 1,
         "totalMemory": 128,
+        "totalGPUs": 1,
         "state": "RUNNING",
         "created": 1719826995764,
         "updated": 1719892279019
@@ -206,11 +208,13 @@ curl --location 'http://drove.local:7000/apis/v1/applications/TEST_APP-1/spec' \
         "env": {
             "CORES": "8"
         },
-        "exposureSpec": {
-            "vhost": "testapp.local",
-            "portName": "main",
-            "mode": "ALL"
-        },
+        "exposureSpec": [
+            {
+                "vhost": "testapp.local",
+                "portName": "main",
+                "mode": "ALL"
+            }
+        ],
         "preShutdown": {
             "hooks": [
                 {
@@ -236,6 +240,8 @@ curl --location 'http://drove.local:7000/apis/v1/applications/TEST_APP-1/spec' \
 
 !!!note
     `configs` section data will not be returned by any api calls
+
+    APIs always return `exposureSpec` as a list. A spec with a single exposure entry still returns a list.
 
 ## Get list of currently active instances
 `GET /apis/v1/applications/{id}/instances`
@@ -293,6 +299,7 @@ curl --location 'http://drove.local:7000/apis/v1/applications/TEST_APP-1/instanc
 }
 ```
 
+## Get list of old instances
 ## Get list of old instances
 `GET /apis/v1/applications/{id}/instances/old`
 

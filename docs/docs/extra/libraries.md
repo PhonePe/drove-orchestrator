@@ -46,7 +46,7 @@ Please note that the client does not provide specific functions corresponding to
 
 The transport layer in the client is used to actually make HTTP calls to the Drove server. A new transport can be used by implementing the `get()`, `post()`, `put()` and `delete()` methods in the `DroveHttpTransport` interface.
 
-By default Drove client uses Java internal HTTP client as a trivial transport implementation. We also provide an [Apache Http Components](https://hc.apache.org/) based implementation.
+By default Drove client uses Java internal HTTP client as a trivial transport implementation. We also provide an [Apache Http Components](https://hc.apache.org/){:target="_blank"} based implementation.
 
 !!!tip
     Do not use the default transport in production. Please use the HTTP Components based transport or your custom ones.

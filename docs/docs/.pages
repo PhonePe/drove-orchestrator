@@ -1,6 +1,7 @@
 nav:
   - index.md
   - ...
+  - concepts
   - cluster
   - applications
   - localservices

@@ -15,7 +15,7 @@ Please note the following behaviour about controllers:
 - Controllers being down does not affect running containers on executors
 
 ## Controller Configuration File Reference
-The Drove Controller is written on the [Dropwizard](https://www.dropwizard.io/en/release-2.1.x/) framework. The configuration to the service is set using a YAML file which needs to be injected into the container. A typical controller configuration file will look like the following:
+The Drove Controller is written on the [Dropwizard](https://www.dropwizard.io/en/release-2.1.x/){:target="_blank"} framework. The configuration to the service is set using a YAML file which needs to be injected into the container. A typical controller configuration file will look like the following:
 
 ```yaml
 server: #(1)!
@@ -133,27 +133,7 @@ zookeeper:
 ```
 
 ### Intra Node Authentication Configuration
-Communication between controller and executor is protected by a shared-secret based authentication. The following configuration is meant to configure this. This section consists of a list of 2 members:
-
-* Config for controller to talk to executors
-* Config for executors to talk to controller
-
-Each section consists of the following:
-
-| Name      | Option     | Description                                                    |
-|-----------|------------|----------------------------------------------------------------|
-| Node Type | `nodeType` | Type of node in the cluster. Can be `CONTROLLER` or `EXECUTOR` |
-| Secret    | `secret`   | The actual secret to be passed.                                |
-
-**Sample**
-```yaml
-clusterAuth:
-  secrets:
-  - nodeType: CONTROLLER
-    secret: ControllerSecretValue
-  - nodeType: EXECUTOR
-    secret: ExecutorSecret
-```
+{!intra_node_auth.md!}
 
 !!!danger
     The values are passed in the header as is. Please manage the config file ownership to ensure that the files are not world readable.
@@ -170,7 +150,7 @@ The configuration consists of:
 |------|--------|-------------|
 | Enabled | `enabled` | Enable basic auth for the cluster |
 | Encoding | `encoding` | The actual encoding of the password. Can be `PLAIN` or `CRYPT` |
-| Caching | `cachingPolicy` | Caching policy for the authentication and authorization of the user. Please check [CaffeineSpec](https://github.com/ben-manes/caffeine/wiki/Specification){:target = "_blank"} docs for more details. Set to `maximumSize=500, expireAfterAccess=30m` by default |
+| Caching | `cachingPolicy` | Caching policy for the authentication and authorization of the user. Please check [CaffeineSpec](https://github.com/ben-manes/caffeine/wiki/Specification){:target="_blank"} docs for more details. Set to `maximumSize=500, expireAfterAccess=30m` by default |
 | List of users| `users` | A list of users recognized by the system |
 
 Each entry in the user list consists of:
@@ -235,9 +215,15 @@ The following options can be set to influence the behavior of the Drove cluster 
 | Audited Methods | `auditedHttpMethods` | Drove prints an audit log with user details when an api is called by an user. Defaults to `["POST", "PUT"]`. |
 | Allowed mount directories | `allowedMountDirs` | If provided, Drove will ensure that application and task spec can mount only the directories mentioned in this set on executor host. |
 | Disable read-only auth | `disableReadAuth` | When `userAuth` is enabled, setting this option, will enforce authorization only on write operations. |
-| Disable command line arguments | `disableCmdlArgs` | When set to `true`, passing command line arguments will be disabled. Default: `false` (users can pass arguments. |
-| Allowed rule import packages | `allowedRuleImportPackages` | A whitelist of Java package prefixes that placement rules can import when using MVEL rules. Keep this strict in production. |
 | Stale executor age | `staleExecutorAge` | Maximum age of executor heartbeat data before the controller considers it stale and excludes it from active topology calculations. Defaults to 45 seconds. |
+| Stale service age | `staleServiceAge` | Maximum time for which metadata for a stale local service is retained on the cluster. Defaults to 7 days. Expressed in [duration](units.md#duration). |
+| Job retry count | `jobRetryCount` | Number of retries for operations internal to the cluster, for example instance start or task start. Defaults to 2. Range: 0-32. |
+| Job retry interval | `jobRetryInterval` | Interval between retries for operations internal to the cluster. Defaults to 1 second. Expressed in [duration](units.md#duration). |
+| Instance state check retry interval | `instanceStateCheckRetryInterval` | Interval between retries when the controller checks the state of a new instance. Defaults to 3 seconds. Expressed in [duration](units.md#duration). |
+| Disable command line arguments | `disableCmdlArgs` | When `true`, passing command line arguments to application and task containers is disabled. Default: `false`. Used to build the controller default security profile. |
+| Enable raw device access | `enableRawDeviceAccess` | When `true`, application and task containers can access raw devices on the host. Default: `false`. Used to build the controller default security profile. |
+| Data update parallelism | `dataUpdateParallelism` | Parallelism for the executor state update pipeline. Defaults to 16. Range: 1-256. |
+| Compiled rule cache count | `compiledRuleCacheCount` | Number of compiled `RULE_BASED` placement rule programs cached by the controller. Defaults to 100. Range: 0-1000. |
 
 **Sample**
 ```yaml
@@ -289,6 +275,70 @@ The `allowedMountDirs` option whitelists only some directories to be mounted on 
 
 !!!danger
 	It is **highly** recommended to set `allowedMountDirs` to a designated directory that containers might want to use as scratch space if needed. Keeping this empty _will almost definitely_ cause security issues in the long run.
+
+#### Security policies
+How security profiles work is explained in [Security Profiles](../../concepts/security-profiles.md).
+
+The `securityPolicies` option defines container security profiles per group of deployables. Each entry has a match rule list and a security profile. For every new instance, the controller finds the first policy that matches and applies its profile. If no policy matches, the controller default profile built from the `allowedMountDirs`, `disableCmdlArgs` and `enableRawDeviceAccess` options is used.
+
+Each match rule is a string of the form `(jobtype|*)/(*|name regex)`:
+
+| Part | Description |
+|------|-------------|
+| `jobtype` | One of `SERVICE`, `COMPUTATION` or `LOCAL_SERVICE`. Use `*` to match all job types. |
+| `*` or name regex | `*` matches all names. Any other value is a Java regex matched against the deployable name. |
+
+The name used for matching depends on the deployable type:
+
+| Deployable | Match name |
+|-----------|------------|
+| Application | The application `name` from the spec. |
+| Task | `sourceAppName/taskId` from the task spec. |
+| Local service | The local service `name` from the spec. |
+
+| Name | Option | Description |
+|------|--------|-------------|
+| Policy name | `policyName` | Name for the profile. Required. Used in logs to identify the policy that was applied. |
+| Allowed mount directories | `allowedMountDirs` | Directories this policy allows to be mounted on the container. Overrides the controller default. |
+| Disable command line arguments | `disableCmdlArgs` | When `true`, command line arguments are disabled for matched containers. Default: `false`. |
+| Privileged mode | `enablePrivilegedMode` | When `true`, containers matched by this policy run in privileged mode. Default: `false`. |
+| Raw device access | `enableRawDeviceAccess` | When `true`, containers matched by this policy can access raw devices on the host. Default: `false`. |
+| Capabilities | `capabilities.addedCapabilities` | Linux capabilities added to the container in addition to the default set. For example `SYS_ADMIN`. |
+| Capabilities | `capabilities.droppedCapabilities` | Linux capabilities dropped from the container. |
+| Max open files | `maxOpenFiles` | Maximum number of open file descriptors for the container. Default: 470,000. |
+| Seccomp profile | `seccompProfile` | Path to a custom seccomp profile for the container. Empty means the default. |
+
+!!!note
+    When no `securityPolicies` entry matches a deployable, the controller default profile is used. The default profile is built from the `allowedMountDirs`, `disableCmdlArgs` and `enableRawDeviceAccess` controller options.
+
+**Sample**
+```yaml
+options:
+  securityPolicies:
+    - match:
+        - "COMPUTATION/.*"
+      profile:
+        policyName: "tasks-locked-down"
+        disableCmdlArgs: true
+        maxOpenFiles: 100000
+    - match:
+        - "SERVICE/ml-training"
+      profile:
+        policyName: "ml-privileged"
+        enablePrivilegedMode: true
+        capabilities:
+          addedCapabilities:
+            - "SYS_ADMIN"
+    - match:
+        - "*/*"
+      profile:
+        policyName: "default"
+        allowedMountDirs:
+          - /mnt/scratch
+```
+
+!!!note
+    Policies are evaluated in the order they are listed. The first matching policy wins. Place specific rules before generic ones.
 
 ## Relevant directories
 Location for data and logs are as follows:

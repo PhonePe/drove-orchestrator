@@ -1,5 +1,12 @@
+title: Setup
 nav:
-- cluster.md
-- setup
-- metrics.md
-- maintenance.md
+  - setup/planning.md
+  - setup/prerequisites.md
+  - setup/zookeeper.md
+  - setup/controller.md
+  - setup/executor-setup.md
+  - setup/gateway.md
+  - setup/coredns-drove.md
+  - metrics.md
+  - environment-info.md
+  - maintenance.md

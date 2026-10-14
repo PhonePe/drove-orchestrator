@@ -6,8 +6,8 @@ This section lists all the APIs that a user can communicate with.
 Use a standard HTTP client in the language of your choice to make a call to the leader controller (the cluster virtual host exposed by drove-gateway using NGINX or HAProxy).
 
 !!!tip
-    In case you are using Java, we recommend using the [drove-client](https://github.com/PhonePe/drove/packages/2186471) library along with the [http-transport](https://github.com/PhonePe/drove/packages/2186472).
-    > If multiple controllers endpoints are provided, the client will track the leader automatically. This will reduce your dependency on [drove-gateway](https://github.com/PhonePe/drove-gateway).
+    In case you are using Java, we recommend using the [drove-client](https://central.sonatype.com/artifact/com.phonepe.drove/drove-client){:target="_blank"} library along with the [http-transport](https://central.sonatype.com/artifact/com.phonepe.drove/drove-client-httpcomponent-transport){:target="_blank"}.
+    > If multiple controllers endpoints are provided, the client will track the leader automatically. This will reduce your dependency on [drove-gateway](https://github.com/PhonePe/drove-gateway){:target="_blank"}.
 
 ### Authentication
 
@@ -43,7 +43,7 @@ APIs in Drove belong to the following major classes:
 * [Log Access](logs.md)
 
 !!!tip
-    Response models for these apis can be found in [drove-models](https://github.com/PhonePe/drove/tree/master/drove-models/src/main/java/com/phonepe/drove/models)
+    Response models for these apis can be found in [drove-models](https://github.com/PhonePe/drove/tree/master/drove-models/src/main/java/com/phonepe/drove/models){:target="_blank"}
 
 !!!tip
     Drove controller APIs are OpenAPI-annotated, and OpenAPI metadata is bundled with controller builds for schema generation and integration use cases.

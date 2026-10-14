@@ -19,7 +19,7 @@ This page discusses operations relevant to Task management. Please go over the [
 ## How to initiate an operation
 
 !!!tip
-    Use the [Drove CLI](https://github.com/PhonePe/drove-cli) to perform all manual operations.
+    Use the [Drove CLI](https://github.com/PhonePe/drove-cli){:target="_blank"} to perform all manual operations.
 
 All operations for task lifecycle management need to be issued via a POST HTTP call to the leader controller endpoint on the path `/apis/v1/tasks/operations`. API will return HTTP OK/200 and relevant json response as payload.
 

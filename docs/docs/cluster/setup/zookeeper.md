@@ -93,7 +93,7 @@ ZOO_SERVERS=server.1=192.168.3.10:2888:3888;2181 server.2=192.168.3.11:2888:3888
     - The format for `ZOO_SERVERS` is `server.id=<address1>:<port1>:<port2>[:role];[<client port address>:]<client port>`.
 
 !!!info
-    Exhaustive set of options can be found on the [Official Docker Page](https://hub.docker.com/_/zookeeper/#configuration).
+    Exhaustive set of options can be found on the [Official Docker Page](https://hub.docker.com/_/zookeeper/#configuration){:target="_blank"}.
 
 
 ### Setup JVM parameters
@@ -108,7 +108,7 @@ export SERVER_JVMFLAGS='-Djute.maxbuffer=0x9fffff -Xmx4g -Xms4g -Dfile.encoding=
     
     For the Zookeeper Docker, the environment variable `SERVER_JVMFLAGS` needs to be set to `-Djute.maxbuffer=0x9fffff`.
 
-    Please refer to [Zookeeper Advanced Configuration](https://zookeeper.apache.org/doc/r3.6.2/zookeeperAdmin.html) for further properties that can be tuned.
+    Please refer to [Zookeeper Advanced Configuration](https://zookeeper.apache.org/doc/r3.6.2/zookeeperAdmin.html){:target="_blank"} for further properties that can be tuned.
 
 !!!tip "JVM Size"
     We set 4GB JVM heap size for ZK by adding appropriate options in `SERVER_JVMFLAGS`. Please make sure you have sized your machines to have 10-16GB of RAM at the very least. Tune the JVM size and machine size according to your needs.
@@ -117,7 +117,7 @@ q
     Do not set this variable in `zk.env`. Couple of reasons:
 
     - This will affect _both_ the zk server _as well as_ the client.
-    - There is an [issue](https://stackoverflow.com/questions/56497140/zookeeper-ignores-jvmflags) and the flag (nor the `SERVER_JVMFLAGS`) are _not_ used properly by the startup scripts.
+    - There is an [issue](https://stackoverflow.com/questions/56497140/zookeeper-ignores-jvmflags){:target="_blank"} and the flag (nor the `SERVER_JVMFLAGS`) are _not_ used properly by the startup scripts.
 
 ### Configure logging
 We want to have physical log files on disk for debugging and audits and want the container to be ephemeral to allow for easy updates etc. To achieve this, put the following in `/etc/drove/zk/logback.xml`:
@@ -241,7 +241,7 @@ We want to have physical log files on disk for debugging and audits and want the
 ```
 
 !!!tip
-    This is a customization of the original file from [Zookeeper source tree](https://github.com/apache/zookeeper/blob/branch-3.8/conf/logback.xml). Please refer to [documentation](https://zookeeper.apache.org/doc/r3.8.0/zookeeperAdmin.html#sc_logging) to configure logging.
+    This is a customization of the original file from [Zookeeper source tree](https://github.com/apache/zookeeper/blob/branch-3.8/conf/logback.xml){:target="_blank"}. Please refer to [documentation](https://zookeeper.apache.org/doc/r3.8.0/zookeeperAdmin.html#sc_logging){:target="_blank"} to configure logging.
 
 ## Create Systemd File
 

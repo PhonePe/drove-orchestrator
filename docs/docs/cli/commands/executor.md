@@ -57,8 +57,12 @@ drove executor appinstances <executor-id> [--sort COLUMN] [--reverse]
 List tasks running on an executor.
 
 ```bash
-drove executor tasks <executor-id> [--sort COLUMN] [--reverse]
+drove executor tasks <executor-id> [--app SOURCE_APP] [--sort COLUMN] [--reverse]
 ```
+
+| Option | Description |
+|--------|-------------|
+| `-a, --app` | Show tasks only for the given source app |
 
 ---
 

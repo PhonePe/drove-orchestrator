@@ -11,7 +11,7 @@ Right now Drove supports _only_ docker containers. However as engines, both dock
     Drove supports docker registry authentication. This can be configured in the executor configuration file.
 
 ## Resource Requirements Specification
-This section specifies the hardware resources required to run the container. Right now only CPU and MEMORY are supported as resource types that can be reserved for a container.
+This section specifies the hardware resources required to run the container. CPU, MEMORY and GPU are supported as resource types that can be reserved for a container.
 
 ### CPU Requirements
 Specifies number of cores to be assigned to the container.
@@ -29,6 +29,16 @@ Specifies amount of memory to be allocated to a container.
 | Type              | `type`               | Set type to `MEMORY` for this.                   |
 | Count             | `sizeInMB`           | Amount of memory (in Mega Bytes) to be allocated.|
 
+### GPU Requirements
+Specifies number of GPU cards to be allocated to a container.
+
+| Name              | Option            | Description                                                       |
+|-------------------|-------------------|-------------------------------------------------------------------|
+| Type              | `type`            | Set type to `GPU` for this.                                       |
+| Count             | `count`           | Number of GPU cards to be allocated.                              |
+| GPU Vendor        | `gpuType.vendor`  | Vendor of the GPU. Can be `NVIDIA`, `AMD`, `INTEL`, `GOOGLE_TPU` or `CEREBRAS`. |
+| GPU Model         | `gpuType.model`   | Model of the GPU. For example `Tesla T4`.                          |
+
 **Sample**
 ```js
 [
@@ -39,9 +49,23 @@ Specifies amount of memory to be allocated to a container.
     {
         "type": "MEMORY",
         "sizeInMB": 128
+    },
+    {
+        "type": "GPU",
+        "count": 1,
+        "gpuType": {
+            "vendor": "NVIDIA",
+            "model": "Tesla T4"
+        }
     }
 ]
 ```
+
+!!!note
+    `CPU` and `MEMORY` configurations are mandatory. `GPU` configuration is optional.
+
+!!!warning "Experimental feature"
+    GPU resource scheduling is experimental. Only `NVIDIA` GPUs are discovered and allocated today. Allocation for other vendors, including `AMD`, is not supported yet. AMD support is planned for the next version.
 
 !!!note
     Both `CPU` and `MEMORY` configurations are mandatory.
@@ -319,6 +343,70 @@ The above policy will ensure that _only_ one container of the relevant `{appName
 !!!tip
     It is easy to go into situations where no executors match complicated placement policies. Internally, we tend to keep things rather simple and use the ANY placement for most cases and _maybe_ tags in a few places with over-provisioning or for hosts having special hardware :slight_smile:
 
+### Rule Based Placement
+A rule based policy uses a [CEL](https://cel.dev/){:target="_blank"} expression to select or reject an executor host. The rule must evaluate to a boolean. A host is used only when the rule returns `true`.
+
+| Name        | Option | Description                                      |
+|-------------|--------|--------------------------------------------------|
+| Policy Type | `type` | Put `RULE_BASED` as policy.                      |
+| Rule        | `rule` | The CEL expression. Maximum length is 1000 characters. |
+
+**Sample:**
+```js
+{
+    "type" : "RULE_BASED",
+    "rule": "ctx.allocation.node.executorId != 'excluded-host' && 'gpu' in ctx.allocation.node.tags"
+}
+```
+
+#### Rule context
+The CEL expression is evaluated with a single variable `ctx` of type map. The following fields are available:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `ctx.session.sessionId` | string | ID of the current scheduling session. All allocations for one operation share the same session ID. |
+| `ctx.session.existingAllocations` | map | Current allocations for this session. Maps executor ID to instance ID to the allocation record. |
+| `ctx.environment.liveExecutors` | map | Live executors in the cluster. Maps executor ID to executor data. |
+| `ctx.environment.variables` | map | Environment variables passed into the scheduling session. |
+| `ctx.allocation.spec` | object | The deployment spec being placed: application, task or local service spec. |
+| `ctx.allocation.instanceId` | string | Instance ID for which the allocation is being made. |
+| `ctx.allocation.node.executorId` | string | Executor ID of the candidate host. |
+| `ctx.allocation.node.hostname` | string | Hostname of the candidate host. |
+| `ctx.allocation.node.tags` | list | Tags of the candidate host. |
+| `ctx.allocation.node.metadata` | map | Metadata of the candidate host. |
+
+#### CEL language support
+The following language features are enabled:
+
+| Category | Details |
+|----------|---------|
+| String functions | `startsWith`, `endsWith`, `contains` and `matches` |
+| Bindings | `cel.bind()` for local variables |
+| Comprehensions | v2 macros: `filter()`, `map()`, `exists()` and `all()` |
+| List operations | Standard list operations. The `range` function is not available. |
+| Math functions | `math.greatest()` and `math.least()` |
+| Standard macros | Including `has()` |
+
+CEL is not Turing complete. There are no loops, no recursion and no side effects. The following limits protect the controller from bad rules:
+
+| Limit | Value |
+|-------|-------|
+| Total comprehension iterations per evaluation | 1000 |
+| Regex program size | 100 |
+| Expression length in code points | 1000 |
+| Parse recursion depth | 32 |
+
+If a rule exceeds a limit, evaluation fails. The instance is then marked as failed.
+
+!!!note
+    Rules are evaluated per candidate host. The same rule sees a different `ctx.allocation.node` for each host.
+
+!!!tip
+    Use the [Placement Simulation API](../apis/cluster.md#simulate-placement) to check what a rule does before you deploy it.
+
+!!!tip
+    It is easy to go into situations where no executors match complicated placement policies. Internally, we tend to keep things rather simple and use the ANY placement for most cases and _maybe_ tags in a few places with over-provisioning or for hosts having special hardware :slight_smile:
+
 ## Environment variables
 This config can be used to inject custom environment variables to containers. The values are defined as part of deployment specification, are same across the cluster and immutable to modifications from inside the container (ie any overrides from inside the container will not be visible across the cluster).
 
@@ -333,15 +421,8 @@ This config can be used to inject custom environment variables to containers. Th
 The following environment variables are injected by Drove to all containers:
 
 | Variable Name                 | Value                                                                                                                                                                                                                                                           |
-|-------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| HOST                          | Hostname where the container is running. This is for marathon compatibility.                                                                                                                                                                                    |
-| PORT_`PORT_NUMBER`            | A variable for every port specified in `exposedPorts` section. The value is the actual port on the host, the specified port is mapped to.  For example if ports 8080 and 8081 are specified, two variables called `PORT_8080` and `PORT_8081` will be injected. |
-| DROVE_EXECUTOR_HOST           | Hostname where container is running.                                                                                                                                                                                                                            |
-| DROVE_CONTAINER_ID            | Container that is deployed                                                                                                                                                                                                                                      |
-| DROVE_APP_NAME                | App name as specified in the Application Specification                                                                                                                                                                                                          |
-| DROVE_INSTANCE_ID             | Actual instance ID generated by Drove                                                                                                                                                                                                                           |
-| DROVE_APP_ID                  | Application ID as generated by Drove                                                                                                                                                                                                                            |
-| DROVE_APP_INSTANCE_AUTH_TOKEN | A JWT string generated by Drove that can be used by this container to call `/apis/v1/internal/...` apis.
+| DROVE_APP_INSTANCE_AUTH_TOKEN | A JWT string generated by Drove that can be used by this container to call `/apis/v1/internal/...` apis. |
+| DROVE_ENV_INFO_FILE           | Path to the injected environment info JSON file inside the container. Defaults to `/etc/drove/environment-info.json`. See [Environment Info Injection](../cluster/environment-info.md) for details. |
 
 !!!warning
     **Do not** pass secrets using environment variables. These variables are all visible on the UI as is. Please use [Configs](#config-specification) to inject secrets files and so on.
