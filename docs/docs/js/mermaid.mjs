@@ -31,6 +31,17 @@ function enlargeArrowheads(svg) {
         marker.setAttribute(attr, Math.round(value * ARROW_SCALE));
       }
     });
+    // Scale the viewBox too. Flowchart markers carry a viewBox (state
+    // diagram markers do not). If it stays fixed while the path grows, the
+    // marker viewport clips the arrowhead and it renders half-cut.
+    const viewBox = marker.getAttribute("viewBox");
+    if (viewBox) {
+      marker.setAttribute(
+        "viewBox",
+        viewBox.replace(/-?\d+(?:\.\d+)?/g, (n) =>
+          String(Math.round(Number(n) * ARROW_SCALE * 100) / 100)),
+      );
+    }
     marker.querySelectorAll("path").forEach((path) => {
       const d = path.getAttribute("d");
       if (d) {

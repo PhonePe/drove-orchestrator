@@ -46,7 +46,11 @@ div.mermaid-svg {
  * page, so no :root duplication is needed for them to resolve.
  */
 div.mermaid-svg svg {
-    --mmd-font: var(--md-text-font, "trebuchet ms", verdana, arial, sans-serif);
+    /* Mermaid measures label boxes with its default font (trebuchet ms).
+     * The site monospace font is wider, so it would overflow the measured
+     * foreignObject boxes and clip the text. Keep mermaid's own font for
+     * diagram labels. */
+    --mmd-font: "trebuchet ms", verdana, arial, sans-serif;
     --mmd-text: var(--md-default-fg-color, rgba(0, 0, 0, 0.87));
     --mmd-edge: var(--md-default-fg-color, rgba(0, 0, 0, 0.87));
     --mmd-fill: var(--md-default-fg-color--light, rgba(0, 0, 0, 0.07));
@@ -133,6 +137,34 @@ div.mermaid-svg svg .icon-shape .icon-neo path {
     stroke: var(--md-primary-fg-color, #9370DB) !important;
 }
 
+/* Cluster diagram (concepts/cluster.md): class-based outline colors.
+ * The renderer cannot parse CSS var() inside classDef, so the diagram
+ * sources only set stroke-width there. These rules map the node classes
+ * (gw, ctrl, leader, zk, exec, svc, task) to the dsm-* palette, which
+ * already has light and slate variants. */
+div.mermaid-svg svg g.node.gw rect,
+div.mermaid-svg svg g.node.zk rect {
+    stroke: var(--dsm-start) !important;
+}
+
+div.mermaid-svg svg g.node.ctrl rect,
+div.mermaid-svg svg g.node.leader rect {
+    stroke: var(--dsm-terminal) !important;
+}
+
+div.mermaid-svg svg g.node.exec rect,
+div.mermaid-svg svg g.node.svc rect {
+    stroke: var(--dsm-active) !important;
+}
+
+div.mermaid-svg svg g.node.task rect {
+    stroke: var(--dsm-error) !important;
+}
+
+div.mermaid-svg svg g.cluster.exec rect {
+    stroke: var(--dsm-active) !important;
+}
+
 /* Box and label backgrounds: transparent-ish theme fill instead of the
  * fixed #ECECFF / #f0f0f0 / #fff5ad / gray rgba chips. The dsm-* classDefs
  * in the diagram sources set fill:none, so node bodies show the box fill
@@ -159,7 +191,6 @@ div.mermaid-svg svg .statediagram-cluster.statediagram-cluster-alt .inner {
 div.mermaid-svg svg .edgeLabel,
 div.mermaid-svg svg .edgeLabel p,
 div.mermaid-svg svg .edgeLabel .label rect,
-div.mermaid-svg svg .edgeLabel rect,
 div.mermaid-svg svg .edgeLabel rect,
 div.mermaid-svg svg .stateLabel .box {
     background-color: var(--mmd-label-bg) !important;

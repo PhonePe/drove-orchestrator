@@ -1,12 +1,71 @@
 # Anatomy of a Drove Cluster
-The following diagram provides a high level overview of a typical Drove cluster.
-![Drove Cluster](../images/cluster.png)
-The overall topology consists of the following components:
+The following diagram provides a high level overview of a typical Drove cluster. The round shapes inside the executors show the containers running on them. `S1` to `S3` are application service instances and `T1` is a task instance. Color categories follow the legend under the diagram.
 
+```mermaid
+%%{init: {"flowchart": {"nodeSpacing": 60, "rankSpacing": 90, "curve": "linear", "padding": 20, "layout": "elk"},
+    "themeVariables": {"primaryColor": "transparent", "lineColor": "#888888"}}}%%
+flowchart TB
+    GW["NGinx +<br/>drove-nixy"]
+    CL["Controller<br/>(Leader)"]
+    C1["Controller"]
+    C2["Controller"]
+    ZK[("Apache<br/>ZooKeeper")]
+    subgraph E1["Executor"]
+        S1a("S1")
+        S2a("S2")
+        T1a("T1")
+    end
+    subgraph E2["Executor"]
+        S2b("S2")
+        S3b("S3")
+        S1b("S1")
+    end
+    subgraph E3["Executor"]
+        S1c("S1")
+        S3c("S3")
+        S3d("S3")
+    end
+    GW --> CL
+    GW --> C1
+    GW --> C2
+    CL <--> ZK
+    C1 <--> ZK
+    C2 <--> ZK
+    ZK ~~~ E1
+    ZK ~~~ E2
+    ZK ~~~ E3
+    CL <--> E1
+    CL <--> E2
+    CL <--> E3
+    classDef gw fill:none,stroke-width:3px
+    classDef ctrl fill:none,stroke-width:2px
+    classDef leader fill:none,stroke-width:4px
+    classDef zk fill:none,stroke-width:2px
+    classDef exec fill:none,stroke-width:2px
+    classDef svc fill:none,stroke-width:2px
+    classDef task fill:none,stroke-width:2px
+    class GW gw
+    class C1,C2 ctrl
+    class CL leader
+    class ZK zk
+    class E1,E2,E3 exec
+    class S1a,S2a,S1b,S2b,S3b,S1c,S3c,S3d svc
+    class T1a task
+```
+
+The overall topology consists of the following components:
 - An **Apache ZooKeeper** cluster for state persistence and coordination
 - A set of **controller nodes** one of which (the leader) manages the cluster
 - A set of **executor nodes** on which the containers actually execute
 - **drove-gateway + NGINX/HAProxy** nodes that expose virtual hosts for the leader controller as well as for the vhosts defined for the various applications running on the cluster
+
+Diagram legend:
+
+- **Grey outline** marks the gateway tier that exposes virtual hosts.
+- **Bold purple outline** marks the leader controller. Thin purple outlines mark the follower controllers.
+- **Light outline** marks Apache ZooKeeper, the coordination store.
+- **Green outline** marks executor nodes and service instances (`S1` to `S3`).
+- **Red outline** marks task instances (`T1`).
 
 ## Apache ZooKeeper
 Zookeeper is a central component in a Drove cluster. It is used in the following manner:
@@ -32,7 +91,7 @@ The controller service is the brains of a Drove cluster. The role of the control
 - Manage the lifecycle of all **applications** deployed on the cluster.
     - **Maintain the required number of application instances** as specified during deployment. This means that the controller has to monitor all applications running on all nodes and replace any instances or kill any spurious ones to ensure a constant number of instances on the cluster. The required number of instances is maintained as **expected count**, the current number of instances is maintained as **running count**.
     - Provide a way to **adjust the number of instances** for this application. This would help in users being able to scale applications up and down as needed.
-    - Provide a way to **restart** all instances of the application. This would mean the controller would have to orchestrate a continuous string of start-kill operations across instances running on the cluster.
+    - Provide a way to **restart** all instances of the application. This would mean that the controller would have to orchestrate a continuous string of start-kill operations across instances running on the cluster.
     - Graceful **shutdown/suspension** of application across the cluster. This comes as a natural extension of the above and is mostly a scale down operation with the expected count set as zero.
 - Manage task lifecycle
     - Maintain task state-machine by scheduling it on executors and ensuring it reaches terminal state

@@ -6,16 +6,17 @@
 // reviewed in the browser: ELK layering, enlarged arrowheads, hidden
 // helper-node removal.
 //
-// Usage:  node tools/render-mermaid.mjs
+// Usage:  node tools/render-mermaid.mjs [--prune]
 //
 // - Scans docs/docs/**/*.md for ```mermaid fences.
 // - Writes one SVG per diagram to docs/docs/mermaid-cache/<sha1>.svg.
 // - Skips diagrams whose SVG already exists (content-addressed cache).
+// - --prune also deletes cache files whose hash matches no current fence.
 // - Fails if any diagram fails to render.
 
 import { createHash } from "node:crypto";
 import http from "node:http";
-import { access, mkdir, readdir, readFile, writeFile } from "node:fs/promises";
+import { access, mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import puppeteer from "puppeteer";
@@ -24,6 +25,8 @@ const HERE = path.dirname(fileURLToPath(import.meta.url));
 const DOCS_ROOT = path.resolve(HERE, "..");           // docs/
 const PAGES_DIR = path.join(DOCS_ROOT, "docs");       // docs/docs/
 const OUT_DIR = path.join(PAGES_DIR, "mermaid-cache");
+
+const PRUNE = process.argv.includes("--prune");
 
 const FENCE_RE = /```mermaid\n([\s\S]*?)```/g;
 
@@ -107,6 +110,20 @@ function startServer() {
     `render-mermaid: ${diagrams.length} diagrams, ` +
       `${diagrams.length - pending.length} cached, ${pending.length} to render`,
   );
+
+  if (PRUNE) {
+    // Delete cache files whose hash matches no current diagram source.
+    // Keeps the cache from accumulating SVGs of edited or removed diagrams.
+    const live = new Set(diagrams.map((d) => d.key));
+    for (const entry of await readdir(OUT_DIR)) {
+      if (!entry.endsWith(".svg")) continue;
+      const key = entry.slice(0, -4);
+      if (live.has(key)) continue;
+      await rm(path.join(OUT_DIR, entry));
+      console.log(`render-mermaid: pruned ${entry}`);
+    }
+  }
+
   if (pending.length === 0) return;
 
   const browser = await puppeteer.launch({
