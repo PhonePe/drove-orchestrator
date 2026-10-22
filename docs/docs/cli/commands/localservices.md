@@ -34,6 +34,11 @@ List all local services.
 drove localservices list [--sort COLUMN] [--reverse]
 ```
 
+| Option | Description |
+|--------|-------------|
+| `-s, --sort` | Sort output by column (0-8) |
+| `-r, --reverse` | Sort in reverse order |
+
 ---
 
 ## drove localservices summary

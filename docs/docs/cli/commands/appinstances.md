@@ -30,9 +30,14 @@ List instances for an application.
 drove appinstances list <app-id> [--old] [--sort COLUMN] [--reverse]
 ```
 
+drove appinstances list <app-id> [--old] [--sort COLUMN] [--reverse]
+```
+
 | Option | Description |
 |--------|-------------|
 | `--old` | Include terminated instances |
+| `-s, --sort` | Sort output by column (0-6) |
+| `-r, --reverse` | Sort in reverse order |
 
 ---
 
@@ -61,16 +66,20 @@ drove appinstances logs <app-id> <instance-id>
 Tail instance logs.
 
 ```bash
-drove appinstances tail <app-id> <instance-id> [--log FILE]
+drove appinstances tail <app-id> <instance-id> [--log FILE] [--skip-chars N]
 ```
 
 | Option | Description | Default |
 |--------|-------------|---------|
 | `-l, --log` | Log file name | output.log |
+| `-S, --skip-chars` | Skip N leading characters per log line before printing | 0 |
 
 Example:
 ```bash
 drove appinstances tail MY_APP-1 AI-abc123 -l error.log
+
+# Hide the drove log prefix on each line
+drove appinstances tail MY_APP-1 AI-abc123 --skip-chars 67
 ```
 
 ---

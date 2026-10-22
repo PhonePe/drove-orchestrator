@@ -94,7 +94,8 @@ drove cluster events [--follow] [--type TYPE] [--count COUNT]
 |--------|-------------|
 | `-f, --follow` | Stream continuously |
 | `-t, --type` | Filter by event type |
-| `-c, --count` | Number of events to fetch |
+| `-c, --count` | Number of events to fetch at a time (default: 1024) |
+| `-s, --textfmt` | Python format string for each event (default: `{type: <25} | {id: <36} | {time: <20} | {metadata}`) |
 
 Example:
 ```bash

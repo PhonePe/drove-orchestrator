@@ -438,6 +438,9 @@ curl --location --request POST 'http://drove.local:7000/apis/v1/cluster/placemen
 !!!warning
     This API returns an error when the cluster is in maintenance mode.
 
+!!!tip
+    The [`drove cluster simulate-placement`](../cli/commands/cluster.md#drove-cluster-simulate-placement) CLI command calls this API. Prefer the CLI for quick checks.
+
 ### Event List
 `GET /apis/v1/cluster/events/latest`
 

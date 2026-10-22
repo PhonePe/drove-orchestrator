@@ -30,6 +30,12 @@ List instances for a local service.
 drove lsinstances list <service-id> [--old] [--sort COLUMN] [--reverse]
 ```
 
+| Option | Description |
+|--------|-------------|
+| `--old` | Include terminated instances |
+| `-s, --sort` | Sort output by column (0-5) |
+| `-r, --reverse` | Sort in reverse order |
+
 ---
 
 ## drove lsinstances info

@@ -33,6 +33,8 @@ drove tasks list [--app APP] [--sort COLUMN] [--reverse]
 | Option | Description |
 |--------|-------------|
 | `-a, --app` | Filter by source application |
+| `-s, --sort` | Sort output by column (0-8) |
+| `-r, --reverse` | Sort in reverse order |
 
 ---
 

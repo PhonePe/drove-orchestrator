@@ -44,7 +44,13 @@ The rule is a CEL expression. It sees one candidate host at a time through `ctx.
 
 CEL is not Turing complete. There are no loops, no recursion and no side effects. Hard limits on iterations, regex size and expression length keep bad rules from hurting the controller.
 
-Try a rule with the [Placement Simulation API](../apis/cluster.md#simulate-placement) against the live cluster before deploying it.
+Try a rule against the live cluster before deploying it. Use the [Placement Simulation API](../apis/cluster.md#simulate-placement) or the CLI command:
+
+```bash
+drove cluster simulate-placement spec.json --placement-policy policy.json --detail
+```
+
+The command sends the spec and the policy to the cluster. The cluster does not change. See [`drove cluster simulate-placement`](../cli/commands/cluster.md#drove-cluster-simulate-placement) for all options.
 
 !!!tip
     It is easy to write a rule so strict that no host matches. Keep rules simple. Most clusters do fine with `ANY` plus a few `MATCH_TAG` targets for special hardware.

@@ -31,9 +31,11 @@ You need:
     chmod +x /usr/local/bin/drove
     ```
 
-Verify:
+Verify the install:
 ```bash
-drove --version
+pip show drove-cli
+
+drove cluster ping
 ```
 
 ## Upgrade drove-cli
@@ -47,6 +49,23 @@ drove --version
     ```bash
     docker pull ghcr.io/phonepe/drove-cli:latest
     ```
+
+## Global options
+
+You can pass these options before any command:
+
+| Option | Description |
+|--------|-------------|
+| `-f, --file` | Path to a config file (default: `~/.drove`) |
+| `-c, --cluster` | Cluster name from the config file |
+| `-e, --endpoint` | Drove endpoint URL (for example: `https://drove.test.com`) |
+| `-t, --auth-header` | Authorization header value for the endpoint |
+| `-u, --username` | Drove cluster username |
+| `-p, --password` | Drove cluster password |
+| `-i, --insecure` | Do not verify the SSL certificate of the server |
+| `-d, --debug` | Print details of errors |
+| `--full-help` | Show help for every command and sub-command |
+| `--print-completion {bash,zsh,tcsh}` | Print a shell completion script |
 
 ## Configure cluster access
 
@@ -90,7 +109,7 @@ You can generate shell completions file for `bash`, `zfs` and `tcsh` using the `
 drove --print-completion bash > drove.bash.completions
 ```
 
-To use this osurce the completion file
+To use this, source the completion file:
 ```shell
 source drove.bash.completions
 ```
@@ -149,6 +168,7 @@ drove config use-cluster staging
 
 ```bash
 drove -h              # All commands
+drove --full-help     # Help for every command and sub-command
 drove apps -h         # Command group
 drove apps scale -h   # Specific command
 ```

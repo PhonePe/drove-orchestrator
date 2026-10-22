@@ -54,6 +54,7 @@ flowchart TB
 ```
 
 The overall topology consists of the following components:
+
 - An **Apache ZooKeeper** cluster for state persistence and coordination
 - A set of **controller nodes** one of which (the leader) manages the cluster
 - A set of **executor nodes** on which the containers actually execute

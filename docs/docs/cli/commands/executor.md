@@ -63,6 +63,8 @@ drove executor tasks <executor-id> [--app SOURCE_APP] [--sort COLUMN] [--reverse
 | Option | Description |
 |--------|-------------|
 | `-a, --app` | Show tasks only for the given source app |
+| `-s, --sort` | Sort output by column (0-5) |
+| `-r, --reverse` | Sort in reverse order |
 
 ---
 
