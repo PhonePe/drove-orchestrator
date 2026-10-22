@@ -42,6 +42,7 @@ Hosts in one cluster are rarely equal. An Ice Lake host, for instance, is about 
 
 * The controller divides the requested core count and memory by the scaling factor and rounds up. A spec asking for 3 cores reserves `ceil(3 / 1.5) = 2` cores on a host with `cpuScalingFactor: 1.5`.
 * Scaling changes only what the controller **reserves**. The container always sees the full requested cores and memory.
+* The controller applies scaling only when the request is at or above a minimum. Below `minScaledCpus` cores (default 2) or `minScaledMemoryMB` memory (default 128 MB), the controller reserves the raw request as is.
 
 Set the baseline to the slowest host family in the cluster and give faster hosts factors above 1.0. The options are in [Performance scaling configuration](../cluster/setup/executor-setup.md#performance-scaling-configuration).
 

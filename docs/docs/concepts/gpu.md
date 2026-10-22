@@ -10,6 +10,10 @@ With the managed GPU loader enabled, the executor finds all Nvidia GPUs on the h
 
 GPU hosts are specialised hosts. Tag them. Then use a `MATCH_TAG` placement policy to send GPU workloads to them. See [Placement Policies](placement-policies.md).
 
+### NUMA locality
+
+A host can have GPUs attached to more than one NUMA node. When the controller allocates GPUs, it prefers the NUMA node that has the most free GPUs local to it. The controller then picks GPUs local to that NUMA node first. This keeps the cores, memory and GPUs of a container on the same NUMA node when possible. See [CPU, NUMA and Memory](cpu-numa-memory.md) for how CPU cores and memory stay NUMA-local.
+
 !!!warning "Experimental feature"
     GPU resource scheduling is experimental. Only `NVIDIA` GPUs are discovered and allocated today. Support for other vendors, including `AMD`, is planned.
 

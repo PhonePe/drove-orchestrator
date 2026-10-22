@@ -27,6 +27,10 @@ The following sections go over the features.
 * Support extra metadata in the form of **tags** on instances. This can be used in external systems for routing or other use-cases, as this information is available at the endpoint as well.
 * [**CLI**](https://github.com/PhonePe/drove-cli){:target="_blank"} system for easy deployments and app/task lifecycle management.
 * [drove-gateway](https://github.com/PhonePe/drove-gateway){:target="_blank"} based router support for both NGINX and HAProxy for efficient communication with the cluster itself and containers deployed on it.
+* **GPU scheduling**: discovery, allocation and metrics for NVIDIA GPUs including MIG slices, with NUMA-local placement. See [GPU Scheduling](concepts/gpu.md).
+* **Placement simulation API** to dry-run placement policies against current cluster state before deployment. See [Placement Simulation](apis/cluster.md#simulate-placement).
+* **Security profiles** with per-deployable container security policies. See [Security Profiles](concepts/security-profiles.md).
+* **Environment info injection**: a JSON file with executor, port, vhost and resource details is injected into every container. See [Environment Info Injection](cluster/environment-info.md).
 
 
 ### Operations

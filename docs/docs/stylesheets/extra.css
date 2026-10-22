@@ -2,9 +2,187 @@
 [data-md-color-scheme="slate"] img {
     background-color: lightgray;
 }
+/* State machine diagram colors */
+:root {
+    --dsm-start: #616161;
+    --dsm-terminal: #6A1B9A;
+    --dsm-error: #C62828;
+    --dsm-active: #2E7D32;
+    --dsm-transit: #9E7C0C;
+}
+
+[data-md-color-scheme="slate"] {
+    --dsm-start: #BDBDBD;
+    --dsm-terminal: #BA68C8;
+    --dsm-error: #EF5350;
+    --dsm-active: #81C784;
+    --dsm-transit: #FFE082;
+}
+
+/* State machine diagrams: center in the content column */
+div.mermaid,
+div.mermaid-svg {
+    display: flex;
+    justify-content: center;
+}
 
 /* Monospace documentation typography */
 :root {
     --md-text-font: "JetBrains Mono", "Fira Code", "Source Code Pro", "DejaVu Sans Mono", monospace;
     --md-code-font: "JetBrains Mono", "Fira Code", "Source Code Pro", "DejaVu Sans Mono", monospace;
+}
+
+/*
+ * Pre-rendered mermaid SVGs (div.mermaid-svg) theme colors.
+ *
+ * The renderer (tools/render-mermaid.mjs) runs headless, so it cannot see the
+ * site theme. Mermaid therefore bakes light-theme defaults into the SVG
+ * <style>: purple (#9370DB) borders, light blue (#ECECFF) fills, near-black
+ * (#333) text and a gray rgba(232,232,232,.8) label background. The rules
+ * below map every element of the baked SVG to theme CSS variables, so the
+ * diagrams follow light and dark mode like the rest of the page.
+ *
+ * CSS variables are inherited into the SVG because it is inlined into the
+ * page, so no :root duplication is needed for them to resolve.
+ */
+div.mermaid-svg svg {
+    --mmd-font: var(--md-text-font, "trebuchet ms", verdana, arial, sans-serif);
+    --mmd-text: var(--md-default-fg-color, rgba(0, 0, 0, 0.87));
+    --mmd-edge: var(--md-default-fg-color, rgba(0, 0, 0, 0.87));
+    --mmd-fill: var(--md-default-fg-color--light, rgba(0, 0, 0, 0.07));
+    --mmd-bg: var(--md-default-bg-color, #fff);
+    --mmd-label-bg: color-mix(in srgb, var(--md-default-bg-color, #fff) 92%, transparent);
+    --mmd-shadow: color-mix(in srgb, var(--md-default-fg-color, #000) 15%, transparent);
+}
+
+/* Slate override inside @media screen, same guard the theme palette uses,
+ * so it wins over the light rules above regardless of load order. */
+@media screen {
+    [data-md-color-scheme="slate"] div.mermaid-svg svg {
+        --mmd-text: var(--md-default-fg-color, rgba(255, 255, 255, 0.87));
+        --mmd-edge: var(--md-default-fg-color, rgba(255, 255, 255, 0.87));
+        --mmd-fill: var(--md-default-fg-color--lightest, rgba(255, 255, 255, 0.07));
+        --mmd-bg: var(--md-default-bg-color, #1e2129);
+        --mmd-label-bg: color-mix(in srgb, var(--md-default-bg-color, #1e2129) 92%, transparent);
+        --mmd-shadow: color-mix(in srgb, var(--md-default-fg-color, #fff) 20%, transparent);
+    }
+}
+
+/* Diagram text: node titles, edge labels, notes. Follows the page font and
+ * text color instead of the hardcoded trebuchet/#333. */
+div.mermaid-svg svg,
+div.mermaid-svg svg .edgeLabel,
+div.mermaid-svg svg .edgeLabel p,
+div.mermaid-svg svg .label div .edgeLabel,
+div.mermaid-svg svg g.stateGroup text,
+div.mermaid-svg svg g.stateGroup .state-title,
+div.mermaid-svg svg .edgeLabel .label text,
+div.mermaid-svg svg .stateLabel text,
+div.mermaid-svg svg .cluster-label,
+div.mermaid-svg svg .nodeLabel,
+div.mermaid-svg svg .statediagramTitleText {
+    font-family: var(--mmd-font) !important;
+    fill: var(--mmd-text) !important;
+    color: var(--mmd-text) !important;
+}
+
+/* Edge (transition) lines: theme stroke color. The baked style sets
+ * fill:none on .transition (elbow paths are closed, a fill would draw
+ * solid triangles at every bend), so keep fill none here. */
+div.mermaid-svg svg .transition,
+div.mermaid-svg svg g.stateGroup line {
+    stroke: var(--mmd-edge) !important;
+    fill: none !important;
+}
+
+/* Arrowheads and start/end dots: filled with the edge color. */
+div.mermaid-svg svg .marker,
+div.mermaid-svg svg .marker.cross,
+div.mermaid-svg svg defs [id$="-barbEnd"],
+div.mermaid-svg svg [id$="-barbEnd"],
+div.mermaid-svg svg [id$="-dependencyStart"],
+div.mermaid-svg svg [id$="-dependencyEnd"],
+div.mermaid-svg svg .node circle.state-start,
+div.mermaid-svg svg .node .fork-join {
+    stroke: var(--mmd-edge) !important;
+    fill: var(--mmd-edge) !important;
+}
+
+/* Node, cluster and note box strokes: use the theme accent instead of the
+ * fixed mermaid purple. */
+div.mermaid-svg svg g.stateGroup rect,
+div.mermaid-svg svg g.stateGroup .composit,
+div.mermaid-svg svg g.stateGroup .alt-composit,
+div.mermaid-svg svg .node rect,
+div.mermaid-svg svg .node polygon,
+div.mermaid-svg svg .statediagram-cluster rect,
+div.mermaid-svg svg .statediagram-state rect.divider,
+div.mermaid-svg svg .statediagram-note rect,
+div.mermaid-svg svg .state-note,
+div.mermaid-svg svg .node circle.state-end,
+div.mermaid-svg svg .node .neo-node,
+div.mermaid-svg svg [data-look="neo"].node rect,
+div.mermaid-svg svg [data-look="neo"].cluster rect,
+div.mermaid-svg svg [data-look="neo"].node polygon,
+div.mermaid-svg svg [data-look="neo"].node path,
+div.mermaid-svg svg [data-look="neo"].node .neo-line path,
+div.mermaid-svg svg [data-look="neo"].node circle,
+div.mermaid-svg svg .statediagram-state .divider,
+div.mermaid-svg svg .icon-shape .icon,
+div.mermaid-svg svg .icon-shape .icon-neo path {
+    stroke: var(--md-primary-fg-color, #9370DB) !important;
+}
+
+/* Box and label backgrounds: transparent-ish theme fill instead of the
+ * fixed #ECECFF / #f0f0f0 / #fff5ad / gray rgba chips. The dsm-* classDefs
+ * in the diagram sources set fill:none, so node bodies show the box fill
+ * from these rules. */
+div.mermaid-svg svg g.stateGroup rect,
+div.mermaid-svg svg .node rect,
+div.mermaid-svg svg .node polygon,
+div.mermaid-svg svg .statediagram-cluster rect,
+div.mermaid-svg svg .statediagram-state rect.divider,
+div.mermaid-svg svg .statediagram-note rect,
+div.mermaid-svg svg .state-note,
+div.mermaid-svg svg .stateLabel .box {
+    fill: var(--mmd-fill) !important;
+}
+
+/* Composite/alt-composite inner areas. */
+div.mermaid-svg svg .statediagram-cluster.statediagram-cluster .inner,
+div.mermaid-svg svg .statediagram-cluster.statediagram-cluster-alt .inner {
+    fill: var(--mmd-bg) !important;
+}
+
+/* Edge label chips: the gray background the fixed SVG style sets on
+ * .edgeLabel. Also covers the duplicate rules the renderer emits. */
+div.mermaid-svg svg .edgeLabel,
+div.mermaid-svg svg .edgeLabel p,
+div.mermaid-svg svg .edgeLabel .label rect,
+div.mermaid-svg svg .edgeLabel rect,
+div.mermaid-svg svg .edgeLabel rect,
+div.mermaid-svg svg .stateLabel .box {
+    background-color: var(--mmd-label-bg) !important;
+}
+
+div.mermaid-svg svg .edgeLabel rect,
+div.mermaid-svg svg .edgeLabel .label rect {
+    fill: var(--mmd-label-bg) !important;
+    opacity: 1 !important;
+}
+
+/* Neo-look drop shadows: replace the baked light-gray shadow with a theme
+ * shadow so boxes do not glow on dark backgrounds. */
+div.mermaid-svg svg [data-look="neo"].node rect,
+div.mermaid-svg svg [data-look="neo"].cluster rect,
+div.mermaid-svg svg [data-look="neo"].node polygon,
+div.mermaid-svg svg [data-look="neo"].node circle,
+div.mermaid-svg svg .icon-shape .icon,
+div.mermaid-svg svg .icon-shape .icon-neo path {
+    filter: drop-shadow(1px 2px 2px var(--mmd-shadow)) !important;
+}
+
+/* End-state marker: white inner dot on theme background. */
+div.mermaid-svg svg .end-state-inner {
+    fill: var(--mmd-bg) !important;
 }

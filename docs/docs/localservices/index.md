@@ -90,3 +90,89 @@ The following operations are supported:
 
 !!!tip
     Use [Drove CLI](../cli/index.md) for manual operations and API payloads for automation/integration workflows.
+
+### Local service state machine
+
+The full state machine allows many transitions for error and cancellation paths. The diagrams below show the basic flows only. Each arrow shows the operation or the result that triggers the move.
+
+#### Activation states
+
+The following diagram shows the normal activation and deactivation flow between the steady states `INACTIVE`, `CONFIG_TESTING`, and `ACTIVE`.
+
+```mermaid
+%%{init: {"layout": "elk", "state": {"nodeSpacing": 30, "rankSpacing": 100}}}%%
+stateDiagram-v2
+    direction TB
+    state "INIT" as INIT
+    state "ACTIVATION<br/>REQUESTED" as ACTIVATION_REQUESTED
+    state "CONFIG TESTING<br/>REQUESTED" as CONFIG_TESTING_REQUESTED
+    state "DEACTIVATION<br/>REQUESTED" as DEACTIVATION_REQUESTED
+    classDef start fill:none,stroke:var(--dsm-start),stroke-width:4px
+    classDef active fill:none,stroke:var(--dsm-active),stroke-width:2px
+    classDef transit fill:none,stroke:var(--dsm-transit),stroke-width:2px
+    classDef hidden fill:none,stroke:none
+    INIT --> INACTIVE: CREATE
+    INACTIVE --> ACTIVATION_REQUESTED: ACTIVATE
+    ACTIVATION_REQUESTED --> ACTIVE: Completed
+    INACTIVE --> CONFIG_TESTING_REQUESTED: DEPLOY_TEST_INSTANCE
+    CONFIG_TESTING_REQUESTED --> CONFIG_TESTING: Completed
+    CONFIG_TESTING --> ACTIVE: ACTIVATE
+    ACTIVE --> DEACTIVATION_REQUESTED: DEACTIVATE
+    CONFIG_TESTING --> DEACTIVATION_REQUESTED: DEACTIVATE
+    DEACTIVATION_REQUESTED --> INACTIVE: Completed
+    INIT --> H0
+    H0 --> ACTIVATION_REQUESTED
+    H0 --> CONFIG_TESTING_REQUESTED
+    class H0 hidden
+    class INIT start
+    class ACTIVE,INACTIVE,CONFIG_TESTING active
+    class ACTIVATION_REQUESTED,CONFIG_TESTING_REQUESTED,DEACTIVATION_REQUESTED transit
+```
+
+The outline color shows the state category. Gray marks the start state. Green marks steady states. Yellow marks transient states.
+
+!!!note
+    `EMERGENCY_DEACTIVATION_REQUESTED` is not shown. The controller enters this error state from instance management states when a job is cancelled. It then moves the service to `DEACTIVATION_REQUESTED`.
+
+#### Instance management states
+
+The following diagram shows instance management operations from the steady states, and the destroy flow. Operations are issued from `ACTIVE`, `INACTIVE`, or `CONFIG_TESTING`. Each operation returns to a steady state when it completes.
+
+```mermaid
+%%{init: {"layout": "elk", "state": {"nodeSpacing": 30, "rankSpacing": 150}}}%%
+stateDiagram-v2
+    direction TB
+    state "ADJUSTING<br/>INSTANCES" as ADJUSTING_INSTANCES
+    state "REPLACING<br/>INSTANCES" as REPLACING_INSTANCES
+    state "STOPPING<br/>INSTANCES" as STOPPING_INSTANCES
+    state "UPDATING<br/>INSTANCES COUNT" as UPDATING_INSTANCES_COUNT
+    state "DESTROY<br/>REQUESTED" as DESTROY_REQUESTED
+    classDef terminal fill:none,stroke:var(--dsm-terminal),stroke-width:4px
+    classDef active fill:none,stroke:var(--dsm-active),stroke-width:2px
+    classDef transit fill:none,stroke:var(--dsm-transit),stroke-width:2px
+    INACTIVE --> ADJUSTING_INSTANCES: ADJUST_INSTANCES
+    INACTIVE --> UPDATING_INSTANCES_COUNT: UPDATE_INSTANCE_COUNT
+    ACTIVE --> ADJUSTING_INSTANCES: ADJUST_INSTANCES
+    ACTIVE --> REPLACING_INSTANCES: REPLACE_INSTANCES / RESTART
+    ACTIVE --> STOPPING_INSTANCES: STOP_INSTANCES
+    ACTIVE --> UPDATING_INSTANCES_COUNT: UPDATE_INSTANCE_COUNT
+    ADJUSTING_INSTANCES --> ACTIVE: Completed
+    ADJUSTING_INSTANCES --> INACTIVE: Completed
+    REPLACING_INSTANCES --> ACTIVE: Completed
+    STOPPING_INSTANCES --> ACTIVE: Completed
+    UPDATING_INSTANCES_COUNT --> ACTIVE: Completed
+    UPDATING_INSTANCES_COUNT --> INACTIVE: Completed
+    INACTIVE --> DESTROY_REQUESTED: DESTROY
+    DESTROY_REQUESTED --> DESTROYED: Delete service data
+    class DESTROYED terminal
+    class ACTIVE,INACTIVE,CONFIG_TESTING active
+    class ADJUSTING_INSTANCES,REPLACING_INSTANCES,STOPPING_INSTANCES,UPDATING_INSTANCES_COUNT,DESTROY_REQUESTED transit
+```
+
+The outline color shows the state category. Green marks steady states. Yellow marks transient states. Purple marks the terminal state.
+
+!!!note
+    The complete transition table is defined in the controller. `EMERGENCY_DEACTIVATION_REQUESTED` is entered when an instance management job is cancelled while the service is active. It is not shown in the diagram.
+
+!!!note
+    A local service never moves to `DEPLOYING_TEST_INSTANCE` through a transition in this state machine. The state exists for the test instance deployment flow.

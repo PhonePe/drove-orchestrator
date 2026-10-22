@@ -37,7 +37,7 @@ Specifies number of GPU cards to be allocated to a container.
 | Type              | `type`            | Set type to `GPU` for this.                                       |
 | Count             | `count`           | Number of GPU cards to be allocated.                              |
 | GPU Vendor        | `gpuType.vendor`  | Vendor of the GPU. Can be `NVIDIA`, `AMD`, `INTEL`, `GOOGLE_TPU` or `CEREBRAS`. |
-| GPU Model         | `gpuType.model`   | Model of the GPU. For example `Tesla T4`.                          |
+| GPU Model         | `gpuType.model`   | Model of the GPU. For example `Tesla T4`. Match is case-insensitive. Optional. |
 
 **Sample**
 ```js

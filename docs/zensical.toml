@@ -79,8 +79,22 @@ nav = [
 
 extra_css = ["stylesheets/extra.css"]
 
-# ── Theme ────────────────────────────────────────────────────────────────────
+# NOTE: js/mermaid.mjs is NOT listed in extra_javascript. All mermaid
+# diagrams are pre-rendered to inline SVG at build time (mermaid_svg.py +
+# tools/render-mermaid.mjs), so the site does not load mermaid at runtime.
+# docs/js/mermaid.mjs stays in the docs tree only as the renderer entry
+# point. The exclude plugin below keeps the renderer and its vendored
+# mermaid/ELK modules (about 9 MB) out of the published site.
+
+# Serve the iframe-worker shim from the site itself. The offline plugin
+# injects https://unpkg.com/iframe-worker/shim unless an entry with that
+# name is already present in this list.
+[[project.extra.polyfills]]
+path = "js/vendor/iframe-worker/iframe-worker.js"
+
+# ── Theme ─
 [project.theme]
+custom_dir = "overrides"
 features = [
   "navigation.tracking",
   "navigation.path",
@@ -138,13 +152,17 @@ cache_dir        = ".cache/plugins/privacy"
 assets           = true
 assets_fetch     = true
 assets_fetch_dir = "assets/external"
-links            = true
-links_noopener   = true
-
 [project.plugins.offline]
 enabled = true
 
-# ── Markdown extensions ──────────────────────────────────────────────────────
+# Keep the renderer parts (mermaid.mjs + vendored mermaid/ELK, about 9 MB)
+# out of the published site: diagrams are pre-rendered SVGs now. The
+# vendored iframe-worker and glightbox files stay: the theme bundle needs
+# them at runtime.
+[project.plugins.exclude]
+glob = ["js/mermaid.mjs", "js/vendor/mermaid/**", "js/vendor/layout-elk/**"]
+
+# ── Markdown extensions ─
 [project.markdown_extensions.toc]
 permalink = true
 
@@ -160,7 +178,7 @@ permalink = true
 
 [project.markdown_extensions."pymdownx.superfences"]
 custom_fences = [
-  {name = "mermaid", class = "mermaid", format = "pymdownx.superfences.fence_code_format"}
+  {name = "mermaid", class = "mermaid", format = "mermaid_svg.format_mermaid_svg"}
 ]
 
 [project.markdown_extensions."pymdownx.emoji"]

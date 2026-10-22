@@ -42,14 +42,15 @@ Tasks on Drove have their own life cycle modelled as a state machine. State tran
 Tasks on a Drove cluster can be one of the following states:
 
 - **PENDING** - Task has been submitted, yet to be provisioned
-- **PROVISIONING** - Task is assigned to an executor and docker image i ng -ownloaded
-- **PROVISIONING_FAILED** - Docker image download failed
+- **PROVISIONING** - Task is assigned to an executor and the container image is downloaded
+- **PROVISIONING_FAILED** - Container image download failed. This is an error state.
 - **STARTING** - Docker run is starting
 - **RUNNING** - Task is running currently
-- **RUN_COMPLETED** - Task run has completed. Whether passed or failed n -o be checked from the task result.
-- **DEPROVISIONING** - Docker image cleanup underway
+- **RUN_COMPLETED** - Task run has completed. Whether the task passed or failed must be checked from the task result.
+- **RUN_FAILED** - The container exited with a failure. This is an error state.
+- **DEPROVISIONING** - Container image cleanup underway
 - **STOPPED** - Task cleanup completed. This is a terminal state.
-- **LOST** - Task disappeared while executor was down.
+- **LOST** - Task disappeared while executor was down. This is a terminal state.
 - **UNKNOWN** - All tasks that are running are put in this state when executor has been restarted and startup recovery has not kicked in yet
 
 ### Operations
@@ -66,4 +67,36 @@ The following task operations are recognized by Drove:
 
 The following state machine signifies the states and transitions as affected by cluster state and operations issued.
 
-![Task State Machine](../images/task-state-machine.png)
+```mermaid
+%%{init: {"layout": "elk", "state": {"nodeSpacing": 30, "rankSpacing": 60}}}%%
+stateDiagram-v2
+    direction TB
+    classDef error fill:none,stroke:var(--dsm-error),stroke-width:2px
+    classDef terminal fill:none,stroke:var(--dsm-terminal),stroke-width:4px
+    classDef start fill:none,stroke:var(--dsm-start),stroke-width:4px
+    classDef active fill:none,stroke:var(--dsm-active),stroke-width:2px
+    classDef transit fill:none,stroke:var(--dsm-transit),stroke-width:2px
+    PENDING --> PROVISIONING: valid
+    PROVISIONING --> STARTING: downloaded
+    PROVISIONING --> PROVISIONING_FAILED: download failed
+    STARTING --> RUNNING: started
+    STARTING --> RUN_COMPLETED: exited at once
+    STARTING --> RUN_FAILED: failed to start
+    RUNNING --> RUN_COMPLETED: container exited
+    PROVISIONING_FAILED --> DEPROVISIONING
+    RUN_FAILED --> DEPROVISIONING
+    RUN_COMPLETED --> DEPROVISIONING
+    DEPROVISIONING --> STOPPED
+    UNKNOWN --> RUNNING: recovery
+    UNKNOWN --> STOPPED: gone
+    class PROVISIONING_FAILED,RUN_FAILED error
+    class STOPPED terminal
+    class PENDING start
+    class RUNNING active
+    class PROVISIONING,STARTING,RUN_COMPLETED,DEPROVISIONING,UNKNOWN transit
+```
+
+The outline color shows the state category. Gray marks the start state. Purple marks the terminal state. Red marks error states. Green marks the steady state. Yellow marks transient states.
+
+!!!note
+    A task never moves to `LOST` through a transition in this state machine. The controller marks a task as `LOST` when its executor does not report the task for a period of time.

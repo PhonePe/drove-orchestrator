@@ -262,6 +262,9 @@ The following information needs to be specified for each entry:
 !!!note
     Application instances in any state other than `HEALTHY` are not considered for exposure. Please check [Application Instance State Machine](instances.md#application-instance-state-machine) for an understanding of states of instances.
 
+!!!warning "Duplicate virtual hosts"
+    A vhost can map to exactly one port. The application spec is rejected when the same vhost appears more than once, be it with the same or a different port.
+
 ## Configuring Pre Shutdown Behaviour
 Before a container is shut down, it is desirable to ensure things are spun down properly. This behaviour can be configured in the `preShutdown` section of the configuration.
 

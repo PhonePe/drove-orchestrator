@@ -8,6 +8,7 @@ A task is defined using JSON. We use a sample configuration below to explain the
 {
     "sourceAppName": "TEST_APP",//(1)!
     "taskId": "T0012",//(2)!
+    "type": "COMPUTATION",//(28)!
     "executable": {//(3)!
         "type": "DOCKER", // (4)!
         "url": "ghcr.io/appform-io/test-task",//(5)!
@@ -84,6 +85,7 @@ A task is defined using JSON. We use a sample configuration below to explain the
 25. Number of latest log files to retain
 26. Log files will be compressed
 27. List of command line arguments. See [Command Line Arguments](#command-line-arguments) for details.
+28. Type of job. Always `COMPUTATION` for tasks. Optional, defaults to `COMPUTATION`.
 
 !!!warning
     Please make sure `sourceAppName` is set to a correct application _name_ as specified in the `name` parameter of a running application on the cluster.

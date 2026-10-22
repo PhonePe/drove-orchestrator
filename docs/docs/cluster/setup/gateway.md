@@ -393,3 +393,38 @@ How this works:
 ### Building from source
 
 Refer to `BUILD.md` and `PACKAGING.md` in the drove-gateway repo for build and packaging steps. The repo supports Debian and RPM packages.
+
+## Health and metrics
+
+The nixy listener inside the gateway exposes a health endpoint and a Prometheus metrics endpoint. Both are on the nixy `address`/`port` listener, not the proxy port.
+
+- `/v1/health`: Returns the gateway health as JSON. The response is HTTP 200 when the gateway is healthy and HTTP 500 when it is not.
+- `/v1/metrics`: Exposes Prometheus metrics.
+
+The health endpoint reports these conditions:
+
+- Template rendering and config generation health
+- DNS resolver health
+- Upstream update health for the proxy runtime API
+- HAProxy global server state file update health
+- Proxy control plane responsiveness within the configured timeout
+- Disk I/O health for state persistence
+- Endpoint health per namespace, including whether all endpoints of a namespace are down
+
+Key metrics exposed on `/v1/metrics`:
+
+| Metric | Type | Description |
+|--------|------|-------------|
+| `drove_gateway_proxy_control_plane_healthy` | gauge | 1 if the proxy control plane responds within the configured timeout, 0 otherwise. |
+| `drove_gateway_server_state_file_update_healthy` | gauge | 1 if HAProxy global server state file updates complete, 0 otherwise. |
+| `drove_gateway_disk_io_healthy` | gauge | 1 if disk reads and writes for state persistence complete within the configured timeout, 0 otherwise. |
+| `drove_gateway_proxy_control_plane_timeout_breaches_total` | counter | Number of times the proxy control plane did not respond within the configured timeout. |
+| `drove_gateway_reloads_failed` / `drove_gateway_reloads_successful` | counter | Failed and successful proxy reloads. |
+| `drove_gateway_reload_duration` | histogram | Proxy reload duration. |
+| `drove_gateway_configured_endpoints_total` / `drove_gateway_healthy_endpoints_total` | gauge | Configured and healthy endpoints per namespace. |
+
+### API timeout
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `api_timeout` | 10 | Timeout in seconds for calls to the proxy runtime API and to the Drove controllers. |

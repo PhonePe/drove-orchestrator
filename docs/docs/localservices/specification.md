@@ -8,7 +8,7 @@ A local service is defined using JSON. The structure is similar to application s
 {
     "name": "NODE_EXPORTER", // (1)!
     "version": "1", // (2)!
-    "type": "SERVICE", // (3)!
+    "type": "LOCAL_SERVICE", // (3)!
     "executable": { // (4)!
         "type": "DOCKER", // (5)!
         "url": "ghcr.io/appform-io/perf-test-server-httplib", // (6)!
@@ -123,7 +123,7 @@ A local service is defined using JSON. The structure is similar to application s
 
 1. Human readable local service name.
 2. Version for this service specification.
-3. Use `SERVICE` for long-running local services.
+3. Use `LOCAL_SERVICE` for local services. Optional, defaults to `LOCAL_SERVICE`.
 4. Executable coordinates.
 5. Currently supported executable type is `DOCKER`.
 6. Docker image URI.

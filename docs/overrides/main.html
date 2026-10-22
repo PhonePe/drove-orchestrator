@@ -1,0 +1,18 @@
+{#-
+  Override of the zensical theme's main.html.
+
+  The theme loads Google Fonts and lets the bundle fetch glightbox from
+  unpkg at run time. This override removes both. The site then serves
+  every asset from its own origin:
+
+  - The fonts block is empty. extra.css sets the font stack and falls
+    back to system fonts.
+  - The vendored glightbox script and stylesheet are loaded. The bundle
+    finds window.GLightbox and never fetches it from unpkg.
+-#}
+{% extends "base.html" %}
+{% block fonts %}{% endblock %}
+{% block extrahead %}
+  <link rel="stylesheet" href="{{ 'js/vendor/glightbox/glightbox.min.css' | url }}">
+  <script src="{{ 'js/vendor/glightbox/glightbox.min.js' | url }}"></script>
+{% endblock %}

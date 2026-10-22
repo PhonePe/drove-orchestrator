@@ -87,6 +87,16 @@ The file contains one JSON object. The sections below describe each field.
                 "memoryInMB": {
                     "0": 128
                 }
+            },
+            {
+                "type": "GPU",
+                "gpuIds": [
+                    "GPU-6f0f4a1a"
+                ],
+                "gpuType": {
+                    "vendor": "NVIDIA",
+                    "model": "Tesla T4"
+                }
             }
         ],
         "env": {

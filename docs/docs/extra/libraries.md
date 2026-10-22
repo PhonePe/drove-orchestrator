@@ -8,7 +8,7 @@ Setup the drove version
 ```xml
 <properties>
     <!--other properties-->
-    <drove.version>1.31</drove.version>
+    <drove.version>1.34.1</drove.version>
 </properties>
 ```
 

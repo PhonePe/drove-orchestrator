@@ -1,0 +1,17 @@
+{#-
+  Override of the theme's source partial.
+
+  The theme's JavaScript fetches repository statistics from api.github.com
+  when the repository link carries data-md-component="source". This
+  override omits that attribute, so no GitHub API request is made. The
+  link keeps its class and layout.
+-#}
+<a href="{{ config.repo_url }}" title="{{ lang.t('source') }}" class="md-source">
+  <div class="md-source__icon md-icon">
+    {% set icon = config.theme.icon.repo or "fontawesome/brands/git-alt" %}
+    {% include ".icons/" ~ icon ~ ".svg" %}
+  </div>
+  <div class="md-source__repository">
+    {{ config.repo_name }}
+  </div>
+</a>

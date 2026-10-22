@@ -224,6 +224,8 @@ The following options can be set to influence the behavior of the Drove cluster 
 | Enable raw device access | `enableRawDeviceAccess` | When `true`, application and task containers can access raw devices on the host. Default: `false`. Used to build the controller default security profile. |
 | Data update parallelism | `dataUpdateParallelism` | Parallelism for the executor state update pipeline. Defaults to 16. Range: 1-256. |
 | Compiled rule cache count | `compiledRuleCacheCount` | Number of compiled `RULE_BASED` placement rule programs cached by the controller. Defaults to 100. Range: 0-1000. |
+| Min scaled CPUs | `minScaledCpus` | Minimum core count for which the controller applies [performance scaling](../../concepts/cpu-numa-memory.md#performance-scaling). A request below this threshold is used as is. Defaults to 2. Range: 0-4096. |
+| Min scaled memory | `minScaledMemoryMB` | Minimum memory in MB for which the controller applies [performance scaling](../../concepts/cpu-numa-memory.md#performance-scaling). A request below this threshold is used as is. Defaults to 128. |
 
 **Sample**
 ```yaml

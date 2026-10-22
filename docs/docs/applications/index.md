@@ -63,6 +63,49 @@ The following application operations are recognized by Drove:
 
 ### Application State Machine
 
-The following state machine signifies the states and transitions as affected by cluster state and operations issued.
+An application on a Drove cluster moves through the states above. Each arrow shows the operation or the condition that triggers the move. The `SCALE_INSTANCES` arrow covers `START_INSTANCES` and `SUSPEND`. The API layer converts these two operations to `SCALE` before the state machine sees them.
 
-![Application State Machine](../images/app-state-machine.png)
+```mermaid
+%%{init: {"layout": "elk", "state": {"nodeSpacing": 30, "rankSpacing": 200}}}%%
+stateDiagram-v2
+    direction TB
+    state "INIT" as INIT
+    state "STOP INSTANCES<br/>REQUESTED" as STOP_INSTANCES_REQUESTED
+    state "REPLACE INSTANCES<br/>REQUESTED" as REPLACE_INSTANCES_REQUESTED
+    state "SCALING<br/>REQUESTED" as SCALING_REQUESTED
+    state "OUTAGE<br/>DETECTED" as OUTAGE_DETECTED
+    state "DESTROY<br/>REQUESTED" as DESTROY_REQUESTED
+    classDef error fill:none,stroke:var(--dsm-error),stroke-width:2px
+    classDef terminal fill:none,stroke:var(--dsm-terminal),stroke-width:4px
+    classDef start fill:none,stroke:var(--dsm-start),stroke-width:4px
+    classDef active fill:none,stroke:var(--dsm-active),stroke-width:2px
+    classDef transit fill:none,stroke:var(--dsm-transit),stroke-width:2px
+    classDef hidden fill:none,stroke:none
+    INIT --> MONITORING: CREATE
+    MONITORING --> SCALING_REQUESTED: START_INSTANCES
+    MONITORING --> DESTROY_REQUESTED: DESTROY
+    RUNNING --> STOP_INSTANCES_REQUESTED: STOP_INSTANCES
+    RUNNING --> SCALING_REQUESTED: SUSPEND / SCALE_INSTANCES / START_INSTANCES
+    RUNNING --> REPLACE_INSTANCES_REQUESTED: REPLACE_INSTANCES
+    RUNNING --> OUTAGE_DETECTED: Required Instances Not Present
+    OUTAGE_DETECTED --> SCALING_REQUESTED: Deduce Delta
+    SCALING_REQUESTED --> RUNNING: Has Instances
+    SCALING_REQUESTED --> MONITORING: No Instances
+    REPLACE_INSTANCES_REQUESTED --> RUNNING: Restart Completed
+    STOP_INSTANCES_REQUESTED --> RUNNING: Has Instances
+    STOP_INSTANCES_REQUESTED --> MONITORING: No Instances
+    DESTROY_REQUESTED --> DESTROYED: Delete App data
+    INIT --> H0
+    H0 --> RUNNING
+    H0 --> OUTAGE_DETECTED
+    class H0 hidden
+    class DESTROYED terminal
+    class INIT start
+    class MONITORING,RUNNING active
+    class OUTAGE_DETECTED,SCALING_REQUESTED,STOP_INSTANCES_REQUESTED,REPLACE_INSTANCES_REQUESTED,DESTROY_REQUESTED transit
+```
+
+The outline color shows the state category. Gray marks the start state. Purple marks the terminal state. Green marks the steady states. Yellow marks transient states.
+
+!!!note
+    An application never moves to `FAILED` through a transition in this state machine. The controller uses `FAILED` as a fallback when it cannot find the state of an application.
