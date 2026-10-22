@@ -29,7 +29,9 @@ jobs:
         run: pip install zensical markdown-include pymdown-extensions mkdocs-awesome-pages-plugin mkdocs-glightbox
         working-directory: ./docs
       - name: Build Site
-        run: zensical build --clean
+        # PYTHONPATH=. lets zensical import the mermaid_svg fence module
+        # from the docs directory, same as run-build.sh does locally.
+        run: PYTHONPATH=. zensical build --clean
         working-directory: ./docs
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v4
