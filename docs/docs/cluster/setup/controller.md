@@ -435,8 +435,44 @@ CONFIG_FILE_PATH=/etc/drove/controller/controller.yml
 JAVA_PROCESS_MIN_HEAP=2g
 JAVA_PROCESS_MAX_HEAP=2g
 ZK_CONNECTION_STRING="192.168.3.10:2181"
+CONTROLLER_SECRET="0v8XvJrDc7r86ZY1QCByPTDPninI4Xii"
+EXECUTOR_SECRET="pOd9sIEXhv0wrGOVc7ebwNvR7twZqyTN"
+ADMIN_PASSWORD="<admin user password>"
+GUEST_PASSWORD="<guest user password>"
+INSTANCE_AUTH_SECRET="bd2SIgz9OMPG2L8wA6zxj21oLVLbuLFC"
 JAVA_OPTS="-Xlog:gc:/var/log/drove/controller/gc.log -Xlog:gc:::filecount=3,filesize=10M -Xlog:gc::time,level,tags -XX:+UseNUMA -XX:+ExitOnOutOfMemoryError -Djava.security.egd=file:/dev/urandom -Dfile.encoding=utf-8 -Djute.maxbuffer=0x9fffff"
 ```
+
+### Container environment variables
+The controller container entrypoint reads the following environment variables:
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `CONFIG_FILE_PATH` | Path to the config file inside the container | `config.yml` |
+| `ZK_CONNECTION_STRING` | Zookeeper connection string. Mandatory. The container exits if this is not set. | – |
+| `CONTROLLER_SECRET` | Secret for intra-node authentication, controller side | `ControllerSecret` |
+| `EXECUTOR_SECRET` | Secret for intra-node authentication, executor side | `ExecutorSecret` |
+| `ADMIN_PASSWORD` | Password for the `admin` user | `admin` |
+| `GUEST_PASSWORD` | Password for the `guest` user | `guest` |
+| `INSTANCE_AUTH_SECRET` | Signing secret for instance auth JWTs | `InstanceAuthSecret` |
+| `LOG_LEVEL` | Log level for `com.phonepe.drove` | `INFO` |
+| `TZ` | Timezone for logs | `UTC` |
+| `DEBUG` | Print environment and diagnostics at startup | `0` |
+| `GC_ALGO` | JVM garbage collection algorithm | `UseG1GC` |
+| `JAVA_PROCESS_MIN_HEAP` | JVM minimum heap size | `1g` |
+| `JAVA_PROCESS_MAX_HEAP` | JVM maximum heap size | `1g` |
+| `JAVA_OPTS` | Extra JVM options | – |
+
+!!!danger "Default secrets are rejected"
+    The controller container refuses to start when any security variable (`ADMIN_PASSWORD`, `GUEST_PASSWORD`, `CONTROLLER_SECRET`, `EXECUTOR_SECRET`, `INSTANCE_AUTH_SECRET`) is left at its default value. Set all security variables to strong values. You can use `pwgen -s 32` to generate them.
+
+    For dev and test clusters only, set `ALLOW_DEFAULT_SECRETS=true` to explicitly acknowledge the risk and start with default values.
+
+!!!note
+    The entrypoint validates the security variables even when your config file contains the secrets directly. If your `controller.yml` has literal secrets, you still need to set the security variables to non-default values, or set `ALLOW_DEFAULT_SECRETS=true`.
+
+!!!note
+    When `DEBUG=1`, the startup log masks the values of all security variables before printing the environment.
 
 
 ## Create systemd file

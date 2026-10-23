@@ -32,6 +32,9 @@ The following ports are used:
 - Controller - 4000
 - Gateway - 7000
 
+!!!warning "Default secrets"
+    The controller and executor containers refuse to start with default security values. The compose file sets `ALLOW_DEFAULT_SECRETS=true` for this demo setup. Do _not_ set this on production clusters. See the [controller setup](cluster/setup/controller.md#container-environment-variables) and [executor setup](cluster/setup/executor-setup.md#container-environment-variables) pages for the full list of container environment variables.
+
 Drove credentials would be `admin/admin` and `guest/guest` for read-write and read-only permissions respectively.
 
 You should be able to access the UI at [http://drove.local:7000](http://drove.local:7000){:target="_blank"}

@@ -455,8 +455,39 @@ Environment variables needed to run the drove executor are setup in `/etc/drove/
 CONFIG_FILE_PATH=/etc/drove/executor/executor.yml
 JAVA_PROCESS_MIN_HEAP=1g
 JAVA_PROCESS_MAX_HEAP=1g
+ZK_CONNECTION_STRING="192.168.3.10:2181"
+CONTROLLER_SECRET="0v8XvJrDc7r86ZY1QCByPTDPninI4Xii"
+EXECUTOR_SECRET="pOd9sIEXhv0wrGOVc7ebwNvR7twZqyTN"
 JAVA_OPTS="-Xlog:gc:/var/log/drove/executor/gc.log -Xlog:gc:::filecount=3,filesize=10M -Xlog:gc::time,level,tags -XX:+UseNUMA -XX:+ExitOnOutOfMemoryError -Djava.security.egd=file:/dev/urandom -Dfile.encoding=utf-8 -Djute.maxbuffer=0x9fffff"
 ```
+
+!!!note
+    The `CONTROLLER_SECRET` and `EXECUTOR_SECRET` values must match the secrets configured on the controllers. See [intra node auth config](#intra-node-authentication-configuration) for details.
+
+### Container environment variables
+The executor container entrypoint reads the following environment variables:
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `CONFIG_FILE_PATH` | Path to the config file inside the container | `config.yml` |
+| `ZK_CONNECTION_STRING` | Kept for compatibility. The container exits if this is not set. Executors talk to controllers directly, not Zookeeper. | – |
+| `CONTROLLER_SECRET` | Secret for intra-node authentication, controller side | `ControllerSecret` |
+| `EXECUTOR_SECRET` | Secret for intra-node authentication, executor side | `ExecutorSecret` |
+| `LOG_LEVEL` | Log level for `com.phonepe.drove` | `INFO` |
+| `TZ` | Timezone for logs | `UTC` |
+| `DEBUG` | Print environment and diagnostics at startup | `0` |
+| `GC_ALGO` | JVM garbage collection algorithm | `UseG1GC` |
+| `JAVA_PROCESS_MIN_HEAP` | JVM minimum heap size | `1g` |
+| `JAVA_PROCESS_MAX_HEAP` | JVM maximum heap size | `1g` |
+| `JAVA_OPTS` | Extra JVM options | – |
+
+!!!danger "Default secrets are rejected"
+    The executor container refuses to start when `CONTROLLER_SECRET` or `EXECUTOR_SECRET` is left at its default value. Set both secrets to strong values that match the controllers. You can use `pwgen -s 32` to generate them.
+
+    For dev and test clusters only, set `ALLOW_DEFAULT_SECRETS=true` to explicitly acknowledge the risk and start with default values.
+
+!!!note
+    When `DEBUG=1`, the startup log masks the values of all security variables before printing the environment.
 
 ## Create systemd file
 Create a `systemd` file. Put the following in `/etc/systemd/system/drove.executor.service`:
