@@ -21,12 +21,13 @@ nav = [
     {"Prerequisites" = "cluster/setup/prerequisites.md"},
     {"Zookeeper" = "cluster/setup/zookeeper.md"},
     {"Controller" = "cluster/setup/controller.md"},
-    {"Executor Setup" = "cluster/setup/executor-setup.md"},
+    {"Executor" = "cluster/setup/executor-setup.md"},
     {"Gateway" = "cluster/setup/gateway.md"},
     {"Coredns Drove" = "cluster/setup/coredns-drove.md"},
     {"Metrics" = "cluster/metrics.md"},
     {"Environment Info" = "cluster/environment-info.md"},
-    {"Maintenance" = "cluster/maintenance.md"}
+    {"Maintenance" = "cluster/maintenance.md"},
+    {"Migration Guide" = "cluster/setup/migrating.md"}
   ]},
   {"Applications" = [
     {"Overview" = "applications/index.md"},

@@ -2,29 +2,8 @@
 
 We shall setup the executor nodes by setting up the hardware, operating system first and then the executor service itself.
 
-## Migrating from 1.33.x
-
-This release has breaking changes that affect existing executor deployments. Go through the checklist below before upgrading.
-
-### Zookeeper config is removed from executors
-Executors no longer connect to Zookeeper. They now talk to controllers directly over HTTP(S). Zookeeper is used by controllers only.
-
-- Add a `controllers.endpoints` section listing all controller endpoints to the executor config. This section is **required**.
-- Remove the `zookeeper` section from the executor config. A leftover `zookeeper` key is ignored for backwards compatibility, but it can be removed safely.
-- The `options.remoteUpdateMode` option is removed. Updates always go to controllers over HTTP(S). A leftover key is ignored.
-
-See [Zookeeper Connection Configuration](#zookeeper-connection-configuration) for details.
-
-### Default secrets are rejected
-The executor container now refuses to start when `CONTROLLER_SECRET` or `EXECUTOR_SECRET` is left at its default value. The values must match the secrets configured on the controllers. Set both to strong values (`pwgen -s 32`), or, for dev/test clusters only, set `ALLOW_DEFAULT_SECRETS=true` to explicitly acknowledge the risk.
-
-See [Container environment variables](#container-environment-variables) for the full list of variables and their defaults.
-
-### GPU configuration has moved
-`resources.enableNvidiaGpu` is deprecated in favour of `resources.nvidiaGPULoaderConfig`, which enables managed GPU discovery and allocation. The two modes are mutually exclusive. The legacy pass-through mode still works if you need it. See [Resource Configuration](#resource-configuration) and [GPU Scheduling](../../concepts/gpu.md).
-
-### New executor options
-`resources.performanceScaling`, `options.defaultUserSpec`, `options.environmentInfoPath`, `options.controllerConnectTimeout` and `options.controllerResponseTimeout` are new. See [Resource Configuration](#resource-configuration), [Performance scaling configuration](#performance-scaling-configuration), [Executor Options](#executor-options) and [Environment Info Injection](../environment-info.md).
+!!!warning "Upgrading from 1.33.x?"
+    1.34.x will not start on an old config. Go through the [migration guide](migrating.md#upgrading-from-133x) checklist before rolling out new images.
 
 ## Considerations and tuning for hardware and operating system
 
@@ -193,6 +172,7 @@ controllers: #(12)!
 9. Resource configuration for this node.
 10. Options to configure executor behaviour. Check [executor options](#executor-options) section for details.
 11. Controller endpoints. Executors send all updates to controllers over HTTP(S). This section is required.
+
 !!!tip
 	In case you do not want to expose admin apis to outside the host, please set `bindHost` in the admin connectors section.
 
@@ -203,14 +183,13 @@ controllers: #(12)!
 	    bindHost: 127.0.0.1
 	```
 
-### Zookeeper Connection Configuration
+### Controller Endpoints Configuration
 Executors no longer connect to Zookeeper. Zookeeper is used by controllers only. Executors talk to controllers directly over HTTP(S) using the `controllers.endpoints` configuration.
 
 A leftover `zookeeper` key in the executor config is ignored for backwards compatibility. This key can be removed safely from existing executor configuration files.
 
 !!!note
     Ensure `controllers.endpoints` lists all controller endpoints. Executors use these endpoints to register themselves and send all state updates.
-
 {!intra_node_auth.md!}
 
 !!!note
