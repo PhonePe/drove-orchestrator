@@ -474,7 +474,10 @@ The controller container entrypoint reads the following environment variables:
 !!!note
     When `DEBUG=1`, the startup log masks the values of all security variables before printing the environment.
 
+!!!note
+    When `DEBUG=1`, the startup log masks the values of all security variables before printing the environment.
 
+{!image_supply_chain.md!}
 ## Create systemd file
 Create a `systemd` file. Put the following in `/etc/systemd/system/drove.controller.service`:
 
