@@ -2,14 +2,35 @@
 
 We shall setup the executor nodes by setting up the hardware, operating system first and then the executor service itself.
 
+## Migrating from 1.33.x
+
+This release has breaking changes that affect existing executor deployments. Go through the checklist below before upgrading.
+
+### Zookeeper config is removed from executors
+Executors no longer connect to Zookeeper. They now talk to controllers directly over HTTP(S). Zookeeper is used by controllers only.
+
+- Add a `controllers.endpoints` section listing all controller endpoints to the executor config. This section is **required**.
+- Remove the `zookeeper` section from the executor config. A leftover `zookeeper` key is ignored for backwards compatibility, but it can be removed safely.
+- The `options.remoteUpdateMode` option is removed. Updates always go to controllers over HTTP(S). A leftover key is ignored.
+
+See [Zookeeper Connection Configuration](#zookeeper-connection-configuration) for details.
+
+### Default secrets are rejected
+The executor container now refuses to start when `CONTROLLER_SECRET` or `EXECUTOR_SECRET` is left at its default value. The values must match the secrets configured on the controllers. Set both to strong values (`pwgen -s 32`), or, for dev/test clusters only, set `ALLOW_DEFAULT_SECRETS=true` to explicitly acknowledge the risk.
+
+See [Container environment variables](#container-environment-variables) for the full list of variables and their defaults.
+
+### GPU configuration has moved
+`resources.enableNvidiaGpu` is deprecated in favour of `resources.nvidiaGPULoaderConfig`, which enables managed GPU discovery and allocation. The two modes are mutually exclusive. The legacy pass-through mode still works if you need it. See [Resource Configuration](#resource-configuration) and [GPU Scheduling](../../concepts/gpu.md).
+
+### New executor options
+`resources.performanceScaling`, `options.defaultUserSpec`, `options.environmentInfoPath`, `options.controllerConnectTimeout` and `options.controllerResponseTimeout` are new. See [Resource Configuration](#resource-configuration), [Performance scaling configuration](#performance-scaling-configuration), [Executor Options](#executor-options) and [Environment Info Injection](../environment-info.md).
+
 ## Considerations and tuning for hardware and operating system
 
 In the following sections we discus some aspects of scheduling, hardware and settings on the OS to ensure good performance.
 
 ### CPU and Memory considerations
-
-A detailed explanation of NUMA-aware allocation, core and memory pinning, performance scaling and over provisioning lives in [CPU, NUMA and Memory](../../concepts/cpu-numa-memory.md).
-
 The executor nodes are the servers that host and run the actual docker containers. Drove will take into consideration the NUMA topology of these machines to optimize the placement for containers to extract the maximum performance. Along with this, Drove will `cpuset` the containers to the allocated cores in a non overlapping manner, so that the cores allocated to a container are dedicated to it. Memory allocated to a container is pinned as well and selected from the same NUMA node.
 
 Needless to say the minimum amount of CPU that can be given to an application or task is 1. Fractional cpu allocation can be achieved in a predictable manner by configuring over provisioning on executor nodes.

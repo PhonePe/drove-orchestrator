@@ -2,6 +2,29 @@
 
 Controllers are the brains of Drove cluster. For HA, at least 2 controllers should be set up.
 
+## Migrating from 1.33.x
+
+This release has breaking changes that affect existing controller deployments. Go through the checklist below before upgrading.
+
+### Default secrets are rejected
+The controller container now refuses to start when any security environment variable (`ADMIN_PASSWORD`, `GUEST_PASSWORD`, `CONTROLLER_SECRET`, `EXECUTOR_SECRET`, `INSTANCE_AUTH_SECRET`) is left at its default value. This check runs even if the secrets are configured directly in `controller.yml`. Set all security variables to strong values (`pwgen -s 32`), or, for dev/test clusters only, set `ALLOW_DEFAULT_SECRETS=true` to explicitly acknowledge the risk.
+
+See [Container environment variables](#container-environment-variables) for the full list of variables and their defaults.
+
+### MVEL and HOPE rule engines are removed
+`RULE_BASED` placement policies are now evaluated using [CEL](https://cel.dev){:target="_blank"} expressions only. The MVEL and HOPE rule engines have been removed. Existing MVEL or HOPE placement rules must be rewritten as CEL expressions **before** upgrading, or the affected applications and tasks will fail to place.
+
+- See [Placement Policies](../../concepts/placement-policies.md) for how `RULE_BASED` rules work now.
+- Test rewritten rules against the live cluster with the [Placement Simulation API](../../apis/cluster.md#simulate-placement) or `drove cluster simulate-placement` before rolling out.
+- The `options.allowedRuleImportPackages` controller option is removed along with the MVEL engine. Remove it from the config.
+
+### New and changed controller options
+- `options.securityPolicies` is new. It defines per-deployable container security profiles. The controller default profile is still built from `allowedMountDirs`, `disableCmdlArgs` and `enableRawDeviceAccess`. See [Security policies](#security-policies).
+- `options.minScaledCpus` and `options.minScaledMemoryMB` control when [performance scaling](../../concepts/cpu-numa-memory.md#performance-scaling) is applied.
+
+!!!note
+    Zookeeper connectivity for controllers is unchanged. Executors, however, no longer connect to Zookeeper. See the [executor migration section](executor-setup.md#migrating-from-1.33x) if you run executors as well.
+
 Please note the following behaviour about controllers:
 
 - _Only_ one controller is **leader** at a time. A leader controller does not relinquish control till the process is stopped or dies
