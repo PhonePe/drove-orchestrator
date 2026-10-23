@@ -1,6 +1,6 @@
 # drove executor
 
-Manage executor nodes.
+Manage the executor nodes in your cluster.
 
 ## Synopsis
 
@@ -24,7 +24,7 @@ drove executor <command> [options]
 
 ## drove executor list
 
-List all executors with resource usage.
+List all executors with their resource usage.
 
 ```bash
 drove executor list
@@ -34,7 +34,7 @@ drove executor list
 
 ## drove executor info
 
-Show detailed executor information.
+Show detailed information about one executor.
 
 ```bash
 drove executor info <executor-id>
@@ -44,7 +44,7 @@ drove executor info <executor-id>
 
 ## drove executor appinstances
 
-List application instances running on an executor.
+List the application instances running on an executor.
 
 ```bash
 drove executor appinstances <executor-id> [--sort COLUMN] [--reverse]
@@ -54,7 +54,7 @@ drove executor appinstances <executor-id> [--sort COLUMN] [--reverse]
 
 ## drove executor tasks
 
-List tasks running on an executor.
+List the tasks running on an executor.
 
 ```bash
 drove executor tasks <executor-id> [--app SOURCE_APP] [--sort COLUMN] [--reverse]
@@ -70,7 +70,7 @@ drove executor tasks <executor-id> [--app SOURCE_APP] [--sort COLUMN] [--reverse
 
 ## drove executor lsinstances
 
-List local service instances on an executor.
+List the local service instances on an executor.
 
 ```bash
 drove executor lsinstances <executor-id> [--sort COLUMN] [--reverse]
@@ -80,7 +80,7 @@ drove executor lsinstances <executor-id> [--sort COLUMN] [--reverse]
 
 ## drove executor blacklist
 
-Remove executors from scheduling rotation. Existing workloads continue running.
+Remove executors from the scheduling rotation. Existing workloads continue running.
 
 ```bash
 drove executor blacklist <executor-id> [<executor-id> ...]
@@ -96,7 +96,7 @@ drove executor blacklist exec-001 exec-002
 
 ## drove executor unblacklist
 
-Add executors back to rotation.
+Add executors back to the scheduling rotation.
 
 ```bash
 drove executor unblacklist <executor-id> [<executor-id> ...]

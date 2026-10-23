@@ -1,6 +1,6 @@
 # drove localservices
 
-Manage local services. Local services run on every executor in the cluster.
+Manage local services. A local service runs on every executor in the cluster.
 
 ## Synopsis
 
@@ -28,7 +28,7 @@ drove localservices <command> [options]
 
 ## drove localservices list
 
-List all local services.
+List all local services in the cluster.
 
 ```bash
 drove localservices list [--sort COLUMN] [--reverse]
@@ -43,7 +43,7 @@ drove localservices list [--sort COLUMN] [--reverse]
 
 ## drove localservices summary
 
-Show service summary.
+Show the summary of one local service.
 
 ```bash
 drove localservices summary <service-id>
@@ -53,7 +53,7 @@ drove localservices summary <service-id>
 
 ## drove localservices spec
 
-Print raw JSON specification.
+Print the raw JSON specification of a local service.
 
 ```bash
 drove localservices spec <service-id>
@@ -63,7 +63,7 @@ drove localservices spec <service-id>
 
 ## drove localservices create
 
-Create a new local service.
+Create a new local service from a spec file.
 
 ```bash
 drove localservices create <spec-file> [--instances N]
@@ -77,7 +77,7 @@ drove localservices create <spec-file> [--instances N]
 
 ## drove localservices destroy
 
-Delete an inactive local service.
+Delete a local service. The service must be inactive before you can destroy it.
 
 ```bash
 drove localservices destroy <service-id>
@@ -87,9 +87,9 @@ drove localservices destroy <service-id>
 
 ## drove localservices activate
 
-Activate a local service. Starts instances on all executors.
+Activate a local service. Drove starts instances on all executors.
 
-Recommended sequence: run `drove localservices conftest <service-id>` first, then activate.
+We recommend that you run `drove localservices conftest <service-id>` first, and then activate.
 
 ```bash
 drove localservices activate <service-id>
@@ -99,9 +99,9 @@ drove localservices activate <service-id>
 
 ## drove localservices conftest
 
-Deploy one test instance for validation.
+Deploy one test instance to validate the service.
 
-This is recommended before `activate` to verify spec/config/checks before full rollout.
+Run this before `activate` to verify the spec, config, and checks before a full rollout.
 
 ```bash
 drove localservices conftest <service-id>
@@ -111,7 +111,7 @@ drove localservices conftest <service-id>
 
 ## drove localservices deactivate
 
-Deactivate a local service. Stops all instances.
+Deactivate a local service. Drove stops all instances.
 
 ```bash
 drove localservices deactivate <service-id>
@@ -121,7 +121,7 @@ drove localservices deactivate <service-id>
 
 ## drove localservices update
 
-Update instances per executor.
+Change the number of instances per executor.
 
 ```bash
 drove localservices update <service-id> <count>
@@ -131,7 +131,7 @@ drove localservices update <service-id> <count>
 
 ## drove localservices restart
 
-Rolling restart of all instances.
+Restart all instances, one at a time, in a rolling fashion.
 
 ```bash
 drove localservices restart <service-id> [--stop] [--parallelism N] [--timeout DURATION] [--wait]
@@ -148,7 +148,7 @@ drove localservices restart <service-id> [--stop] [--parallelism N] [--timeout D
 
 ## drove localservices cancelop
 
-Cancel the currently running operation.
+Cancel the operation that is currently running on a local service.
 
 ```bash
 drove localservices cancelop <service-id>

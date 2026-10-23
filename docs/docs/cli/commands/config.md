@@ -1,6 +1,6 @@
 # drove config
 
-Manage CLI configuration. These commands work offline.
+Manage the CLI configuration. These commands work offline, so you can use them without a running cluster.
 
 ## Synopsis
 
@@ -24,7 +24,7 @@ drove config <command> [options]
 
 ## drove config get-clusters
 
-List all configured clusters.
+List all clusters in your config file.
 
 ```bash
 drove config get-clusters
@@ -44,7 +44,7 @@ Current cluster: prod
 
 ## drove config current-cluster
 
-Show the current default cluster.
+Show the cluster that the CLI uses by default.
 
 ```bash
 drove config current-cluster
@@ -54,7 +54,7 @@ drove config current-cluster
 
 ## drove config use-cluster
 
-Set the default cluster.
+Set the cluster that the CLI uses by default.
 
 ```bash
 drove config use-cluster <cluster-name>
@@ -103,7 +103,7 @@ drove config init -e https://drove.example.com -n prod -t "Bearer xxx"
 
 ## drove config add-cluster
 
-Add a cluster to existing config.
+Add a cluster to your existing config.
 
 ```bash
 drove config add-cluster <name> --endpoint URL [--username USER] [--password PASS] \
@@ -119,7 +119,7 @@ drove config add-cluster staging -e https://drove-stg.example.com -u admin -p se
 
 ## drove config delete-cluster
 
-Remove a cluster from config.
+Remove a cluster from your config.
 
 ```bash
 drove config delete-cluster <name>

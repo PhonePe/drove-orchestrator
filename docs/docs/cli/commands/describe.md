@@ -20,13 +20,13 @@ drove describe <resource> [options]
 | `localservice` | Local service with instances |
 | `lsinstance` | Local service instance details |
 
-All commands support `--json` for machine-readable output.
+Every command supports `--json` if you need machine-readable output.
 
 ---
 
 ## drove describe cluster
 
-Show cluster state, resources, and all executors.
+Show the cluster state, resources, and all executors.
 
 ```bash
 drove describe cluster [--json]
@@ -65,7 +65,7 @@ Executors (8):
 
 ## drove describe executor
 
-Show executor resources, running instances, and tasks.
+Show the resources of an executor, plus the instances and tasks running on it.
 
 ```bash
 drove describe executor <executor-id> [--json]
@@ -75,7 +75,7 @@ drove describe executor <executor-id> [--json]
 
 ## drove describe app
 
-Show application details including spec, health, and all instances.
+Show an application with its spec, health, and all instances.
 
 ```bash
 drove describe app <app-id> [--json]
@@ -118,7 +118,7 @@ Instances (5):
 
 ## drove describe instance
 
-Show application instance details including ports and resources.
+Show the details of an application instance, including ports and resources.
 
 ```bash
 drove describe instance <app-id> <instance-id> [--json]
@@ -128,7 +128,7 @@ drove describe instance <app-id> <instance-id> [--json]
 
 ## drove describe task
 
-Show task details including execution state and result.
+Show the details of a task, including its execution state and result.
 
 ```bash
 drove describe task <source-app> <task-id> [--json]
@@ -138,7 +138,7 @@ drove describe task <source-app> <task-id> [--json]
 
 ## drove describe localservice
 
-Show local service details and instances across executors.
+Show a local service with its instances across executors.
 
 ```bash
 drove describe localservice <service-id> [--json]
@@ -148,7 +148,7 @@ drove describe localservice <service-id> [--json]
 
 ## drove describe lsinstance
 
-Show local service instance details.
+Show the details of a local service instance.
 
 ```bash
 drove describe lsinstance <service-id> <instance-id> [--json]

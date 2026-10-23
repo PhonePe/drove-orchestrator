@@ -1,6 +1,6 @@
 # drove lsinstances
 
-Manage local service instances.
+Manage the instances of your local services.
 
 ## Synopsis
 
@@ -24,7 +24,7 @@ drove lsinstances <command> [options]
 
 ## drove lsinstances list
 
-List instances for a local service.
+List the instances of a local service.
 
 ```bash
 drove lsinstances list <service-id> [--old] [--sort COLUMN] [--reverse]
@@ -40,7 +40,7 @@ drove lsinstances list <service-id> [--old] [--sort COLUMN] [--reverse]
 
 ## drove lsinstances info
 
-Show instance details.
+Show the details of a single local service instance.
 
 ```bash
 drove lsinstances info <service-id> <instance-id>
@@ -50,7 +50,7 @@ drove lsinstances info <service-id> <instance-id>
 
 ## drove lsinstances logs
 
-List available log files.
+List the log files available for a local service instance.
 
 ```bash
 drove lsinstances logs <service-id> <instance-id>
@@ -60,7 +60,7 @@ drove lsinstances logs <service-id> <instance-id>
 
 ## drove lsinstances tail
 
-Tail instance logs.
+Follow the logs of a local service instance.
 
 ```bash
 drove lsinstances tail <service-id> <instance-id> [--log FILE] [--skip-chars N]
@@ -75,7 +75,7 @@ drove lsinstances tail <service-id> <instance-id> [--log FILE] [--skip-chars N]
 
 ## drove lsinstances download
 
-Download a log file.
+Download a log file to your machine.
 
 ```bash
 drove lsinstances download <service-id> <instance-id> <file> [--out OUTPUT]
@@ -96,7 +96,7 @@ drove lsinstances replace <service-id> <instance-id> [<instance-id> ...] \
 
 ## drove lsinstances kill
 
-Kill specific instances.
+Kill specific instances without replacing them.
 
 ```bash
 drove lsinstances kill <service-id> <instance-id> [<instance-id> ...] \

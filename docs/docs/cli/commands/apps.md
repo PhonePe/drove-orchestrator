@@ -1,6 +1,6 @@
 # drove apps
 
-Manage application lifecycle.
+Manage the lifecycle of your applications.
 
 ## Synopsis
 
@@ -27,7 +27,7 @@ drove apps <command> [options]
 
 ## drove apps list
 
-List all applications.
+List all applications in the cluster.
 
 ```bash
 drove apps list [--sort COLUMN] [--reverse]
@@ -42,7 +42,7 @@ drove apps list [--sort COLUMN] [--reverse]
 
 ## drove apps summary
 
-Show application details.
+Show the details of one application.
 
 ```bash
 drove apps summary <app-id>
@@ -57,7 +57,7 @@ drove apps summary PAYMENT_SERVICE-1
 
 ## drove apps spec
 
-Print raw JSON specification.
+Print the raw JSON specification of an application.
 
 ```bash
 drove apps spec <app-id>
@@ -67,7 +67,7 @@ drove apps spec <app-id>
 
 ## drove apps create
 
-Create a new application from spec file.
+Create a new application from a spec file.
 
 ```bash
 drove apps create <spec-file>
@@ -78,7 +78,7 @@ Example:
 drove apps create payment-service.json
 ```
 
-The app is created in monitoring state. Use `deploy` or `scale` to start instances. Refer to [Application Lifecycle](../../applications/index.md#application-state-machine) to understand more about application states.
+The app starts in monitoring state. Use `deploy` or `scale` to start instances. Refer to [Application Lifecycle](../../applications/index.md#application-state-machine) to understand more about application states.
 
 ---
 
@@ -106,7 +106,7 @@ drove apps deploy PAYMENT_SERVICE-1 5 -p 2 -w
 
 ## drove apps scale
 
-Scale to exact instance count. Adds or removes instances as needed.
+Scale an application to an exact instance count. The command adds or removes instances as needed.
 
 ```bash
 drove apps scale <app-id> <count> [--parallelism N] [--timeout DURATION] [--wait]
@@ -125,7 +125,7 @@ drove apps scale PAYMENT_SERVICE-1 2 -w
 
 ## drove apps suspend
 
-Stop all instances (scale to 0).
+Stop all instances of an application (scale to 0).
 
 ```bash
 drove apps suspend <app-id> [--parallelism N] [--timeout DURATION] [--wait]
@@ -135,7 +135,7 @@ drove apps suspend <app-id> [--parallelism N] [--timeout DURATION] [--wait]
 
 ## drove apps restart
 
-Rolling restart of all instances.
+Restart all instances, one at a time, in a rolling fashion.
 
 ```bash
 drove apps restart <app-id> [--parallelism N] [--timeout DURATION] [--wait]
@@ -151,7 +151,7 @@ drove apps restart PAYMENT_SERVICE-1 -p 3 -w
 
 ## drove apps destroy
 
-Delete an application. App must have zero instances.
+Delete an application. The app must have zero instances before you can destroy it.
 
 ```bash
 drove apps destroy <app-id>
@@ -161,7 +161,7 @@ drove apps destroy <app-id>
 
 ## drove apps cancelop
 
-Cancel the currently running operation.
+Cancel the operation that is currently running on an application.
 
 ```bash
 drove apps cancelop <app-id>

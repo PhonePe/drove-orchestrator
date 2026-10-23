@@ -1,6 +1,6 @@
 # drove tasks
 
-Manage one-off tasks.
+Manage one-off tasks. A task runs once and exits when it completes.
 
 ## Synopsis
 
@@ -24,7 +24,7 @@ drove tasks <command> [options]
 
 ## drove tasks list
 
-List active tasks.
+List the tasks that are currently active.
 
 ```bash
 drove tasks list [--app APP] [--sort COLUMN] [--reverse]
@@ -40,7 +40,7 @@ drove tasks list [--app APP] [--sort COLUMN] [--reverse]
 
 ## drove tasks create
 
-Create a new task from spec file.
+Create a new task from a spec file.
 
 ```bash
 drove tasks create <spec-file>
@@ -50,7 +50,7 @@ drove tasks create <spec-file>
 
 ## drove tasks show
 
-Show task details.
+Show the details of one task.
 
 ```bash
 drove tasks show <source-app> <task-id>
@@ -70,7 +70,7 @@ drove tasks kill <source-app> <task-id>
 
 ## drove tasks logs
 
-List available log files.
+List the log files available for a task.
 
 ```bash
 drove tasks logs <source-app> <task-id>
@@ -80,7 +80,7 @@ drove tasks logs <source-app> <task-id>
 
 ## drove tasks tail
 
-Tail task logs.
+Follow the logs of a task.
 
 ```bash
 drove tasks tail <source-app> <task-id> [--log FILE]
@@ -94,7 +94,7 @@ drove tasks tail <source-app> <task-id> [--log FILE]
 
 ## drove tasks download
 
-Download a log file.
+Download a task log file to your machine.
 
 ```bash
 drove tasks download <source-app> <task-id> <file> [--out OUTPUT]

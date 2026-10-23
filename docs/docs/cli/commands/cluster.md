@@ -1,6 +1,6 @@
 # drove cluster
 
-Manage and monitor Drove clusters.
+Manage and monitor your Drove cluster.
 
 ## Synopsis
 
@@ -25,7 +25,7 @@ drove cluster <command> [options]
 
 ## drove cluster ping
 
-Check if the cluster is reachable.
+Check whether the cluster is reachable.
 
 ```bash
 drove cluster ping
@@ -35,7 +35,7 @@ drove cluster ping
 
 ## drove cluster summary
 
-Show cluster resource utilization.
+Show how much of the cluster resources are in use.
 
 ```bash
 drove cluster summary
@@ -65,7 +65,7 @@ drove cluster leader
 
 ## drove cluster endpoints
 
-List all exposed application endpoints. Useful for debugging routing.
+List all exposed application endpoints. Use this when you debug routing.
 
 ```bash
 drove cluster endpoints [--vhost VHOST]
@@ -84,7 +84,7 @@ drove cluster endpoints -v myapp.example.com
 
 ## drove cluster events
 
-Stream cluster events in real-time.
+Stream cluster events in real time.
 
 ```bash
 drove cluster events [--follow] [--type TYPE] [--count COUNT]
@@ -95,7 +95,7 @@ drove cluster events [--follow] [--type TYPE] [--count COUNT]
 | `-f, --follow` | Stream continuously |
 | `-t, --type` | Filter by event type |
 | `-c, --count` | Number of events to fetch at a time (default: 1024) |
-| `-s, --textfmt` | Python format string for each event (default: `{type: <25} | {id: <36} | {time: <20} | {metadata}`) |
+| `-s, --textfmt` | Python format string for each event. The default prints the event type, id, time, and metadata, separated by pipes. |
 
 Example:
 ```bash
@@ -110,7 +110,7 @@ drove cluster events -t APP_STATE_CHANGE -c 50
 
 ## drove cluster simulate-placement
 
-Simulate placement for a deployable spec. The command sends the spec to the cluster simulation API. The cluster does not change.
+Simulate placement for a deployable spec. The command sends the spec to the cluster simulation API, and the cluster reports where the instances would run. The cluster does not change.
 
 ```bash
 drove cluster simulate-placement SPEC_FILE [--num-instances N] [--placement-policy FILE] [--detail] [--json]
@@ -133,7 +133,7 @@ drove cluster simulate-placement app-spec.json -n 4 --detail
 
 ## drove cluster maintenance-on
 
-Put cluster in maintenance mode. New operations are rejected.
+Put the cluster in maintenance mode. The cluster rejects new operations.
 
 ```bash
 drove cluster maintenance-on
@@ -146,7 +146,7 @@ drove cluster maintenance-on
 
 ## drove cluster maintenance-off
 
-Exit maintenance mode.
+Take the cluster out of maintenance mode.
 
 ```bash
 drove cluster maintenance-off

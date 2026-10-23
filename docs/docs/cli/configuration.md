@@ -1,10 +1,10 @@
 # Configuration
 
-This page explains how to configure drove CLI for single and multi-cluster access.
+This page explains how to configure the drove CLI for single and multi-cluster access.
 
 ## Config file location
 
-drove reads config from `~/.drove` by default. Override with `-f`:
+The CLI reads its config from `~/.drove` by default. Use `-f` to point it at a different file:
 
 ```bash
 drove -f /path/to/config cluster ping
@@ -12,7 +12,7 @@ drove -f /path/to/config cluster ping
 
 ## Single cluster setup
 
-Minimal config:
+A minimal config looks like this:
 
 ```ini
 [DEFAULT]
@@ -26,6 +26,8 @@ password = admin
 ```
 
 ## Multi-cluster setup
+
+With more than one cluster, set `current_cluster` to choose the default:
 
 ```ini
 [DEFAULT]
@@ -53,7 +55,7 @@ drove -c prod cluster summary  # One-off override
 
 ## Authentication
 
-drove supports two auth methods:
+The CLI supports two auth methods:
 
 | Method | Config |
 |--------|--------|
@@ -80,7 +82,7 @@ auth_header = Bearer eyJhbGc...
 
 ## Variable interpolation
 
-Avoid repeating tokens:
+Use interpolation to avoid repeating tokens:
 
 ```ini
 [DEFAULT]
@@ -98,7 +100,7 @@ auth_header = %(prod_token)s
 
 ## SSL verification
 
-Skip certificate verification for insecure clusters:
+Set `insecure = true` to skip certificate verification on internal clusters:
 
 ```ini
 [internal]
@@ -108,7 +110,7 @@ insecure = true
 
 ## Command line overrides
 
-Any config option can be overridden:
+You can override any config option on the command line:
 
 ```bash
 drove -e https://drove.example.com -u admin -p secret cluster ping
@@ -116,6 +118,8 @@ drove -c prod --insecure cluster summary
 ```
 
 ## Manage config with drove
+
+The CLI can manage its own config file:
 
 ```bash
 # Initialize new config

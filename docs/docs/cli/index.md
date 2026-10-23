@@ -1,10 +1,10 @@
 # Drove CLI
 
-The Drove CLI (`drove`) provides command-line access to Drove clusters.
+The Drove CLI (`drove`) gives you command-line access to your Drove clusters. Use it to deploy applications, run one-off tasks, inspect cluster health, and manage nodes — all from your terminal.
 
 ## Before you begin
 
-You need:
+Before you install the CLI, make sure you have:
 
 - Python 3.x or Docker
 - Network access to a Drove controller
@@ -31,7 +31,7 @@ You need:
     chmod +x /usr/local/bin/drove
     ```
 
-Verify the install:
+Once the install finishes, confirm that the CLI is available and can reach your cluster:
 ```bash
 pip show drove-cli
 
@@ -52,7 +52,7 @@ drove cluster ping
 
 ## Global options
 
-You can pass these options before any command:
+These options work with every command. Put them before the command name:
 
 | Option | Description |
 |--------|-------------|
@@ -69,7 +69,7 @@ You can pass these options before any command:
 
 ## Configure cluster access
 
-Create `~/.drove`:
+The CLI stores its settings in `~/.drove`. Create the file with your cluster endpoint and credentials:
 
 ```ini
 [DEFAULT]
@@ -84,7 +84,7 @@ username = admin
 password = admin
 ```
 
-Test connectivity:
+Then check that the CLI can reach your cluster:
 ```bash
 drove cluster ping
 ```
@@ -99,17 +99,17 @@ See [Configuration](configuration.md) for auth options and multi-cluster setup.
 - Covers: apps, app instances, local services, local service instances, tasks, executors, and cluster operations
 - Includes recommended sequence for local services (`create -> conftest -> activate`)
 
-Use this skill in your agent setup if you want the agent to run Drove operations reliably without manual command lookup.
+Add this skill to your agent setup if you want the agent to run Drove operations reliably, without looking up commands by hand.
 
-## Enabling Command Completion
+## Enabling command completion
 
-You can generate shell completions file for `bash`, `zfs` and `tcsh` using the `--print-completion` option.
+The CLI can print a completion script for `bash`, `zsh`, and `tcsh`:
 
 ```shell
 drove --print-completion bash > drove.bash.completions
 ```
 
-To use this, source the completion file:
+To use the completions in your current shell, source the file:
 ```shell
 source drove.bash.completions
 ```
@@ -118,6 +118,8 @@ source drove.bash.completions
     Check your operating system documentation to understand where to store this file to enable completions automatically.
 
 ## Common tasks
+
+Here are the commands you will use most often. Each command group has a full reference page — see [Command groups](#command-groups) below.
 
 ### View cluster state
 ```bash
@@ -152,6 +154,8 @@ drove config use-cluster staging
 
 ## Command groups
 
+Each command group has its own reference page:
+
 | Command | Purpose |
 |---------|---------|
 | [`appinstances`](commands/appinstances.md) | Instance operations |
@@ -165,6 +169,8 @@ drove config use-cluster staging
 | [`tasks`](commands/tasks.md) | One-off task execution |
 
 ## Get help
+
+The CLI prints built-in help at every level:
 
 ```bash
 drove -h              # All commands
