@@ -63,6 +63,21 @@ drove -e http://drove.local:7000 apps destroy TEST_APP-1
 
 # MAC OS specific changes 
 
+# Editing the documentation
+The documentation sources live in `docs/`. Mermaid diagrams are pre-rendered
+at build time, so after editing or adding a diagram run the build script from
+`docs/`, which renders new diagrams and prunes stale cache entries:
+
+```shell
+cd docs
+./run-build.sh        # or ./run-serve.sh for live preview
+```
+
+This requires Node.js with puppeteer installed in `docs/tools/` (one-time
+setup: `cd docs/tools && npm install`). See `docs/README.md` for
+details. If Node.js is unavailable, set `NO_RENDER_MERMAID=1` to skip the
+render step.
+
 ## Rancher desktop preferences
 Please select below preferences in the Rancher desktop
 

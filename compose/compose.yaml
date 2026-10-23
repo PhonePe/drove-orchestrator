@@ -12,6 +12,7 @@ services:
       LOG_LEVEL: DEBUG
       TIMEZONE: IST
       DEBUG: 1
+      ALLOW_DEFAULT_SECRETS: 'true'
   executor:
     image: ghcr.io/phonepe/drove-executor:latest
     network_mode: host
@@ -20,6 +21,7 @@ services:
       LOG_LEVEL: DEBUG
       TIMEZONE: IST
       DEBUG: 1
+      ALLOW_DEFAULT_SECRETS: 'true'
     volumes:
       - type: bind
         source: /var/run/docker.sock
