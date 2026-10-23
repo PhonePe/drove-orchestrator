@@ -404,9 +404,6 @@ If a rule exceeds a limit, evaluation fails. The instance is then marked as fail
 !!!tip
     Use the [Placement Simulation API](../apis/cluster.md#simulate-placement) to check what a rule does before you deploy it.
 
-!!!tip
-    It is easy to go into situations where no executors match complicated placement policies. Internally, we tend to keep things rather simple and use the ANY placement for most cases and _maybe_ tags in a few places with over-provisioning or for hosts having special hardware :slight_smile:
-
 ## Environment variables
 This config can be used to inject custom environment variables to containers. The values are defined as part of deployment specification, are same across the cluster and immutable to modifications from inside the container (ie any overrides from inside the container will not be visible across the cluster).
 

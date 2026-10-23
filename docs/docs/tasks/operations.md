@@ -97,7 +97,7 @@ Once ready, CLI command needs to be issued or the following payload needs to be 
     There are no separate create/run steps in a task. Creation will start execution _automatically and immediately_.
 
 ## Kill a task
-A task can be created issuing the following command.
+A task can be killed issuing the following command.
 
 **Preconditions:**
 - Task with same `{sourceAppName,taskId}` needs to exist on the cluster.
