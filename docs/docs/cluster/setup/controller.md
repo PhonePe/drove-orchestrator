@@ -132,7 +132,6 @@ zookeeper:
   namespace: drovetest
 ```
 
-### Intra Node Authentication Configuration
 {!intra_node_auth.md!}
 
 !!!danger

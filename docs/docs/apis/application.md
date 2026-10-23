@@ -300,7 +300,6 @@ curl --location 'http://drove.local:7000/apis/v1/applications/TEST_APP-1/instanc
 ```
 
 ## Get list of old instances
-## Get list of old instances
 `GET /apis/v1/applications/{id}/instances/old`
 
 **Request**

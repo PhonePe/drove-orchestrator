@@ -72,8 +72,7 @@ nav = [
   ]},
   {"Extra" = [
     {"Epoch" = "extra/epoch.md"},
-    {"Libraries" = "extra/libraries.md"},
-    {"CLI" = "extra/cli.md"}
+    {"Libraries" = "extra/libraries.md"}
   ]}
 ]
 

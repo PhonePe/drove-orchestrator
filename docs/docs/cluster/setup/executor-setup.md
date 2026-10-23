@@ -190,7 +190,6 @@ A leftover `zookeeper` key in the executor config is ignored for backwards compa
 !!!note
     Ensure `controllers.endpoints` lists all controller endpoints. Executors use these endpoints to register themselves and send all state updates.
 
-### Intra Node Authentication Configuration
 {!intra_node_auth.md!}
 
 !!!note
@@ -480,6 +479,9 @@ The executor container entrypoint reads the following environment variables:
 | `JAVA_PROCESS_MIN_HEAP` | JVM minimum heap size | `1g` |
 | `JAVA_PROCESS_MAX_HEAP` | JVM maximum heap size | `1g` |
 | `JAVA_OPTS` | Extra JVM options | – |
+| `DISABLE_NUMA_PINNING` | Disable NUMA and CPU core pinning for containers. Maps to `disableNUMAPinning` in the config | `false` |
+| `ENABLE_NVIDIA_GPU` | Enable legacy pass-through mode for Nvidia GPUs. Maps to `enableNvidiaGpu` in the config | `false` |
+| `EXECUTOR_ID` | Executor identity exposed to the controllers. Defaults to the container IP address | container IP |
 
 !!!danger "Default secrets are rejected"
     The executor container refuses to start when `CONTROLLER_SECRET` or `EXECUTOR_SECRET` is left at its default value. Set both secrets to strong values that match the controllers. You can use `pwgen -s 32` to generate them.
